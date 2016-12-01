@@ -27,6 +27,8 @@ ApplicationMain.create = function() {
 	types.push("TEXT");
 	urls.push("assets/images/images-go-here.txt");
 	types.push("TEXT");
+	urls.push("assets/images/Tiles.png");
+	types.push("IMAGE");
 	urls.push("assets/music/music-goes-here.txt");
 	types.push("TEXT");
 	urls.push("assets/sounds/sounds-go-here.txt");
@@ -65,7 +67,7 @@ ApplicationMain.init = function() {
 	if(total == 0) ApplicationMain.start();
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "3", company : "Michael", file : "MultiplayerAlchemy", fps : 60, name : "MultiplayerAlchemy", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 480, parameters : "{}", resizable : false, stencilBuffer : true, title : "MultiplayerAlchemy", vsync : true, width : 640, x : null, y : null}]};
+	ApplicationMain.config = { build : "95", company : "Michael", file : "MultiplayerAlchemy", fps : 60, name : "MultiplayerAlchemy", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 512, parameters : "{}", resizable : false, stencilBuffer : true, title : "MultiplayerAlchemy", vsync : true, width : 512, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -1475,7 +1477,7 @@ openfl_display_Sprite.prototype = $extend(openfl_display_DisplayObjectContainer.
 });
 var Main = function() {
 	openfl_display_Sprite.call(this);
-	this.addChild(new flixel_FlxGame(640,480,MenuState));
+	this.addChild(new flixel_FlxGame(256,256,MenuState));
 };
 $hxClasses["Main"] = Main;
 Main.__name__ = ["Main"];
@@ -1493,6 +1495,463 @@ DocumentClass.__name__ = ["DocumentClass"];
 DocumentClass.__super__ = Main;
 DocumentClass.prototype = $extend(Main.prototype,{
 	__class__: DocumentClass
+});
+var flixel_util_IFlxDestroyable = function() { };
+$hxClasses["flixel.util.IFlxDestroyable"] = flixel_util_IFlxDestroyable;
+flixel_util_IFlxDestroyable.__name__ = ["flixel","util","IFlxDestroyable"];
+flixel_util_IFlxDestroyable.prototype = {
+	destroy: null
+	,__class__: flixel_util_IFlxDestroyable
+};
+var flixel_FlxBasic = function() {
+	this.flixelType = 0;
+	this.exists = true;
+	this.alive = true;
+	this.visible = true;
+	this.active = true;
+	this.ID = -1;
+};
+$hxClasses["flixel.FlxBasic"] = flixel_FlxBasic;
+flixel_FlxBasic.__name__ = ["flixel","FlxBasic"];
+flixel_FlxBasic.__interfaces__ = [flixel_util_IFlxDestroyable];
+flixel_FlxBasic.prototype = {
+	ID: null
+	,active: null
+	,visible: null
+	,alive: null
+	,exists: null
+	,flixelType: null
+	,_cameras: null
+	,destroy: function() {
+		this.set_exists(false);
+		this._cameras = null;
+	}
+	,kill: function() {
+		this.set_alive(false);
+		this.set_exists(false);
+	}
+	,revive: function() {
+		this.set_alive(true);
+		this.set_exists(true);
+	}
+	,update: function(elapsed) {
+		flixel_FlxBasic.activeCount++;
+	}
+	,draw: function() {
+		flixel_FlxBasic.visibleCount++;
+	}
+	,toString: function() {
+		return flixel_util_FlxStringUtil.getDebugString([flixel_util_LabelValuePair._pool.get().create("active",this.active),flixel_util_LabelValuePair._pool.get().create("visible",this.visible),flixel_util_LabelValuePair._pool.get().create("alive",this.alive),flixel_util_LabelValuePair._pool.get().create("exists",this.exists)]);
+	}
+	,set_visible: function(Value) {
+		return this.visible = Value;
+	}
+	,set_active: function(Value) {
+		return this.active = Value;
+	}
+	,set_exists: function(Value) {
+		return this.exists = Value;
+	}
+	,set_alive: function(Value) {
+		return this.alive = Value;
+	}
+	,get_camera: function() {
+		if(this._cameras == null || this._cameras.length == 0) return flixel_FlxCamera.defaultCameras[0]; else return this._cameras[0];
+	}
+	,set_camera: function(Value) {
+		if(this._cameras == null) this._cameras = [Value]; else this._cameras[0] = Value;
+		return Value;
+	}
+	,get_cameras: function() {
+		if(this._cameras == null) return flixel_FlxCamera.defaultCameras; else return this._cameras;
+	}
+	,set_cameras: function(Value) {
+		return this._cameras = Value;
+	}
+	,__class__: flixel_FlxBasic
+	,__properties__: {set_cameras:"set_cameras",get_cameras:"get_cameras",set_camera:"set_camera",get_camera:"get_camera",set_exists:"set_exists",set_alive:"set_alive",set_visible:"set_visible",set_active:"set_active"}
+};
+var flixel_group_FlxTypedGroup = function(MaxSize) {
+	if(MaxSize == null) MaxSize = 0;
+	this._marker = 0;
+	this.length = 0;
+	flixel_FlxBasic.call(this);
+	this.members = [];
+	this.set_maxSize(Std["int"](Math.abs(MaxSize)));
+	this.flixelType = 2;
+};
+$hxClasses["flixel.group.FlxTypedGroup"] = flixel_group_FlxTypedGroup;
+flixel_group_FlxTypedGroup.__name__ = ["flixel","group","FlxTypedGroup"];
+flixel_group_FlxTypedGroup.overlaps = function(Callback,Group,X,Y,InScreenSpace,Camera) {
+	var result = false;
+	if(Group != null) {
+		var i = 0;
+		var l = Group.length;
+		var basic;
+		while(i < l) {
+			basic = Group.members[i++];
+			if(basic != null && Callback(basic,X,Y,InScreenSpace,Camera)) {
+				result = true;
+				break;
+			}
+		}
+	}
+	return result;
+};
+flixel_group_FlxTypedGroup.resolveGroup = function(ObjectOrGroup) {
+	var group = null;
+	if(ObjectOrGroup != null) {
+		if(ObjectOrGroup.flixelType == 2) group = ObjectOrGroup; else if(ObjectOrGroup.flixelType == 4) {
+			var spriteGroup = ObjectOrGroup;
+			group = spriteGroup.group;
+		}
+	}
+	return group;
+};
+flixel_group_FlxTypedGroup.__super__ = flixel_FlxBasic;
+flixel_group_FlxTypedGroup.prototype = $extend(flixel_FlxBasic.prototype,{
+	members: null
+	,maxSize: null
+	,length: null
+	,_marker: null
+	,destroy: function() {
+		flixel_FlxBasic.prototype.destroy.call(this);
+		if(this.members != null) {
+			var i = 0;
+			var basic = null;
+			while(i < this.length) {
+				basic = this.members[i++];
+				if(basic != null) basic.destroy();
+			}
+			this.members = null;
+		}
+	}
+	,update: function(elapsed) {
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && basic.exists && basic.active) basic.update(elapsed);
+		}
+	}
+	,draw: function() {
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && basic.exists && basic.visible) basic.draw();
+		}
+	}
+	,add: function(Object) {
+		if(Object == null) {
+			flixel_FlxG.log.advanced("Cannot add a `null` object to a FlxGroup.",flixel_system_debug_log_LogStyle.WARNING,true);
+			return null;
+		}
+		if(HxOverrides.indexOf(this.members,Object,0) >= 0) return Object;
+		var index = this.getFirstNull();
+		if(index != -1) {
+			this.members[index] = Object;
+			if(index >= this.length) this.length = index + 1;
+			return Object;
+		}
+		if(this.maxSize > 0 && this.length >= this.maxSize) return Object;
+		this.members.push(Object);
+		this.length++;
+		return Object;
+	}
+	,insert: function(position,object) {
+		if(object == null) {
+			flixel_FlxG.log.advanced("Cannot insert a `null` object into a FlxGroup.",flixel_system_debug_log_LogStyle.WARNING,true);
+			return null;
+		}
+		if(HxOverrides.indexOf(this.members,object,0) >= 0) return object;
+		if(position < this.length && this.members[position] == null) {
+			this.members[position] = object;
+			return object;
+		}
+		if(this.maxSize > 0 && this.length >= this.maxSize) return object;
+		this.members.splice(position,0,object);
+		this.length++;
+		return object;
+	}
+	,recycle: function(ObjectClass,ObjectFactory,Force,Revive) {
+		if(Revive == null) Revive = true;
+		if(Force == null) Force = false;
+		var basic = null;
+		if(this.maxSize > 0) {
+			if(this.length < this.maxSize) return this.recycleCreateObject(ObjectClass,ObjectFactory); else {
+				basic = this.members[this._marker++];
+				if(this._marker >= this.maxSize) this._marker = 0;
+				if(Revive) basic.revive();
+				return basic;
+			}
+		} else {
+			basic = this.getFirstAvailable(ObjectClass,Force);
+			if(basic != null) {
+				if(Revive) basic.revive();
+				return basic;
+			}
+			return this.recycleCreateObject(ObjectClass,ObjectFactory);
+		}
+	}
+	,recycleCreateObject: function(ObjectClass,ObjectFactory) {
+		var object = null;
+		if(ObjectFactory != null) this.add(object = ObjectFactory()); else if(ObjectClass != null) this.add(object = Type.createInstance(ObjectClass,[]));
+		return object;
+	}
+	,remove: function(Object,Splice) {
+		if(Splice == null) Splice = false;
+		if(this.members == null) return null;
+		var index = HxOverrides.indexOf(this.members,Object,0);
+		if(index < 0) return null;
+		if(Splice) this.members.splice(index,1); else this.members[index] = null;
+		return Object;
+	}
+	,replace: function(OldObject,NewObject) {
+		var index = HxOverrides.indexOf(this.members,OldObject,0);
+		if(index < 0) return null;
+		this.members[index] = NewObject;
+		return NewObject;
+	}
+	,sort: function(Function,Order) {
+		if(Order == null) Order = -1;
+		this.members.sort((function(f,a1) {
+			return function(a2,a3) {
+				return f(a1,a2,a3);
+			};
+		})(Function,Order));
+	}
+	,getFirstAvailable: function(ObjectClass,Force) {
+		if(Force == null) Force = false;
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && !basic.exists && (ObjectClass == null || js_Boot.__instanceof(basic,ObjectClass))) {
+				if(Force && Type.getClassName(basic == null?null:js_Boot.getClass(basic)) != Type.getClassName(ObjectClass)) continue;
+				return this.members[i - 1];
+			}
+		}
+		return null;
+	}
+	,getFirstNull: function() {
+		var i = 0;
+		while(i < this.length) {
+			if(this.members[i] == null) return i;
+			i++;
+		}
+		return -1;
+	}
+	,getFirstExisting: function() {
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && basic.exists) return basic;
+		}
+		return null;
+	}
+	,getFirstAlive: function() {
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && basic.exists && basic.alive) return basic;
+		}
+		return null;
+	}
+	,getFirstDead: function() {
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && !basic.alive) return basic;
+		}
+		return null;
+	}
+	,countLiving: function() {
+		var i = 0;
+		var count = -1;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null) {
+				if(count < 0) count = 0;
+				if(basic.exists && basic.alive) count++;
+			}
+		}
+		return count;
+	}
+	,countDead: function() {
+		var i = 0;
+		var count = -1;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null) {
+				if(count < 0) count = 0;
+				if(!basic.alive) count++;
+			}
+		}
+		return count;
+	}
+	,getRandom: function(StartIndex,Length) {
+		if(Length == null) Length = 0;
+		if(StartIndex == null) StartIndex = 0;
+		if(StartIndex < 0) StartIndex = 0;
+		if(Length <= 0) Length = this.length;
+		return flixel_FlxG.random.getObject_flixel_group_FlxTypedGroup_T(this.members,null,StartIndex,Length);
+	}
+	,clear: function() {
+		this.length = 0;
+		flixel_util_FlxArrayUtil.clearArray(this.members);
+	}
+	,kill: function() {
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && basic.exists) basic.kill();
+		}
+		flixel_FlxBasic.prototype.kill.call(this);
+	}
+	,revive: function() {
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && !basic.exists) basic.revive();
+		}
+		flixel_FlxBasic.prototype.revive.call(this);
+	}
+	,iterator: function(filter) {
+		return new flixel_group_FlxTypedGroupIterator(this.members,filter);
+	}
+	,forEach: function(Function,Recurse) {
+		if(Recurse == null) Recurse = false;
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null) {
+				if(Recurse) {
+					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
+					if(group != null) group.forEach(Function,Recurse);
+				}
+				Function(basic);
+			}
+		}
+	}
+	,forEachAlive: function(Function,Recurse) {
+		if(Recurse == null) Recurse = false;
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && basic.exists && basic.alive) {
+				if(Recurse) {
+					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
+					if(group != null) group.forEachAlive(Function,Recurse);
+				}
+				Function(basic);
+			}
+		}
+	}
+	,forEachDead: function(Function,Recurse) {
+		if(Recurse == null) Recurse = false;
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && !basic.alive) {
+				if(Recurse) {
+					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
+					if(group != null) group.forEachDead(Function,Recurse);
+				}
+				Function(basic);
+			}
+		}
+	}
+	,forEachExists: function(Function,Recurse) {
+		if(Recurse == null) Recurse = false;
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null && basic.exists) {
+				if(Recurse) {
+					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
+					if(group != null) group.forEachExists(Function,Recurse);
+				}
+				Function(basic);
+			}
+		}
+	}
+	,forEachOfType: function(ObjectClass,Function,Recurse) {
+		if(Recurse == null) Recurse = false;
+		var i = 0;
+		var basic = null;
+		while(i < this.length) {
+			basic = this.members[i++];
+			if(basic != null) {
+				if(Recurse) {
+					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
+					if(group != null) group.forEachOfType(ObjectClass,Function,Recurse);
+				}
+				if(js_Boot.__instanceof(basic,ObjectClass)) Function(basic);
+			}
+		}
+	}
+	,set_maxSize: function(Size) {
+		this.maxSize = Std["int"](Math.abs(Size));
+		if(this._marker >= this.maxSize) this._marker = 0;
+		if(this.maxSize == 0 || this.members == null || this.maxSize >= this.length) return this.maxSize;
+		var i = this.maxSize;
+		var l = this.length;
+		var basic = null;
+		while(i < l) {
+			basic = this.members[i++];
+			if(basic != null) basic.destroy();
+		}
+		flixel_util_FlxArrayUtil.setLength_flixel_group_FlxTypedGroup_T(this.members,this.maxSize);
+		this.length = this.members.length;
+		return this.maxSize;
+	}
+	,__class__: flixel_group_FlxTypedGroup
+	,__properties__: $extend(flixel_FlxBasic.prototype.__properties__,{set_maxSize:"set_maxSize"})
+});
+var Board = function(H,W) {
+	flixel_group_FlxTypedGroup.call(this);
+	this.width = W;
+	this.height = H;
+	this.tab = [];
+	var _g1 = 0;
+	var _g = Settings.BOARD_TILE_HEIGHT;
+	while(_g1 < _g) {
+		var i = _g1++;
+		var row = [];
+		var _g3 = 0;
+		var _g2 = Settings.BOARD_TILE_WIDTH;
+		while(_g3 < _g2) {
+			var j = _g3++;
+			var t = new Tile(j * Settings.TILE_WIDTH,i * Settings.TILE_HEIGHT,Std.random(4),j,i);
+			row.push(t);
+			this.add(t);
+		}
+		this.tab.push(row);
+	}
+};
+$hxClasses["Board"] = Board;
+Board.__name__ = ["Board"];
+Board.__super__ = flixel_group_FlxTypedGroup;
+Board.prototype = $extend(flixel_group_FlxTypedGroup.prototype,{
+	tab: null
+	,width: null
+	,height: null
+	,rotate: function(BX,BY) {
+		this.tab[BY][BX].rotate();
+	}
+	,__class__: Board
 });
 var lime_AssetLibrary = function() {
 	this.onChange = new lime_app_Event_$Void_$Void();
@@ -1584,6 +2043,9 @@ var DefaultAssetLibrary = function() {
 	id = "assets/images/images-go-here.txt";
 	this.path.set(id,id);
 	this.type.set(id,"TEXT");
+	id = "assets/images/Tiles.png";
+	this.path.set(id,id);
+	this.type.set(id,"IMAGE");
 	id = "assets/music/music-goes-here.txt";
 	this.path.set(id,id);
 	this.type.set(id,"TEXT");
@@ -2067,430 +2529,6 @@ _$List_ListIterator.prototype = {
 	,__class__: _$List_ListIterator
 };
 Math.__name__ = ["Math"];
-var flixel_util_IFlxDestroyable = function() { };
-$hxClasses["flixel.util.IFlxDestroyable"] = flixel_util_IFlxDestroyable;
-flixel_util_IFlxDestroyable.__name__ = ["flixel","util","IFlxDestroyable"];
-flixel_util_IFlxDestroyable.prototype = {
-	destroy: null
-	,__class__: flixel_util_IFlxDestroyable
-};
-var flixel_FlxBasic = function() {
-	this.flixelType = 0;
-	this.exists = true;
-	this.alive = true;
-	this.visible = true;
-	this.active = true;
-	this.ID = -1;
-};
-$hxClasses["flixel.FlxBasic"] = flixel_FlxBasic;
-flixel_FlxBasic.__name__ = ["flixel","FlxBasic"];
-flixel_FlxBasic.__interfaces__ = [flixel_util_IFlxDestroyable];
-flixel_FlxBasic.prototype = {
-	ID: null
-	,active: null
-	,visible: null
-	,alive: null
-	,exists: null
-	,flixelType: null
-	,_cameras: null
-	,destroy: function() {
-		this.set_exists(false);
-		this._cameras = null;
-	}
-	,kill: function() {
-		this.set_alive(false);
-		this.set_exists(false);
-	}
-	,revive: function() {
-		this.set_alive(true);
-		this.set_exists(true);
-	}
-	,update: function(elapsed) {
-		flixel_FlxBasic.activeCount++;
-	}
-	,draw: function() {
-		flixel_FlxBasic.visibleCount++;
-	}
-	,toString: function() {
-		return flixel_util_FlxStringUtil.getDebugString([flixel_util_LabelValuePair._pool.get().create("active",this.active),flixel_util_LabelValuePair._pool.get().create("visible",this.visible),flixel_util_LabelValuePair._pool.get().create("alive",this.alive),flixel_util_LabelValuePair._pool.get().create("exists",this.exists)]);
-	}
-	,set_visible: function(Value) {
-		return this.visible = Value;
-	}
-	,set_active: function(Value) {
-		return this.active = Value;
-	}
-	,set_exists: function(Value) {
-		return this.exists = Value;
-	}
-	,set_alive: function(Value) {
-		return this.alive = Value;
-	}
-	,get_camera: function() {
-		if(this._cameras == null || this._cameras.length == 0) return flixel_FlxCamera.defaultCameras[0]; else return this._cameras[0];
-	}
-	,set_camera: function(Value) {
-		if(this._cameras == null) this._cameras = [Value]; else this._cameras[0] = Value;
-		return Value;
-	}
-	,get_cameras: function() {
-		if(this._cameras == null) return flixel_FlxCamera.defaultCameras; else return this._cameras;
-	}
-	,set_cameras: function(Value) {
-		return this._cameras = Value;
-	}
-	,__class__: flixel_FlxBasic
-	,__properties__: {set_cameras:"set_cameras",get_cameras:"get_cameras",set_camera:"set_camera",get_camera:"get_camera",set_exists:"set_exists",set_alive:"set_alive",set_visible:"set_visible",set_active:"set_active"}
-};
-var flixel_group_FlxTypedGroup = function(MaxSize) {
-	if(MaxSize == null) MaxSize = 0;
-	this._marker = 0;
-	this.length = 0;
-	flixel_FlxBasic.call(this);
-	this.members = [];
-	this.set_maxSize(Std["int"](Math.abs(MaxSize)));
-	this.flixelType = 2;
-};
-$hxClasses["flixel.group.FlxTypedGroup"] = flixel_group_FlxTypedGroup;
-flixel_group_FlxTypedGroup.__name__ = ["flixel","group","FlxTypedGroup"];
-flixel_group_FlxTypedGroup.overlaps = function(Callback,Group,X,Y,InScreenSpace,Camera) {
-	var result = false;
-	if(Group != null) {
-		var i = 0;
-		var l = Group.length;
-		var basic;
-		while(i < l) {
-			basic = Group.members[i++];
-			if(basic != null && Callback(basic,X,Y,InScreenSpace,Camera)) {
-				result = true;
-				break;
-			}
-		}
-	}
-	return result;
-};
-flixel_group_FlxTypedGroup.resolveGroup = function(ObjectOrGroup) {
-	var group = null;
-	if(ObjectOrGroup != null) {
-		if(ObjectOrGroup.flixelType == 2) group = ObjectOrGroup; else if(ObjectOrGroup.flixelType == 4) {
-			var spriteGroup = ObjectOrGroup;
-			group = spriteGroup.group;
-		}
-	}
-	return group;
-};
-flixel_group_FlxTypedGroup.__super__ = flixel_FlxBasic;
-flixel_group_FlxTypedGroup.prototype = $extend(flixel_FlxBasic.prototype,{
-	members: null
-	,maxSize: null
-	,length: null
-	,_marker: null
-	,destroy: function() {
-		flixel_FlxBasic.prototype.destroy.call(this);
-		if(this.members != null) {
-			var i = 0;
-			var basic = null;
-			while(i < this.length) {
-				basic = this.members[i++];
-				if(basic != null) basic.destroy();
-			}
-			this.members = null;
-		}
-	}
-	,update: function(elapsed) {
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && basic.exists && basic.active) basic.update(elapsed);
-		}
-	}
-	,draw: function() {
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && basic.exists && basic.visible) basic.draw();
-		}
-	}
-	,add: function(Object) {
-		if(Object == null) {
-			flixel_FlxG.log.advanced("Cannot add a `null` object to a FlxGroup.",flixel_system_debug_log_LogStyle.WARNING,true);
-			return null;
-		}
-		if(HxOverrides.indexOf(this.members,Object,0) >= 0) return Object;
-		var index = this.getFirstNull();
-		if(index != -1) {
-			this.members[index] = Object;
-			if(index >= this.length) this.length = index + 1;
-			return Object;
-		}
-		if(this.maxSize > 0 && this.length >= this.maxSize) return Object;
-		this.members.push(Object);
-		this.length++;
-		return Object;
-	}
-	,insert: function(position,object) {
-		if(object == null) {
-			flixel_FlxG.log.advanced("Cannot insert a `null` object into a FlxGroup.",flixel_system_debug_log_LogStyle.WARNING,true);
-			return null;
-		}
-		if(HxOverrides.indexOf(this.members,object,0) >= 0) return object;
-		if(position < this.length && this.members[position] == null) {
-			this.members[position] = object;
-			return object;
-		}
-		if(this.maxSize > 0 && this.length >= this.maxSize) return object;
-		this.members.splice(position,0,object);
-		this.length++;
-		return object;
-	}
-	,recycle: function(ObjectClass,ObjectFactory,Force,Revive) {
-		if(Revive == null) Revive = true;
-		if(Force == null) Force = false;
-		var basic = null;
-		if(this.maxSize > 0) {
-			if(this.length < this.maxSize) return this.recycleCreateObject(ObjectClass,ObjectFactory); else {
-				basic = this.members[this._marker++];
-				if(this._marker >= this.maxSize) this._marker = 0;
-				if(Revive) basic.revive();
-				return basic;
-			}
-		} else {
-			basic = this.getFirstAvailable(ObjectClass,Force);
-			if(basic != null) {
-				if(Revive) basic.revive();
-				return basic;
-			}
-			return this.recycleCreateObject(ObjectClass,ObjectFactory);
-		}
-	}
-	,recycleCreateObject: function(ObjectClass,ObjectFactory) {
-		var object = null;
-		if(ObjectFactory != null) this.add(object = ObjectFactory()); else if(ObjectClass != null) this.add(object = Type.createInstance(ObjectClass,[]));
-		return object;
-	}
-	,remove: function(Object,Splice) {
-		if(Splice == null) Splice = false;
-		if(this.members == null) return null;
-		var index = HxOverrides.indexOf(this.members,Object,0);
-		if(index < 0) return null;
-		if(Splice) this.members.splice(index,1); else this.members[index] = null;
-		return Object;
-	}
-	,replace: function(OldObject,NewObject) {
-		var index = HxOverrides.indexOf(this.members,OldObject,0);
-		if(index < 0) return null;
-		this.members[index] = NewObject;
-		return NewObject;
-	}
-	,sort: function(Function,Order) {
-		if(Order == null) Order = -1;
-		this.members.sort((function(f,a1) {
-			return function(a2,a3) {
-				return f(a1,a2,a3);
-			};
-		})(Function,Order));
-	}
-	,getFirstAvailable: function(ObjectClass,Force) {
-		if(Force == null) Force = false;
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && !basic.exists && (ObjectClass == null || js_Boot.__instanceof(basic,ObjectClass))) {
-				if(Force && Type.getClassName(basic == null?null:js_Boot.getClass(basic)) != Type.getClassName(ObjectClass)) continue;
-				return this.members[i - 1];
-			}
-		}
-		return null;
-	}
-	,getFirstNull: function() {
-		var i = 0;
-		while(i < this.length) {
-			if(this.members[i] == null) return i;
-			i++;
-		}
-		return -1;
-	}
-	,getFirstExisting: function() {
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && basic.exists) return basic;
-		}
-		return null;
-	}
-	,getFirstAlive: function() {
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && basic.exists && basic.alive) return basic;
-		}
-		return null;
-	}
-	,getFirstDead: function() {
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && !basic.alive) return basic;
-		}
-		return null;
-	}
-	,countLiving: function() {
-		var i = 0;
-		var count = -1;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null) {
-				if(count < 0) count = 0;
-				if(basic.exists && basic.alive) count++;
-			}
-		}
-		return count;
-	}
-	,countDead: function() {
-		var i = 0;
-		var count = -1;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null) {
-				if(count < 0) count = 0;
-				if(!basic.alive) count++;
-			}
-		}
-		return count;
-	}
-	,getRandom: function(StartIndex,Length) {
-		if(Length == null) Length = 0;
-		if(StartIndex == null) StartIndex = 0;
-		if(StartIndex < 0) StartIndex = 0;
-		if(Length <= 0) Length = this.length;
-		return flixel_FlxG.random.getObject_flixel_group_FlxTypedGroup_T(this.members,null,StartIndex,Length);
-	}
-	,clear: function() {
-		this.length = 0;
-		flixel_util_FlxArrayUtil.clearArray(this.members);
-	}
-	,kill: function() {
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && basic.exists) basic.kill();
-		}
-		flixel_FlxBasic.prototype.kill.call(this);
-	}
-	,revive: function() {
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && !basic.exists) basic.revive();
-		}
-		flixel_FlxBasic.prototype.revive.call(this);
-	}
-	,iterator: function(filter) {
-		return new flixel_group_FlxTypedGroupIterator(this.members,filter);
-	}
-	,forEach: function(Function,Recurse) {
-		if(Recurse == null) Recurse = false;
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null) {
-				if(Recurse) {
-					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
-					if(group != null) group.forEach(Function,Recurse);
-				}
-				Function(basic);
-			}
-		}
-	}
-	,forEachAlive: function(Function,Recurse) {
-		if(Recurse == null) Recurse = false;
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && basic.exists && basic.alive) {
-				if(Recurse) {
-					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
-					if(group != null) group.forEachAlive(Function,Recurse);
-				}
-				Function(basic);
-			}
-		}
-	}
-	,forEachDead: function(Function,Recurse) {
-		if(Recurse == null) Recurse = false;
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && !basic.alive) {
-				if(Recurse) {
-					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
-					if(group != null) group.forEachDead(Function,Recurse);
-				}
-				Function(basic);
-			}
-		}
-	}
-	,forEachExists: function(Function,Recurse) {
-		if(Recurse == null) Recurse = false;
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null && basic.exists) {
-				if(Recurse) {
-					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
-					if(group != null) group.forEachExists(Function,Recurse);
-				}
-				Function(basic);
-			}
-		}
-	}
-	,forEachOfType: function(ObjectClass,Function,Recurse) {
-		if(Recurse == null) Recurse = false;
-		var i = 0;
-		var basic = null;
-		while(i < this.length) {
-			basic = this.members[i++];
-			if(basic != null) {
-				if(Recurse) {
-					var group = flixel_group_FlxTypedGroup.resolveGroup(basic);
-					if(group != null) group.forEachOfType(ObjectClass,Function,Recurse);
-				}
-				if(js_Boot.__instanceof(basic,ObjectClass)) Function(basic);
-			}
-		}
-	}
-	,set_maxSize: function(Size) {
-		this.maxSize = Std["int"](Math.abs(Size));
-		if(this._marker >= this.maxSize) this._marker = 0;
-		if(this.maxSize == 0 || this.members == null || this.maxSize >= this.length) return this.maxSize;
-		var i = this.maxSize;
-		var l = this.length;
-		var basic = null;
-		while(i < l) {
-			basic = this.members[i++];
-			if(basic != null) basic.destroy();
-		}
-		flixel_util_FlxArrayUtil.setLength_flixel_group_FlxTypedGroup_T(this.members,this.maxSize);
-		this.length = this.members.length;
-		return this.maxSize;
-	}
-	,__class__: flixel_group_FlxTypedGroup
-	,__properties__: $extend(flixel_FlxBasic.prototype.__properties__,{set_maxSize:"set_maxSize"})
-});
 var flixel_FlxState = function(MaxSize) {
 	this._requestSubStateReset = false;
 	this.destroySubStates = true;
@@ -2578,6 +2616,9 @@ MenuState.__super__ = flixel_FlxState;
 MenuState.prototype = $extend(flixel_FlxState.prototype,{
 	create: function() {
 		flixel_FlxState.prototype.create.call(this);
+		flixel_FlxG.log.set_redirectTraces(true);
+		flixel_FlxG.autoPause = false;
+		flixel_FlxG.switchState(new PlayState());
 	}
 	,update: function(elapsed) {
 		flixel_FlxState.prototype.update.call(this,elapsed);
@@ -2622,11 +2663,11 @@ NMEPreloader.prototype = $extend(openfl_display_Sprite.prototype,{
 		return 0;
 	}
 	,getHeight: function() {
-		var height = 480;
+		var height = 512;
 		if(height > 0) return height; else return openfl_Lib.current.stage.stageHeight;
 	}
 	,getWidth: function() {
-		var width = 640;
+		var width = 512;
 		if(width > 0) return width; else return openfl_Lib.current.stage.stageWidth;
 	}
 	,onInit: function() {
@@ -2640,6 +2681,52 @@ NMEPreloader.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.progress.set_scaleX(percentLoaded);
 	}
 	,__class__: NMEPreloader
+});
+var PlayState = function(MaxSize) {
+	flixel_FlxState.call(this,MaxSize);
+};
+$hxClasses["PlayState"] = PlayState;
+PlayState.__name__ = ["PlayState"];
+PlayState.__super__ = flixel_FlxState;
+PlayState.prototype = $extend(flixel_FlxState.prototype,{
+	board: null
+	,socket: null
+	,create: function() {
+		var _g = this;
+		this.socket = new WebSocket("ws://192.168.1.105:9000");
+		this.socket.onopen = function() {
+			_g.socket.send("Hey, it's me, ur client");
+		};
+		this.socket.onmessage = function(message) {
+			var BX = Std["int"](message.data.split(",")[0]);
+			var BY = Std["int"](message.data.split(",")[1]);
+			_g.board.rotate(BX,BY);
+		};
+		flixel_FlxState.prototype.create.call(this);
+		this.board = new Board(Settings.BOARD_TILE_WIDTH,Settings.BOARD_TILE_HEIGHT);
+		this.add(this.board);
+	}
+	,update: function(elapsed) {
+		flixel_FlxState.prototype.update.call(this,elapsed);
+		if(flixel_FlxG.mouse._leftButton.current == 2) {
+			var _g = 0;
+			var _g1 = this.board.tab;
+			while(_g < _g1.length) {
+				var r = _g1[_g];
+				++_g;
+				var _g2 = 0;
+				while(_g2 < r.length) {
+					var t = r[_g2];
+					++_g2;
+					if(flixel_FlxG.mouse.overlaps(t)) {
+						t.rotate();
+						this.socket.send(t.getBoardCoordinates());
+					}
+				}
+			}
+		}
+	}
+	,__class__: PlayState
 });
 var Reflect = function() { };
 $hxClasses["Reflect"] = Reflect;
@@ -2710,6 +2797,9 @@ Reflect.makeVarArgs = function(f) {
 		return f(a);
 	};
 };
+var Settings = function() { };
+$hxClasses["Settings"] = Settings;
+Settings.__name__ = ["Settings"];
 var Std = function() { };
 $hxClasses["Std"] = Std;
 Std.__name__ = ["Std"];
@@ -2730,6 +2820,9 @@ Std.parseInt = function(x) {
 };
 Std.parseFloat = function(x) {
 	return parseFloat(x);
+};
+Std.random = function(x) {
+	if(x <= 0) return 0; else return Math.floor(Math.random() * x);
 };
 var StringBuf = function() {
 	this.b = "";
@@ -2802,342 +2895,6 @@ StringTools.hex = function(n,digits) {
 StringTools.fastCodeAt = function(s,index) {
 	return s.charCodeAt(index);
 };
-var ValueType = $hxClasses["ValueType"] = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
-ValueType.TNull = ["TNull",0];
-ValueType.TNull.toString = $estr;
-ValueType.TNull.__enum__ = ValueType;
-ValueType.TInt = ["TInt",1];
-ValueType.TInt.toString = $estr;
-ValueType.TInt.__enum__ = ValueType;
-ValueType.TFloat = ["TFloat",2];
-ValueType.TFloat.toString = $estr;
-ValueType.TFloat.__enum__ = ValueType;
-ValueType.TBool = ["TBool",3];
-ValueType.TBool.toString = $estr;
-ValueType.TBool.__enum__ = ValueType;
-ValueType.TObject = ["TObject",4];
-ValueType.TObject.toString = $estr;
-ValueType.TObject.__enum__ = ValueType;
-ValueType.TFunction = ["TFunction",5];
-ValueType.TFunction.toString = $estr;
-ValueType.TFunction.__enum__ = ValueType;
-ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
-ValueType.TUnknown = ["TUnknown",8];
-ValueType.TUnknown.toString = $estr;
-ValueType.TUnknown.__enum__ = ValueType;
-var Type = function() { };
-$hxClasses["Type"] = Type;
-Type.__name__ = ["Type"];
-Type.getClass = function(o) {
-	if(o == null) return null; else return js_Boot.getClass(o);
-};
-Type.getSuperClass = function(c) {
-	return c.__super__;
-};
-Type.getClassName = function(c) {
-	var a = c.__name__;
-	if(a == null) return null;
-	return a.join(".");
-};
-Type.getEnumName = function(e) {
-	var a = e.__ename__;
-	return a.join(".");
-};
-Type.resolveClass = function(name) {
-	var cl = $hxClasses[name];
-	if(cl == null || !cl.__name__) return null;
-	return cl;
-};
-Type.resolveEnum = function(name) {
-	var e = $hxClasses[name];
-	if(e == null || !e.__ename__) return null;
-	return e;
-};
-Type.createInstance = function(cl,args) {
-	var _g = args.length;
-	switch(_g) {
-	case 0:
-		return new cl();
-	case 1:
-		return new cl(args[0]);
-	case 2:
-		return new cl(args[0],args[1]);
-	case 3:
-		return new cl(args[0],args[1],args[2]);
-	case 4:
-		return new cl(args[0],args[1],args[2],args[3]);
-	case 5:
-		return new cl(args[0],args[1],args[2],args[3],args[4]);
-	case 6:
-		return new cl(args[0],args[1],args[2],args[3],args[4],args[5]);
-	case 7:
-		return new cl(args[0],args[1],args[2],args[3],args[4],args[5],args[6]);
-	case 8:
-		return new cl(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
-	default:
-		throw new js__$Boot_HaxeError("Too many arguments");
-	}
-	return null;
-};
-Type.createEmptyInstance = function(cl) {
-	function empty() {}; empty.prototype = cl.prototype;
-	return new empty();
-};
-Type.createEnum = function(e,constr,params) {
-	var f = Reflect.field(e,constr);
-	if(f == null) throw new js__$Boot_HaxeError("No such constructor " + constr);
-	if(Reflect.isFunction(f)) {
-		if(params == null) throw new js__$Boot_HaxeError("Constructor " + constr + " need parameters");
-		return Reflect.callMethod(e,f,params);
-	}
-	if(params != null && params.length != 0) throw new js__$Boot_HaxeError("Constructor " + constr + " does not need parameters");
-	return f;
-};
-Type.getInstanceFields = function(c) {
-	var a = [];
-	for(var i in c.prototype) a.push(i);
-	HxOverrides.remove(a,"__class__");
-	HxOverrides.remove(a,"__properties__");
-	return a;
-};
-Type.getClassFields = function(c) {
-	var a = Reflect.fields(c);
-	HxOverrides.remove(a,"__name__");
-	HxOverrides.remove(a,"__interfaces__");
-	HxOverrides.remove(a,"__properties__");
-	HxOverrides.remove(a,"__super__");
-	HxOverrides.remove(a,"__meta__");
-	HxOverrides.remove(a,"prototype");
-	return a;
-};
-Type.getEnumConstructs = function(e) {
-	var a = e.__constructs__;
-	return a.slice();
-};
-Type["typeof"] = function(v) {
-	var _g = typeof(v);
-	switch(_g) {
-	case "boolean":
-		return ValueType.TBool;
-	case "string":
-		return ValueType.TClass(String);
-	case "number":
-		if(Math.ceil(v) == v % 2147483648.0) return ValueType.TInt;
-		return ValueType.TFloat;
-	case "object":
-		if(v == null) return ValueType.TNull;
-		var e = v.__enum__;
-		if(e != null) return ValueType.TEnum(e);
-		var c = js_Boot.getClass(v);
-		if(c != null) return ValueType.TClass(c);
-		return ValueType.TObject;
-	case "function":
-		if(v.__name__ || v.__ename__) return ValueType.TObject;
-		return ValueType.TFunction;
-	case "undefined":
-		return ValueType.TNull;
-	default:
-		return ValueType.TUnknown;
-	}
-};
-Type.enumEq = function(a,b) {
-	if(a == b) return true;
-	try {
-		if(a[0] != b[0]) return false;
-		var _g1 = 2;
-		var _g = a.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			if(!Type.enumEq(a[i],b[i])) return false;
-		}
-		var e = a.__enum__;
-		if(e != b.__enum__ || e == null) return false;
-	} catch( e1 ) {
-		haxe_CallStack.lastException = e1;
-		if (e1 instanceof js__$Boot_HaxeError) e1 = e1.val;
-		return false;
-	}
-	return true;
-};
-var _$UInt_UInt_$Impl_$ = {};
-$hxClasses["_UInt.UInt_Impl_"] = _$UInt_UInt_$Impl_$;
-_$UInt_UInt_$Impl_$.__name__ = ["_UInt","UInt_Impl_"];
-_$UInt_UInt_$Impl_$.gt = function(a,b) {
-	var aNeg = a < 0;
-	var bNeg = b < 0;
-	if(aNeg != bNeg) return aNeg; else return a > b;
-};
-_$UInt_UInt_$Impl_$.toFloat = function(this1) {
-	var $int = this1;
-	if($int < 0) return 4294967296.0 + $int; else return $int + 0.0;
-};
-var Xml = function(nodeType) {
-	this.nodeType = nodeType;
-	this.children = [];
-	this.attributeMap = new haxe_ds_StringMap();
-};
-$hxClasses["Xml"] = Xml;
-Xml.__name__ = ["Xml"];
-Xml.parse = function(str) {
-	return haxe_xml_Parser.parse(str);
-};
-Xml.createElement = function(name) {
-	var xml = new Xml(Xml.Element);
-	if(xml.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + xml.nodeType);
-	xml.nodeName = name;
-	return xml;
-};
-Xml.createPCData = function(data) {
-	var xml = new Xml(Xml.PCData);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createCData = function(data) {
-	var xml = new Xml(Xml.CData);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createComment = function(data) {
-	var xml = new Xml(Xml.Comment);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createDocType = function(data) {
-	var xml = new Xml(Xml.DocType);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createProcessingInstruction = function(data) {
-	var xml = new Xml(Xml.ProcessingInstruction);
-	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
-	xml.nodeValue = data;
-	return xml;
-};
-Xml.createDocument = function() {
-	return new Xml(Xml.Document);
-};
-Xml.prototype = {
-	nodeType: null
-	,nodeName: null
-	,nodeValue: null
-	,parent: null
-	,children: null
-	,attributeMap: null
-	,get_nodeName: function() {
-		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
-		return this.nodeName;
-	}
-	,get: function(att) {
-		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
-		return this.attributeMap.get(att);
-	}
-	,set: function(att,value) {
-		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
-		this.attributeMap.set(att,value);
-	}
-	,exists: function(att) {
-		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
-		return this.attributeMap.exists(att);
-	}
-	,elements: function() {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		var ret;
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.children;
-		while(_g1 < _g2.length) {
-			var child = _g2[_g1];
-			++_g1;
-			if(child.nodeType == Xml.Element) _g.push(child);
-		}
-		ret = _g;
-		return HxOverrides.iter(ret);
-	}
-	,elementsNamed: function(name) {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		var ret;
-		var _g = [];
-		var _g1 = 0;
-		var _g2 = this.children;
-		while(_g1 < _g2.length) {
-			var child = _g2[_g1];
-			++_g1;
-			if(child.nodeType == Xml.Element && (function($this) {
-				var $r;
-				if(child.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + child.nodeType);
-				$r = child.nodeName;
-				return $r;
-			}(this)) == name) _g.push(child);
-		}
-		ret = _g;
-		return HxOverrides.iter(ret);
-	}
-	,firstElement: function() {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		var _g = 0;
-		var _g1 = this.children;
-		while(_g < _g1.length) {
-			var child = _g1[_g];
-			++_g;
-			if(child.nodeType == Xml.Element) return child;
-		}
-		return null;
-	}
-	,addChild: function(x) {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		if(x.parent != null) x.parent.removeChild(x);
-		this.children.push(x);
-		x.parent = this;
-	}
-	,removeChild: function(x) {
-		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
-		if(HxOverrides.remove(this.children,x)) {
-			x.parent = null;
-			return true;
-		}
-		return false;
-	}
-	,__class__: Xml
-	,__properties__: {get_nodeName:"get_nodeName"}
-};
-var flixel_IFlxBasic = function() { };
-$hxClasses["flixel.IFlxBasic"] = flixel_IFlxBasic;
-flixel_IFlxBasic.__name__ = ["flixel","IFlxBasic"];
-flixel_IFlxBasic.prototype = {
-	set_active: null
-	,set_visible: null
-	,set_alive: null
-	,set_exists: null
-	,ID: null
-	,active: null
-	,visible: null
-	,alive: null
-	,exists: null
-	,draw: null
-	,update: null
-	,destroy: null
-	,kill: null
-	,revive: null
-	,toString: null
-	,__class__: flixel_IFlxBasic
-	,__properties__: {set_exists:"set_exists",set_alive:"set_alive",set_visible:"set_visible",set_active:"set_active"}
-};
-var openfl_VectorData = function() {
-	this.length = 0;
-};
-$hxClasses["openfl.VectorData"] = openfl_VectorData;
-openfl_VectorData.__name__ = ["openfl","VectorData"];
-openfl_VectorData.prototype = {
-	data: null
-	,fixed: null
-	,length: null
-	,__class__: openfl_VectorData
-};
 var flixel_util_IFlxPooled = function() { };
 $hxClasses["flixel.util.IFlxPooled"] = flixel_util_IFlxPooled;
 flixel_util_IFlxPooled.__name__ = ["flixel","util","IFlxPooled"];
@@ -3154,256 +2911,6 @@ flixel_util_IFlxPool.prototype = {
 	preAllocate: null
 	,clear: null
 	,__class__: flixel_util_IFlxPool
-};
-var flixel_util_FlxPool_$flixel_$math_$FlxPoint = function(classObj) {
-	this._count = 0;
-	this._pool = [];
-	this._class = classObj;
-};
-$hxClasses["flixel.util.FlxPool_flixel_math_FlxPoint"] = flixel_util_FlxPool_$flixel_$math_$FlxPoint;
-flixel_util_FlxPool_$flixel_$math_$FlxPoint.__name__ = ["flixel","util","FlxPool_flixel_math_FlxPoint"];
-flixel_util_FlxPool_$flixel_$math_$FlxPoint.__interfaces__ = [flixel_util_IFlxPool];
-flixel_util_FlxPool_$flixel_$math_$FlxPoint.prototype = {
-	_pool: null
-	,_class: null
-	,_count: null
-	,get: function() {
-		if(this._count == 0) return Type.createInstance(this._class,[]);
-		return this._pool[--this._count];
-	}
-	,put: function(obj) {
-		if(obj != null) {
-			var i = HxOverrides.indexOf(this._pool,obj,0);
-			if(i == -1 || i >= this._count) {
-				obj.destroy();
-				this._pool[this._count++] = obj;
-			}
-		}
-	}
-	,putUnsafe: function(obj) {
-		if(obj != null) {
-			obj.destroy();
-			this._pool[this._count++] = obj;
-		}
-	}
-	,preAllocate: function(numObjects) {
-		while(numObjects-- > 0) this._pool[this._count++] = Type.createInstance(this._class,[]);
-	}
-	,clear: function() {
-		this._count = 0;
-		var oldPool = this._pool;
-		this._pool = [];
-		return oldPool;
-	}
-	,get_length: function() {
-		return this._count;
-	}
-	,__class__: flixel_util_FlxPool_$flixel_$math_$FlxPoint
-	,__properties__: {get_length:"get_length"}
-};
-var flixel_math_FlxPoint = function(X,Y) {
-	if(Y == null) Y = 0;
-	if(X == null) X = 0;
-	this._inPool = false;
-	this._weak = false;
-	this.y = 0;
-	this.x = 0;
-	this.set(X,Y);
-};
-$hxClasses["flixel.math.FlxPoint"] = flixel_math_FlxPoint;
-flixel_math_FlxPoint.__name__ = ["flixel","math","FlxPoint"];
-flixel_math_FlxPoint.__interfaces__ = [flixel_util_IFlxPooled];
-flixel_math_FlxPoint.__properties__ = {get_pool:"get_pool"}
-flixel_math_FlxPoint.get = function(X,Y) {
-	if(Y == null) Y = 0;
-	if(X == null) X = 0;
-	var point = flixel_math_FlxPoint._pool.get().set(X,Y);
-	point._inPool = false;
-	return point;
-};
-flixel_math_FlxPoint.weak = function(X,Y) {
-	if(Y == null) Y = 0;
-	if(X == null) X = 0;
-	var point = flixel_math_FlxPoint.get(X,Y);
-	point._weak = true;
-	return point;
-};
-flixel_math_FlxPoint.get_pool = function() {
-	return flixel_math_FlxPoint._pool;
-};
-flixel_math_FlxPoint.prototype = {
-	x: null
-	,y: null
-	,_weak: null
-	,_inPool: null
-	,put: function() {
-		if(!this._inPool) {
-			this._inPool = true;
-			this._weak = false;
-			flixel_math_FlxPoint._pool.putUnsafe(this);
-		}
-	}
-	,putWeak: function() {
-		if(this._weak) this.put();
-	}
-	,set: function(X,Y) {
-		if(Y == null) Y = 0;
-		if(X == null) X = 0;
-		this.set_x(X);
-		this.set_y(Y);
-		return this;
-	}
-	,add: function(X,Y) {
-		if(Y == null) Y = 0;
-		if(X == null) X = 0;
-		var _g = this;
-		_g.set_x(_g.x + X);
-		var _g1 = this;
-		_g1.set_y(_g1.y + Y);
-		return this;
-	}
-	,addPoint: function(point) {
-		var _g = this;
-		_g.set_x(_g.x + point.x);
-		var _g1 = this;
-		_g1.set_y(_g1.y + point.y);
-		if(point._weak) point.put();
-		return this;
-	}
-	,subtract: function(X,Y) {
-		if(Y == null) Y = 0;
-		if(X == null) X = 0;
-		var _g = this;
-		_g.set_x(_g.x - X);
-		var _g1 = this;
-		_g1.set_y(_g1.y - Y);
-		return this;
-	}
-	,subtractPoint: function(point) {
-		var _g = this;
-		_g.set_x(_g.x - point.x);
-		var _g1 = this;
-		_g1.set_y(_g1.y - point.y);
-		if(point._weak) point.put();
-		return this;
-	}
-	,scale: function(k) {
-		var _g = this;
-		_g.set_x(_g.x * k);
-		var _g1 = this;
-		_g1.set_y(_g1.y * k);
-		return this;
-	}
-	,copyFrom: function(point) {
-		this.set_x(point.x);
-		this.set_y(point.y);
-		if(point._weak) point.put();
-		return this;
-	}
-	,copyTo: function(point) {
-		if(point == null) point = flixel_math_FlxPoint.get(null,null);
-		point.set_x(this.x);
-		point.set_y(this.y);
-		return point;
-	}
-	,copyFromFlash: function(FlashPoint) {
-		this.set_x(FlashPoint.x);
-		this.set_y(FlashPoint.y);
-		return this;
-	}
-	,copyToFlash: function(FlashPoint) {
-		if(FlashPoint == null) FlashPoint = new openfl_geom_Point();
-		FlashPoint.x = this.x;
-		FlashPoint.y = this.y;
-		return FlashPoint;
-	}
-	,addToFlash: function(FlashPoint) {
-		FlashPoint.x += this.x;
-		FlashPoint.y += this.y;
-		return FlashPoint;
-	}
-	,subtractFromFlash: function(FlashPoint) {
-		FlashPoint.x -= this.x;
-		FlashPoint.y -= this.y;
-		return FlashPoint;
-	}
-	,inCoords: function(RectX,RectY,RectWidth,RectHeight) {
-		return flixel_math_FlxMath.pointInCoordinates(this.x,this.y,RectX,RectY,RectWidth,RectHeight);
-	}
-	,inRect: function(Rect) {
-		return flixel_math_FlxMath.pointInFlxRect(this.x,this.y,Rect);
-	}
-	,distanceTo: function(point) {
-		var dx = this.x - point.x;
-		var dy = this.y - point.y;
-		if(point._weak) point.put();
-		return Math.sqrt(dx * dx + dy * dy);
-	}
-	,floor: function() {
-		this.set_x(Math.floor(this.x));
-		this.set_y(Math.floor(this.y));
-		return this;
-	}
-	,ceil: function() {
-		this.set_x(Math.ceil(this.x));
-		this.set_y(Math.ceil(this.y));
-		return this;
-	}
-	,round: function() {
-		this.set_x(Math.round(this.x));
-		this.set_y(Math.round(this.y));
-		return this;
-	}
-	,rotate: function(Pivot,Angle) {
-		var radians = Angle * (Math.PI / 180);
-		var sin = flixel_math_FlxMath.fastSin(radians);
-		var cos = flixel_math_FlxMath.fastSin(radians + 1.570796327);
-		var dx = this.x - Pivot.x;
-		var dy = this.y - Pivot.y;
-		this.set_x(cos * dx - sin * dy + Pivot.x);
-		this.set_y(sin * dx + cos * dy + Pivot.y);
-		if(Pivot._weak) Pivot.put();
-		return this;
-	}
-	,angleBetween: function(point) {
-		var x = point.x - this.x;
-		var y = point.y - this.y;
-		var angle = 0;
-		if(x != 0 || y != 0) {
-			var c1 = Math.PI * 0.25;
-			var c2 = 3 * c1;
-			var ay;
-			if(y < 0) ay = -y; else ay = y;
-			if(x >= 0) angle = c1 - c1 * ((x - ay) / (x + ay)); else angle = c2 - c1 * ((x + ay) / (ay - x));
-			angle = (y < 0?-angle:angle) * (180 / Math.PI);
-			if(angle > 90) angle = angle - 270; else angle += 90;
-		}
-		if(point._weak) point.put();
-		return angle;
-	}
-	,equals: function(point) {
-		var result = Math.abs(this.x - point.x) <= 0.0000001 && Math.abs(this.y - point.y) <= 0.0000001;
-		if(point._weak) point.put();
-		return result;
-	}
-	,destroy: function() {
-	}
-	,transform: function(matrix) {
-		var x1 = this.x * matrix.a + this.y * matrix.c + matrix.tx;
-		var y1 = this.x * matrix.b + this.y * matrix.d + matrix.ty;
-		return this.set(x1,y1);
-	}
-	,toString: function() {
-		return flixel_util_FlxStringUtil.getDebugString([flixel_util_LabelValuePair._pool.get().create("x",this.x),flixel_util_LabelValuePair._pool.get().create("y",this.y)]);
-	}
-	,set_x: function(Value) {
-		return this.x = Value;
-	}
-	,set_y: function(Value) {
-		return this.y = Value;
-	}
-	,__class__: flixel_math_FlxPoint
-	,__properties__: {set_y:"set_y",set_x:"set_x"}
 };
 var flixel_util_FlxPool_$flixel_$math_$FlxRect = function(classObj) {
 	this._count = 0;
@@ -3754,6 +3261,1877 @@ flixel_math_FlxRect.prototype = {
 	}
 	,__class__: flixel_math_FlxRect
 	,__properties__: {get_isEmpty:"get_isEmpty",set_bottom:"set_bottom",get_bottom:"get_bottom",set_top:"set_top",get_top:"get_top",set_right:"set_right",get_right:"get_right",set_left:"set_left",get_left:"get_left"}
+};
+var flixel_FlxObject = function(X,Y,Width,Height) {
+	if(Height == null) Height = 0;
+	if(Width == null) Width = 0;
+	if(Y == null) Y = 0;
+	if(X == null) X = 0;
+	this._rect = flixel_math_FlxRect.get(null,null,null,null);
+	this._point = flixel_math_FlxPoint.get(null,null);
+	this.path = null;
+	this.ignoreDrawDebug = false;
+	this.debugBoundingBoxColorPartial = -16744448;
+	this.debugBoundingBoxColorNotSolid = -16776961;
+	this.debugBoundingBoxColorSolid = -65536;
+	this.debugBoundingBoxColor = null;
+	this.collisonXDrag = true;
+	this.allowCollisions = 4369;
+	this.wasTouching = 0;
+	this.touching = 0;
+	this.health = 1;
+	this.maxAngular = 10000;
+	this.angularDrag = 0;
+	this.angularAcceleration = 0;
+	this.angularVelocity = 0;
+	this.elasticity = 0;
+	this.mass = 1;
+	this.immovable = false;
+	this.moves = true;
+	this.angle = 0;
+	this.pixelPerfectPosition = true;
+	this.y = 0;
+	this.x = 0;
+	flixel_FlxBasic.call(this);
+	this.set_x(X);
+	this.set_y(Y);
+	this.set_width(Width);
+	this.set_height(Height);
+	this.initVars();
+};
+$hxClasses["flixel.FlxObject"] = flixel_FlxObject;
+flixel_FlxObject.__name__ = ["flixel","FlxObject"];
+flixel_FlxObject.separate = function(Object1,Object2) {
+	var separatedX = flixel_FlxObject.separateX(Object1,Object2);
+	var separatedY = flixel_FlxObject.separateY(Object1,Object2);
+	return separatedX || separatedY;
+};
+flixel_FlxObject.updateTouchingFlags = function(Object1,Object2) {
+	var touchingX = flixel_FlxObject.updateTouchingFlagsX(Object1,Object2);
+	var touchingY = flixel_FlxObject.updateTouchingFlagsY(Object1,Object2);
+	return touchingX || touchingY;
+};
+flixel_FlxObject.computeOverlapX = function(Object1,Object2,checkMaxOverlap) {
+	if(checkMaxOverlap == null) checkMaxOverlap = true;
+	var overlap = 0;
+	var obj1delta = Object1.x - Object1.last.x;
+	var obj2delta = Object2.x - Object2.last.x;
+	if(obj1delta != obj2delta) {
+		var obj1deltaAbs;
+		if(obj1delta > 0) obj1deltaAbs = obj1delta; else obj1deltaAbs = -obj1delta;
+		var obj2deltaAbs;
+		if(obj2delta > 0) obj2deltaAbs = obj2delta; else obj2deltaAbs = -obj2delta;
+		var obj1rect = flixel_FlxObject._firstSeparateFlxRect.set(Object1.x - (obj1delta > 0?obj1delta:0),Object1.last.y,Object1.get_width() + obj1deltaAbs,Object1.get_height());
+		var obj2rect = flixel_FlxObject._secondSeparateFlxRect.set(Object2.x - (obj2delta > 0?obj2delta:0),Object2.last.y,Object2.get_width() + obj2deltaAbs,Object2.get_height());
+		if(obj1rect.x + obj1rect.width > obj2rect.x && obj1rect.x < obj2rect.x + obj2rect.width && obj1rect.y + obj1rect.height > obj2rect.y && obj1rect.y < obj2rect.y + obj2rect.height) {
+			var maxOverlap;
+			if(checkMaxOverlap) maxOverlap = obj1deltaAbs + obj2deltaAbs + flixel_FlxObject.SEPARATE_BIAS; else maxOverlap = 0;
+			if(obj1delta > obj2delta) {
+				overlap = Object1.x + Object1.get_width() - Object2.x;
+				if(checkMaxOverlap && overlap > maxOverlap || (Object1.allowCollisions & 16) == 0 || (Object2.allowCollisions & 1) == 0) overlap = 0; else {
+					Object1.touching |= 16;
+					Object2.touching |= 1;
+				}
+			} else if(obj1delta < obj2delta) {
+				overlap = Object1.x - Object2.get_width() - Object2.x;
+				if(checkMaxOverlap && -overlap > maxOverlap || (Object1.allowCollisions & 1) == 0 || (Object2.allowCollisions & 16) == 0) overlap = 0; else {
+					Object1.touching |= 1;
+					Object2.touching |= 16;
+				}
+			}
+		}
+	}
+	return overlap;
+};
+flixel_FlxObject.separateX = function(Object1,Object2) {
+	var obj1immovable = Object1.immovable;
+	var obj2immovable = Object2.immovable;
+	if(obj1immovable && obj2immovable) return false;
+	if(Object1.flixelType == 3) {
+		var tilemap = Object1;
+		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.separateX);
+	}
+	if(Object2.flixelType == 3) {
+		var tilemap1 = Object2;
+		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.separateX,true);
+	}
+	var overlap = flixel_FlxObject.computeOverlapX(Object1,Object2);
+	if(overlap != 0) {
+		var obj1v = Object1.velocity.x;
+		var obj2v = Object2.velocity.x;
+		if(!obj1immovable && !obj2immovable) {
+			overlap *= 0.5;
+			Object1.set_x(Object1.x - overlap);
+			var _g = Object2;
+			_g.set_x(_g.x + overlap);
+			var obj1velocity;
+			obj1velocity = Math.sqrt(obj2v * obj2v * Object2.mass / Object1.mass) * (obj2v > 0?1:-1);
+			var obj2velocity;
+			obj2velocity = Math.sqrt(obj1v * obj1v * Object1.mass / Object2.mass) * (obj1v > 0?1:-1);
+			var average = (obj1velocity + obj2velocity) * 0.5;
+			obj1velocity -= average;
+			obj2velocity -= average;
+			Object1.velocity.set_x(average + obj1velocity * Object1.elasticity);
+			Object2.velocity.set_x(average + obj2velocity * Object2.elasticity);
+		} else if(!obj1immovable) {
+			Object1.set_x(Object1.x - overlap);
+			Object1.velocity.set_x(obj2v - obj1v * Object1.elasticity);
+		} else if(!obj2immovable) {
+			var _g1 = Object2;
+			_g1.set_x(_g1.x + overlap);
+			Object2.velocity.set_x(obj1v - obj2v * Object2.elasticity);
+		}
+		return true;
+	}
+	return false;
+};
+flixel_FlxObject.updateTouchingFlagsX = function(Object1,Object2) {
+	if(Object1.flixelType == 3) {
+		var tilemap = Object1;
+		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.updateTouchingFlagsX);
+	}
+	if(Object2.flixelType == 3) {
+		var tilemap1 = Object2;
+		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.updateTouchingFlagsX,true);
+	}
+	return flixel_FlxObject.computeOverlapX(Object1,Object2,false) != 0;
+};
+flixel_FlxObject.computeOverlapY = function(Object1,Object2,checkMaxOverlap) {
+	if(checkMaxOverlap == null) checkMaxOverlap = true;
+	var overlap = 0;
+	var obj1delta = Object1.y - Object1.last.y;
+	var obj2delta = Object2.y - Object2.last.y;
+	if(obj1delta != obj2delta) {
+		var obj1deltaAbs;
+		if(obj1delta > 0) obj1deltaAbs = obj1delta; else obj1deltaAbs = -obj1delta;
+		var obj2deltaAbs;
+		if(obj2delta > 0) obj2deltaAbs = obj2delta; else obj2deltaAbs = -obj2delta;
+		var obj1rect = flixel_FlxObject._firstSeparateFlxRect.set(Object1.x,Object1.y - (obj1delta > 0?obj1delta:0),Object1.get_width(),Object1.get_height() + obj1deltaAbs);
+		var obj2rect = flixel_FlxObject._secondSeparateFlxRect.set(Object2.x,Object2.y - (obj2delta > 0?obj2delta:0),Object2.get_width(),Object2.get_height() + obj2deltaAbs);
+		if(obj1rect.x + obj1rect.width > obj2rect.x && obj1rect.x < obj2rect.x + obj2rect.width && obj1rect.y + obj1rect.height > obj2rect.y && obj1rect.y < obj2rect.y + obj2rect.height) {
+			var maxOverlap;
+			if(checkMaxOverlap) maxOverlap = obj1deltaAbs + obj2deltaAbs + flixel_FlxObject.SEPARATE_BIAS; else maxOverlap = 0;
+			if(obj1delta > obj2delta) {
+				overlap = Object1.y + Object1.get_height() - Object2.y;
+				if(checkMaxOverlap && overlap > maxOverlap || (Object1.allowCollisions & 4096) == 0 || (Object2.allowCollisions & 256) == 0) overlap = 0; else {
+					Object1.touching |= 4096;
+					Object2.touching |= 256;
+				}
+			} else if(obj1delta < obj2delta) {
+				overlap = Object1.y - Object2.get_height() - Object2.y;
+				if(checkMaxOverlap && -overlap > maxOverlap || (Object1.allowCollisions & 256) == 0 || (Object2.allowCollisions & 4096) == 0) overlap = 0; else {
+					Object1.touching |= 256;
+					Object2.touching |= 4096;
+				}
+			}
+		}
+	}
+	return overlap;
+};
+flixel_FlxObject.separateY = function(Object1,Object2) {
+	var obj1immovable = Object1.immovable;
+	var obj2immovable = Object2.immovable;
+	if(obj1immovable && obj2immovable) return false;
+	if(Object1.flixelType == 3) {
+		var tilemap = Object1;
+		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.separateY);
+	}
+	if(Object2.flixelType == 3) {
+		var tilemap1 = Object2;
+		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.separateY,true);
+	}
+	var overlap = flixel_FlxObject.computeOverlapY(Object1,Object2);
+	if(overlap != 0) {
+		var obj1delta = Object1.y - Object1.last.y;
+		var obj2delta = Object2.y - Object2.last.y;
+		var obj1v = Object1.velocity.y;
+		var obj2v = Object2.velocity.y;
+		if(!obj1immovable && !obj2immovable) {
+			overlap *= 0.5;
+			Object1.set_y(Object1.y - overlap);
+			var _g = Object2;
+			_g.set_y(_g.y + overlap);
+			var obj1velocity;
+			obj1velocity = Math.sqrt(obj2v * obj2v * Object2.mass / Object1.mass) * (obj2v > 0?1:-1);
+			var obj2velocity;
+			obj2velocity = Math.sqrt(obj1v * obj1v * Object1.mass / Object2.mass) * (obj1v > 0?1:-1);
+			var average = (obj1velocity + obj2velocity) * 0.5;
+			obj1velocity -= average;
+			obj2velocity -= average;
+			Object1.velocity.set_y(average + obj1velocity * Object1.elasticity);
+			Object2.velocity.set_y(average + obj2velocity * Object2.elasticity);
+		} else if(!obj1immovable) {
+			Object1.set_y(Object1.y - overlap);
+			Object1.velocity.set_y(obj2v - obj1v * Object1.elasticity);
+			if(Object1.collisonXDrag && Object2.active && Object2.moves && obj1delta > obj2delta) {
+				var _g1 = Object1;
+				_g1.set_x(_g1.x + (Object2.x - Object2.last.x));
+			}
+		} else if(!obj2immovable) {
+			var _g2 = Object2;
+			_g2.set_y(_g2.y + overlap);
+			Object2.velocity.set_y(obj1v - obj2v * Object2.elasticity);
+			if(Object2.collisonXDrag && Object1.active && Object1.moves && obj1delta < obj2delta) {
+				var _g3 = Object2;
+				_g3.set_x(_g3.x + (Object1.x - Object1.last.x));
+			}
+		}
+		return true;
+	}
+	return false;
+};
+flixel_FlxObject.updateTouchingFlagsY = function(Object1,Object2) {
+	if(Object1.flixelType == 3) {
+		var tilemap = Object1;
+		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.updateTouchingFlagsY);
+	}
+	if(Object2.flixelType == 3) {
+		var tilemap1 = Object2;
+		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.updateTouchingFlagsY,true);
+	}
+	return flixel_FlxObject.computeOverlapY(Object1,Object2,false) != 0;
+};
+flixel_FlxObject.__super__ = flixel_FlxBasic;
+flixel_FlxObject.prototype = $extend(flixel_FlxBasic.prototype,{
+	x: null
+	,y: null
+	,width: null
+	,height: null
+	,pixelPerfectRender: null
+	,pixelPerfectPosition: null
+	,angle: null
+	,moves: null
+	,immovable: null
+	,scrollFactor: null
+	,velocity: null
+	,acceleration: null
+	,drag: null
+	,maxVelocity: null
+	,last: null
+	,mass: null
+	,elasticity: null
+	,angularVelocity: null
+	,angularAcceleration: null
+	,angularDrag: null
+	,maxAngular: null
+	,health: null
+	,touching: null
+	,wasTouching: null
+	,allowCollisions: null
+	,collisonXDrag: null
+	,debugBoundingBoxColor: null
+	,debugBoundingBoxColorSolid: null
+	,debugBoundingBoxColorNotSolid: null
+	,debugBoundingBoxColorPartial: null
+	,ignoreDrawDebug: null
+	,path: null
+	,_point: null
+	,_rect: null
+	,initVars: function() {
+		this.flixelType = 1;
+		this.last = flixel_math_FlxPoint.get(this.x,this.y);
+		this.scrollFactor = flixel_math_FlxPoint.get(1,1);
+		this.pixelPerfectPosition = flixel_FlxObject.defaultPixelPerfectPosition;
+		this.velocity = flixel_math_FlxPoint.get(null,null);
+		this.acceleration = flixel_math_FlxPoint.get(null,null);
+		this.drag = flixel_math_FlxPoint.get(null,null);
+		this.maxVelocity = flixel_math_FlxPoint.get(10000,10000);
+	}
+	,initMotionVars: function() {
+		this.velocity = flixel_math_FlxPoint.get(null,null);
+		this.acceleration = flixel_math_FlxPoint.get(null,null);
+		this.drag = flixel_math_FlxPoint.get(null,null);
+		this.maxVelocity = flixel_math_FlxPoint.get(10000,10000);
+	}
+	,destroy: function() {
+		flixel_FlxBasic.prototype.destroy.call(this);
+		this.velocity = flixel_util_FlxDestroyUtil.put(this.velocity);
+		this.acceleration = flixel_util_FlxDestroyUtil.put(this.acceleration);
+		this.drag = flixel_util_FlxDestroyUtil.put(this.drag);
+		this.maxVelocity = flixel_util_FlxDestroyUtil.put(this.maxVelocity);
+		this.scrollFactor = flixel_util_FlxDestroyUtil.put(this.scrollFactor);
+		this.last = flixel_util_FlxDestroyUtil.put(this.last);
+		this._point = flixel_util_FlxDestroyUtil.put(this._point);
+		this._rect = flixel_util_FlxDestroyUtil.put(this._rect);
+	}
+	,update: function(elapsed) {
+		flixel_FlxBasic.prototype.update.call(this,elapsed);
+		this.last.set(this.x,this.y);
+		if(this.path != null && this.path.active) this.path.update(elapsed);
+		if(this.moves) this.updateMotion(elapsed);
+		this.wasTouching = this.touching;
+		this.touching = 0;
+	}
+	,updateMotion: function(elapsed) {
+		var velocityDelta = 0.5 * (flixel_math_FlxVelocity.computeVelocity(this.angularVelocity,this.angularAcceleration,this.angularDrag,this.maxAngular,elapsed) - this.angularVelocity);
+		this.angularVelocity += velocityDelta;
+		var _g = this;
+		_g.set_angle(_g.angle + this.angularVelocity * elapsed);
+		this.angularVelocity += velocityDelta;
+		velocityDelta = 0.5 * (flixel_math_FlxVelocity.computeVelocity(this.velocity.x,this.acceleration.x,this.drag.x,this.maxVelocity.x,elapsed) - this.velocity.x);
+		var _g1 = this.velocity;
+		_g1.set_x(_g1.x + velocityDelta);
+		var delta = this.velocity.x * elapsed;
+		var _g2 = this.velocity;
+		_g2.set_x(_g2.x + velocityDelta);
+		var _g3 = this;
+		_g3.set_x(_g3.x + delta);
+		velocityDelta = 0.5 * (flixel_math_FlxVelocity.computeVelocity(this.velocity.y,this.acceleration.y,this.drag.y,this.maxVelocity.y,elapsed) - this.velocity.y);
+		var _g4 = this.velocity;
+		_g4.set_y(_g4.y + velocityDelta);
+		delta = this.velocity.y * elapsed;
+		var _g5 = this.velocity;
+		_g5.set_y(_g5.y + velocityDelta);
+		var _g6 = this;
+		_g6.set_y(_g6.y + delta);
+	}
+	,draw: function() {
+		flixel_FlxBasic.prototype.draw.call(this);
+		if(flixel_FlxG["debugger"].drawDebug) this.drawDebug();
+	}
+	,overlaps: function(ObjectOrGroup,InScreenSpace,Camera) {
+		if(InScreenSpace == null) InScreenSpace = false;
+		var group = flixel_group_FlxTypedGroup.resolveGroup(ObjectOrGroup);
+		if(group != null) return flixel_group_FlxTypedGroup.overlaps($bind(this,this.overlapsCallback),group,0,0,InScreenSpace,Camera);
+		if(ObjectOrGroup.flixelType == 3) {
+			var tilemap = ObjectOrGroup;
+			return tilemap.overlaps(this,InScreenSpace,Camera);
+		}
+		var object = ObjectOrGroup;
+		if(!InScreenSpace) return object.x + object.get_width() > this.x && object.x < this.x + this.get_width() && object.y + object.get_height() > this.y && object.y < this.y + this.get_height();
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		var objectScreenPos = object.getScreenPosition(null,Camera);
+		this.getScreenPosition(this._point,Camera);
+		return objectScreenPos.x + object.get_width() > this._point.x && objectScreenPos.x < this._point.x + this.get_width() && objectScreenPos.y + object.get_height() > this._point.y && objectScreenPos.y < this._point.y + this.get_height();
+	}
+	,overlapsCallback: function(ObjectOrGroup,X,Y,InScreenSpace,Camera) {
+		return this.overlaps(ObjectOrGroup,InScreenSpace,Camera);
+	}
+	,overlapsAt: function(X,Y,ObjectOrGroup,InScreenSpace,Camera) {
+		if(InScreenSpace == null) InScreenSpace = false;
+		var group = flixel_group_FlxTypedGroup.resolveGroup(ObjectOrGroup);
+		if(group != null) return flixel_group_FlxTypedGroup.overlaps($bind(this,this.overlapsAtCallback),group,X,Y,InScreenSpace,Camera);
+		if(ObjectOrGroup.flixelType == 3) {
+			var tilemap = ObjectOrGroup;
+			return tilemap.overlapsAt(tilemap.x - (X - this.x),tilemap.y - (Y - this.y),this,InScreenSpace,Camera);
+		}
+		var object = ObjectOrGroup;
+		if(!InScreenSpace) return object.x + object.get_width() > X && object.x < X + this.get_width() && object.y + object.get_height() > Y && object.y < Y + this.get_height();
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		var objectScreenPos = object.getScreenPosition(null,Camera);
+		this.getScreenPosition(this._point,Camera);
+		return objectScreenPos.x + object.get_width() > this._point.x && objectScreenPos.x < this._point.x + this.get_width() && objectScreenPos.y + object.get_height() > this._point.y && objectScreenPos.y < this._point.y + this.get_height();
+	}
+	,overlapsAtCallback: function(ObjectOrGroup,X,Y,InScreenSpace,Camera) {
+		return this.overlapsAt(X,Y,ObjectOrGroup,InScreenSpace,Camera);
+	}
+	,overlapsPoint: function(point,InScreenSpace,Camera) {
+		if(InScreenSpace == null) InScreenSpace = false;
+		if(!InScreenSpace) return point.x >= this.x && point.x < this.x + this.get_width() && point.y >= this.y && point.y < this.y + this.get_height();
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		var xPos = point.x - Camera.scroll.x;
+		var yPos = point.y - Camera.scroll.y;
+		this.getScreenPosition(this._point,Camera);
+		if(point._weak) point.put();
+		return xPos >= this._point.x && xPos < this._point.x + this.get_width() && yPos >= this._point.y && yPos < this._point.y + this.get_height();
+	}
+	,inWorldBounds: function() {
+		return this.x + this.get_width() > flixel_FlxG.worldBounds.x && this.x < flixel_FlxG.worldBounds.get_right() && this.y + this.get_height() > flixel_FlxG.worldBounds.y && this.y < flixel_FlxG.worldBounds.get_bottom();
+	}
+	,getScreenPosition: function(point,Camera) {
+		if(point == null) point = flixel_math_FlxPoint.get(null,null);
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		point.set(this.x,this.y);
+		if(this.pixelPerfectPosition) {
+			point.set_x(Math.floor(point.x));
+			point.set_y(Math.floor(point.y));
+			point;
+		}
+		return point.subtract(Camera.scroll.x * this.scrollFactor.x,Camera.scroll.y * this.scrollFactor.y);
+	}
+	,getPosition: function(point) {
+		if(point == null) point = flixel_math_FlxPoint.get(null,null);
+		return point.set(this.x,this.y);
+	}
+	,getMidpoint: function(point) {
+		if(point == null) point = flixel_math_FlxPoint.get(null,null);
+		return point.set(this.x + this.get_width() * 0.5,this.y + this.get_height() * 0.5);
+	}
+	,getHitbox: function(rect) {
+		if(rect == null) rect = flixel_math_FlxRect.get(null,null,null,null);
+		return rect.set(this.x,this.y,this.get_width(),this.get_height());
+	}
+	,reset: function(X,Y) {
+		this.touching = 0;
+		this.wasTouching = 0;
+		this.setPosition(X,Y);
+		this.last.set(this.x,this.y);
+		this.velocity.set();
+		this.revive();
+	}
+	,isOnScreen: function(Camera) {
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		this.getScreenPosition(this._point,Camera);
+		return this._point.x + this.get_width() > 0 && this._point.x < Camera.width && this._point.y + this.get_height() > 0 && this._point.y < Camera.height;
+	}
+	,isPixelPerfectRender: function(Camera) {
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		if(this.pixelPerfectRender == null) return Camera.pixelPerfectRender; else return this.pixelPerfectRender;
+	}
+	,isTouching: function(Direction) {
+		return (this.touching & Direction) > 0;
+	}
+	,justTouched: function(Direction) {
+		return (this.touching & Direction) > 0 && (this.wasTouching & Direction) <= 0;
+	}
+	,hurt: function(Damage) {
+		this.health = this.health - Damage;
+		if(this.health <= 0) this.kill();
+	}
+	,screenCenter: function(axes) {
+		if(axes == null) axes = flixel_util_FlxAxes.XY;
+		if(axes != flixel_util_FlxAxes.Y) this.set_x(flixel_FlxG.width / 2 - this.get_width() / 2);
+		if(axes != flixel_util_FlxAxes.X) this.set_y(flixel_FlxG.height / 2 - this.get_height() / 2);
+		return this;
+	}
+	,setPosition: function(X,Y) {
+		if(Y == null) Y = 0;
+		if(X == null) X = 0;
+		this.set_x(X);
+		this.set_y(Y);
+	}
+	,setSize: function(Width,Height) {
+		this.set_width(Width);
+		this.set_height(Height);
+	}
+	,drawDebug: function() {
+		if(this.ignoreDrawDebug) return;
+		var _g = 0;
+		var _g1 = this.get_cameras();
+		while(_g < _g1.length) {
+			var camera = _g1[_g];
+			++_g;
+			this.drawDebugOnCamera(camera);
+			if(this.path != null && !this.path.ignoreDrawDebug) this.path.drawDebug();
+		}
+	}
+	,drawDebugOnCamera: function(camera) {
+		if(!camera.visible || !camera.exists || !this.isOnScreen(camera)) return;
+		var rect = this.getBoundingBox(camera);
+		var gfx;
+		if(flixel_FlxG.renderBlit) {
+			flixel_util_FlxSpriteUtil.flashGfx.clear();
+			gfx = flixel_util_FlxSpriteUtil.flashGfx;
+		} else gfx = camera.debugLayer.get_graphics();
+		this.drawDebugBoundingBox(gfx,rect,this.allowCollisions,this.immovable);
+		if(flixel_FlxG.renderBlit) camera.buffer.draw(flixel_util_FlxSpriteUtil.flashGfxSprite);
+	}
+	,drawDebugBoundingBox: function(gfx,rect,allowCollisions,partial) {
+		var color = this.debugBoundingBoxColor;
+		if(color == null) {
+			if(allowCollisions != 0) if(partial) color = this.debugBoundingBoxColorPartial; else color = this.debugBoundingBoxColorSolid; else color = this.debugBoundingBoxColorNotSolid;
+		}
+		gfx.lineStyle(1,color,0.5);
+		gfx.drawRect(rect.x,rect.y,rect.width,rect.height);
+	}
+	,beginDrawDebug: function(camera) {
+		if(flixel_FlxG.renderBlit) {
+			flixel_util_FlxSpriteUtil.flashGfx.clear();
+			return flixel_util_FlxSpriteUtil.flashGfx;
+		} else return camera.debugLayer.get_graphics();
+	}
+	,endDrawDebug: function(camera) {
+		if(flixel_FlxG.renderBlit) camera.buffer.draw(flixel_util_FlxSpriteUtil.flashGfxSprite);
+	}
+	,getBoundingBox: function(camera) {
+		this.getScreenPosition(this._point,camera);
+		this._rect.set(this._point.x,this._point.y,this.get_width(),this.get_height());
+		if(this.isPixelPerfectRender(camera)) this._rect.floor();
+		return this._rect;
+	}
+	,toString: function() {
+		return flixel_util_FlxStringUtil.getDebugString([flixel_util_LabelValuePair._pool.get().create("x",this.x),flixel_util_LabelValuePair._pool.get().create("y",this.y),flixel_util_LabelValuePair.weak("w",this.get_width()),flixel_util_LabelValuePair.weak("h",this.get_height()),flixel_util_LabelValuePair._pool.get().create("visible",this.visible),flixel_util_LabelValuePair._pool.get().create("velocity",this.velocity)]);
+	}
+	,set_x: function(NewX) {
+		return this.x = NewX;
+	}
+	,set_y: function(NewY) {
+		return this.y = NewY;
+	}
+	,set_width: function(Width) {
+		if(Width < 0) {
+			flixel_FlxG.log.advanced("An object's width cannot be smaller than 0. Use offset for sprites to control the hitbox position!",flixel_system_debug_log_LogStyle.WARNING,true);
+			return Width;
+		}
+		return this.width = Width;
+	}
+	,set_height: function(Height) {
+		if(Height < 0) {
+			flixel_FlxG.log.advanced("An object's height cannot be smaller than 0. Use offset for sprites to control the hitbox position!",flixel_system_debug_log_LogStyle.WARNING,true);
+			return Height;
+		}
+		return this.height = Height;
+	}
+	,get_width: function() {
+		return this.width;
+	}
+	,get_height: function() {
+		return this.height;
+	}
+	,get_solid: function() {
+		return (this.allowCollisions & 4369) > 0;
+	}
+	,set_solid: function(Solid) {
+		this.set_allowCollisions(Solid?4369:0);
+		return Solid;
+	}
+	,set_angle: function(Value) {
+		return this.angle = Value;
+	}
+	,set_moves: function(Value) {
+		return this.moves = Value;
+	}
+	,set_immovable: function(Value) {
+		return this.immovable = Value;
+	}
+	,set_pixelPerfectRender: function(Value) {
+		return this.pixelPerfectRender = Value;
+	}
+	,set_allowCollisions: function(Value) {
+		return this.allowCollisions = Value;
+	}
+	,set_debugBoundingBoxColorSolid: function(color) {
+		return this.debugBoundingBoxColorSolid = color;
+	}
+	,set_debugBoundingBoxColorNotSolid: function(color) {
+		return this.debugBoundingBoxColorNotSolid = color;
+	}
+	,set_debugBoundingBoxColorPartial: function(color) {
+		return this.debugBoundingBoxColorPartial = color;
+	}
+	,set_path: function(path) {
+		if(this.path == path) return path;
+		if(this.path != null) this.path.object = null;
+		if(path != null) path.object = this;
+		return this.path = path;
+	}
+	,__class__: flixel_FlxObject
+	,__properties__: $extend(flixel_FlxBasic.prototype.__properties__,{set_path:"set_path",set_debugBoundingBoxColorPartial:"set_debugBoundingBoxColorPartial",set_debugBoundingBoxColorNotSolid:"set_debugBoundingBoxColorNotSolid",set_debugBoundingBoxColorSolid:"set_debugBoundingBoxColorSolid",set_allowCollisions:"set_allowCollisions",set_solid:"set_solid",get_solid:"get_solid",set_immovable:"set_immovable",set_moves:"set_moves",set_angle:"set_angle",set_pixelPerfectRender:"set_pixelPerfectRender",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width",set_y:"set_y",set_x:"set_x"})
+});
+var flixel_FlxSprite = function(X,Y,SimpleGraphic) {
+	if(Y == null) Y = 0;
+	if(X == null) X = 0;
+	this._facingFlip = new haxe_ds_IntMap();
+	this._angleChanged = true;
+	this._cosAngle = 1;
+	this._sinAngle = 0;
+	this._facingVerticalMult = 1;
+	this._facingHorizontalMult = 1;
+	this.useColorTransform = false;
+	this.color = 16777215;
+	this.flipY = false;
+	this.flipX = false;
+	this.facing = 16;
+	this.alpha = 1.0;
+	this.bakedRotationAngle = 0;
+	this.numFrames = 0;
+	this.frameHeight = 0;
+	this.frameWidth = 0;
+	this.dirty = true;
+	this.antialiasing = false;
+	this.useFramePixels = true;
+	flixel_FlxObject.call(this,X,Y);
+	this.set_useFramePixels(flixel_FlxG.renderBlit);
+	if(SimpleGraphic != null) this.loadGraphic(SimpleGraphic);
+};
+$hxClasses["flixel.FlxSprite"] = flixel_FlxSprite;
+flixel_FlxSprite.__name__ = ["flixel","FlxSprite"];
+flixel_FlxSprite.__super__ = flixel_FlxObject;
+flixel_FlxSprite.prototype = $extend(flixel_FlxObject.prototype,{
+	animation: null
+	,framePixels: null
+	,useFramePixels: null
+	,antialiasing: null
+	,dirty: null
+	,frame: null
+	,frameWidth: null
+	,frameHeight: null
+	,numFrames: null
+	,frames: null
+	,graphic: null
+	,bakedRotationAngle: null
+	,alpha: null
+	,facing: null
+	,flipX: null
+	,flipY: null
+	,origin: null
+	,offset: null
+	,scale: null
+	,blend: null
+	,color: null
+	,colorTransform: null
+	,useColorTransform: null
+	,clipRect: null
+	,shader: null
+	,_frame: null
+	,_frameGraphic: null
+	,_facingHorizontalMult: null
+	,_facingVerticalMult: null
+	,_flashPoint: null
+	,_flashRect: null
+	,_flashRect2: null
+	,_flashPointZero: null
+	,_matrix: null
+	,_halfSize: null
+	,_sinAngle: null
+	,_cosAngle: null
+	,_angleChanged: null
+	,_facingFlip: null
+	,initVars: function() {
+		flixel_FlxObject.prototype.initVars.call(this);
+		this.animation = new flixel_animation_FlxAnimationController(this);
+		this._flashPoint = new openfl_geom_Point();
+		this._flashRect = new openfl_geom_Rectangle();
+		this._flashRect2 = new openfl_geom_Rectangle();
+		this._flashPointZero = new openfl_geom_Point();
+		this.offset = flixel_math_FlxPoint.get(null,null);
+		this.origin = flixel_math_FlxPoint.get(null,null);
+		this.scale = flixel_math_FlxPoint.get(1,1);
+		this._halfSize = flixel_math_FlxPoint.get(null,null);
+		this._matrix = new flixel_math_FlxMatrix();
+		this.colorTransform = new openfl_geom_ColorTransform();
+	}
+	,destroy: function() {
+		flixel_FlxObject.prototype.destroy.call(this);
+		this.animation = flixel_util_FlxDestroyUtil.destroy(this.animation);
+		this.offset = flixel_util_FlxDestroyUtil.put(this.offset);
+		this.origin = flixel_util_FlxDestroyUtil.put(this.origin);
+		this.scale = flixel_util_FlxDestroyUtil.put(this.scale);
+		this._halfSize = flixel_util_FlxDestroyUtil.put(this._halfSize);
+		this.framePixels = flixel_util_FlxDestroyUtil.dispose(this.framePixels);
+		this._flashPoint = null;
+		this._flashRect = null;
+		this._flashRect2 = null;
+		this._flashPointZero = null;
+		this._matrix = null;
+		this.colorTransform = null;
+		this.set_blend(null);
+		this.set_frames(null);
+		this.set_graphic(null);
+		this._frame = flixel_util_FlxDestroyUtil.destroy(this._frame);
+		this._frameGraphic = flixel_util_FlxDestroyUtil.destroy(this._frameGraphic);
+		this.shader = null;
+	}
+	,clone: function() {
+		return new flixel_FlxSprite().loadGraphicFromSprite(this);
+	}
+	,loadGraphicFromSprite: function(Sprite) {
+		this.set_frames(Sprite.frames);
+		this.bakedRotationAngle = Sprite.bakedRotationAngle;
+		if(this.bakedRotationAngle > 0) {
+			this.set_width(Sprite.get_width());
+			this.set_height(Sprite.get_height());
+			this.centerOffsets();
+		}
+		this.set_antialiasing(Sprite.antialiasing);
+		this.animation.copyFrom(Sprite.animation);
+		this.graphicLoaded();
+		this.set_clipRect(Sprite.clipRect);
+		return this;
+	}
+	,loadGraphic: function(Graphic,Animated,Width,Height,Unique,Key) {
+		if(Unique == null) Unique = false;
+		if(Height == null) Height = 0;
+		if(Width == null) Width = 0;
+		if(Animated == null) Animated = false;
+		var graph = flixel_FlxG.bitmap.add(Graphic,Unique,Key);
+		if(graph == null) return this;
+		if(Width == 0) {
+			if(Animated) Width = graph.height; else Width = graph.width;
+			if(Width > graph.width) Width = graph.width; else Width = Width;
+		}
+		if(Height == 0) {
+			if(Animated) Height = Width; else Height = graph.height;
+			if(Height > graph.height) Height = graph.height; else Height = Height;
+		}
+		if(Animated) this.set_frames(flixel_graphics_frames_FlxTileFrames.fromGraphic(graph,flixel_math_FlxPoint.get(Width,Height))); else this.set_frames(graph.get_imageFrame());
+		return this;
+	}
+	,loadRotatedGraphic: function(Graphic,Rotations,Frame,AntiAliasing,AutoBuffer,Key) {
+		if(AutoBuffer == null) AutoBuffer = false;
+		if(AntiAliasing == null) AntiAliasing = false;
+		if(Frame == null) Frame = -1;
+		if(Rotations == null) Rotations = 16;
+		var brushGraphic = flixel_FlxG.bitmap.add(Graphic,false,Key);
+		if(brushGraphic == null) return this;
+		var brush = brushGraphic.bitmap;
+		var key = brushGraphic.key;
+		if(Frame >= 0) {
+			var brushSize = brush.height;
+			var framesNum = brush.width / brushSize | 0;
+			if(framesNum > Frame) Frame = Frame; else Frame = Frame % framesNum;
+			key += ":" + Frame;
+			var full = brush;
+			brush = new openfl_display_BitmapData(brushSize,brushSize,true,0);
+			this._flashRect.setTo(Frame * brushSize,0,brushSize,brushSize);
+			brush.copyPixels(full,this._flashRect,this._flashPointZero);
+		}
+		key += ":" + Rotations + ":" + (AutoBuffer == null?"null":"" + AutoBuffer);
+		var tempGraph = flixel_FlxG.bitmap._cache.get(key);
+		if(tempGraph == null) {
+			var bitmap = flixel_util_FlxBitmapDataUtil.generateRotations(brush,Rotations,AntiAliasing,AutoBuffer);
+			tempGraph = flixel_graphics_FlxGraphic.fromBitmapData(bitmap,false,key);
+		}
+		var max;
+		if(brush.height > brush.width) max = brush.height; else max = brush.width;
+		if(AutoBuffer) max = max * 1.5 | 0; else max = max;
+		this.set_frames(flixel_graphics_frames_FlxTileFrames.fromGraphic(tempGraph,flixel_math_FlxPoint.get(max,max)));
+		if(AutoBuffer) {
+			this.set_width(brush.width);
+			this.set_height(brush.height);
+			this.centerOffsets();
+		}
+		this.bakedRotationAngle = 360 / Rotations;
+		this.animation.createPrerotated();
+		return this;
+	}
+	,loadRotatedFrame: function(Frame,Rotations,AntiAliasing,AutoBuffer) {
+		if(AutoBuffer == null) AutoBuffer = false;
+		if(AntiAliasing == null) AntiAliasing = false;
+		if(Rotations == null) Rotations = 16;
+		var key = Frame.parent.key;
+		if(Frame.name != null) key += ":" + Frame.name; else key += ":" + Frame.frame.toString();
+		var graphic = flixel_FlxG.bitmap._cache.get(key);
+		if(graphic == null) graphic = flixel_graphics_FlxGraphic.fromBitmapData(Frame.paint(),false,key);
+		return this.loadRotatedGraphic(graphic,Rotations,-1,AntiAliasing,AutoBuffer);
+	}
+	,makeGraphic: function(Width,Height,Color,Unique,Key) {
+		if(Unique == null) Unique = false;
+		if(Color == null) Color = -1;
+		var graph = flixel_FlxG.bitmap.create(Width,Height,Color,Unique,Key);
+		this.set_frames(graph.get_imageFrame());
+		return this;
+	}
+	,graphicLoaded: function() {
+	}
+	,resetSize: function() {
+		this._flashRect.x = 0;
+		this._flashRect.y = 0;
+		this._flashRect.width = this.frameWidth;
+		this._flashRect.height = this.frameHeight;
+	}
+	,resetFrameSize: function() {
+		if(this.frame != null) {
+			this.frameWidth = this.frame.sourceSize.x | 0;
+			this.frameHeight = this.frame.sourceSize.y | 0;
+		}
+		this._halfSize.set(0.5 * this.frameWidth,0.5 * this.frameHeight);
+		this._flashRect.x = 0;
+		this._flashRect.y = 0;
+		this._flashRect.width = this.frameWidth;
+		this._flashRect.height = this.frameHeight;
+	}
+	,resetSizeFromFrame: function() {
+		this.set_width(this.frameWidth);
+		this.set_height(this.frameHeight);
+	}
+	,resetFrame: function() {
+		this.set_frame(this.frame);
+	}
+	,setGraphicSize: function(Width,Height) {
+		if(Height == null) Height = 0;
+		if(Width == null) Width = 0;
+		if(Width <= 0 && Height <= 0) return;
+		var newScaleX = Width / this.frameWidth;
+		var newScaleY = Height / this.frameHeight;
+		this.scale.set(newScaleX,newScaleY);
+		if(Width <= 0) this.scale.set_x(newScaleY); else if(Height <= 0) this.scale.set_y(newScaleX);
+	}
+	,updateHitbox: function() {
+		this.set_width(Math.abs(this.scale.x) * this.frameWidth);
+		this.set_height(Math.abs(this.scale.y) * this.frameHeight);
+		this.offset.set(-0.5 * (this.get_width() - this.frameWidth),-0.5 * (this.get_height() - this.frameHeight));
+		this.origin.set(this.frameWidth * 0.5,this.frameHeight * 0.5);
+	}
+	,resetHelpers: function() {
+		if(this.frame != null) {
+			this.frameWidth = this.frame.sourceSize.x | 0;
+			this.frameHeight = this.frame.sourceSize.y | 0;
+		}
+		this._halfSize.set(0.5 * this.frameWidth,0.5 * this.frameHeight);
+		this._flashRect.x = 0;
+		this._flashRect.y = 0;
+		this._flashRect.width = this.frameWidth;
+		this._flashRect.height = this.frameHeight;
+		this.set_width(this.frameWidth);
+		this.set_height(this.frameHeight);
+		this._flashRect2.x = 0;
+		this._flashRect2.y = 0;
+		if(this.graphic != null) {
+			this._flashRect2.width = this.graphic.width;
+			this._flashRect2.height = this.graphic.height;
+		}
+		this.origin.set(this.frameWidth * 0.5,this.frameHeight * 0.5);
+		if(flixel_FlxG.renderBlit) {
+			this.dirty = true;
+			this.updateFramePixels();
+		}
+	}
+	,update: function(elapsed) {
+		flixel_FlxObject.prototype.update.call(this,elapsed);
+		this.updateAnimation(elapsed);
+	}
+	,updateAnimation: function(elapsed) {
+		this.animation.update(elapsed);
+	}
+	,checkEmptyFrame: function() {
+		if(this._frame == null) this.loadGraphic("flixel/images/logo/default.png");
+	}
+	,draw: function() {
+		this.checkEmptyFrame();
+		if(this.alpha == 0 || this._frame.type == 2) return;
+		if(this.dirty) this.calcFrame(this.useFramePixels);
+		var _g = 0;
+		var _g1 = this.get_cameras();
+		while(_g < _g1.length) {
+			var camera = _g1[_g];
+			++_g;
+			if(!camera.visible || !camera.exists || !this.isOnScreen(camera)) continue;
+			this.getScreenPosition(this._point,camera).subtractPoint(this.offset);
+			if(this.isSimpleRender(camera)) this.drawSimple(camera); else this.drawComplex(camera);
+			flixel_FlxBasic.visibleCount++;
+		}
+		if(flixel_FlxG["debugger"].drawDebug) this.drawDebug();
+	}
+	,drawSimple: function(camera) {
+		if(this.isPixelPerfectRender(camera)) this._point.floor();
+		this._point.copyToFlash(this._flashPoint);
+		camera.copyPixels(this._frame,this.framePixels,this._flashRect,this._flashPoint,this.colorTransform,this.blend,this.antialiasing);
+	}
+	,drawComplex: function(camera) {
+		this._frame.prepareMatrix(this._matrix,0,this.checkFlipX(),this.checkFlipY());
+		this._matrix.translate(-this.origin.x,-this.origin.y);
+		this._matrix.scale(this.scale.x,this.scale.y);
+		if(this.bakedRotationAngle <= 0) {
+			this.updateTrig();
+			if(this.angle != 0) this._matrix.rotateWithTrig(this._cosAngle,this._sinAngle);
+		}
+		this._point.add(this.origin.x,this.origin.y);
+		this._matrix.translate(this._point.x,this._point.y);
+		if(this.isPixelPerfectRender(camera)) {
+			this._matrix.tx = Math.floor(this._matrix.tx);
+			this._matrix.ty = Math.floor(this._matrix.ty);
+		}
+		camera.drawPixels(this._frame,this.framePixels,this._matrix,this.colorTransform,this.blend,this.antialiasing,this.shader);
+	}
+	,stamp: function(Brush,X,Y) {
+		if(Y == null) Y = 0;
+		if(X == null) X = 0;
+		Brush.drawFrame();
+		if(this.graphic == null || Brush.graphic == null) throw new js__$Boot_HaxeError("Cannot stamp to or from a FlxSprite with no graphics.");
+		var bitmapData = Brush.framePixels;
+		if(this.isSimpleRenderBlit()) {
+			this._flashPoint.x = X + this.frame.frame.x;
+			this._flashPoint.y = Y + this.frame.frame.y;
+			this._flashRect2.width = bitmapData.width;
+			this._flashRect2.height = bitmapData.height;
+			this.graphic.bitmap.copyPixels(bitmapData,this._flashRect2,this._flashPoint,null,null,true);
+			this._flashRect2.width = this.graphic.bitmap.width;
+			this._flashRect2.height = this.graphic.bitmap.height;
+		} else {
+			this._matrix.identity();
+			this._matrix.translate(-Brush.origin.x,-Brush.origin.y);
+			this._matrix.scale(Brush.scale.x,Brush.scale.y);
+			if(Brush.angle != 0) this._matrix.rotate(Brush.angle * (Math.PI / 180));
+			this._matrix.translate(X + this.frame.frame.x + Brush.origin.x,Y + this.frame.frame.y + Brush.origin.y);
+			var brushBlend = Brush.blend;
+			this.graphic.bitmap.draw(bitmapData,this._matrix,null,brushBlend,null,Brush.antialiasing);
+		}
+		if(flixel_FlxG.renderBlit) {
+			this.dirty = true;
+			this.calcFrame();
+		}
+	}
+	,drawFrame: function(Force) {
+		if(Force == null) Force = false;
+		if(flixel_FlxG.renderBlit) {
+			if(Force || this.dirty) {
+				this.dirty = true;
+				this.calcFrame();
+			}
+		} else {
+			this.dirty = true;
+			this.calcFrame(true);
+		}
+	}
+	,centerOffsets: function(AdjustPosition) {
+		if(AdjustPosition == null) AdjustPosition = false;
+		this.offset.set_x((this.frameWidth - this.get_width()) * 0.5);
+		this.offset.set_y((this.frameHeight - this.get_height()) * 0.5);
+		if(AdjustPosition) {
+			var _g = this;
+			_g.set_x(_g.x + this.offset.x);
+			var _g1 = this;
+			_g1.set_y(_g1.y + this.offset.y);
+		}
+	}
+	,centerOrigin: function() {
+		this.origin.set(this.frameWidth * 0.5,this.frameHeight * 0.5);
+	}
+	,replaceColor: function(Color,NewColor,FetchPositions) {
+		if(FetchPositions == null) FetchPositions = false;
+		var positions = flixel_util_FlxBitmapDataUtil.replaceColor(this.graphic.bitmap,Color,NewColor,FetchPositions);
+		if(positions != null) this.dirty = true;
+		return positions;
+	}
+	,setColorTransform: function(redMultiplier,greenMultiplier,blueMultiplier,alphaMultiplier,redOffset,greenOffset,blueOffset,alphaOffset) {
+		if(alphaOffset == null) alphaOffset = 0;
+		if(blueOffset == null) blueOffset = 0;
+		if(greenOffset == null) greenOffset = 0;
+		if(redOffset == null) redOffset = 0;
+		if(alphaMultiplier == null) alphaMultiplier = 1.0;
+		if(blueMultiplier == null) blueMultiplier = 1.0;
+		if(greenMultiplier == null) greenMultiplier = 1.0;
+		if(redMultiplier == null) redMultiplier = 1.0;
+		this.set_color((function($this) {
+			var $r;
+			var this1;
+			{
+				var color = flixel_util__$FlxColor_FlxColor_$Impl_$._new();
+				this1 = (function($this) {
+					var $r;
+					{
+						var Value = Math.round(redMultiplier * 255);
+						color &= -16711681;
+						color |= (Value > 255?255:Value < 0?0:Value) << 16;
+						Value;
+						redMultiplier;
+					}
+					{
+						var Value1 = Math.round(greenMultiplier * 255);
+						color &= -65281;
+						color |= (Value1 > 255?255:Value1 < 0?0:Value1) << 8;
+						Value1;
+						greenMultiplier;
+					}
+					{
+						var Value2 = Math.round(blueMultiplier * 255);
+						color &= -256;
+						if(Value2 > 255) color |= 255; else if(Value2 < 0) color |= 0; else color |= Value2;
+						Value2;
+						blueMultiplier;
+					}
+					{
+						var Value3 = Math.round(255);
+						color &= 16777215;
+						color |= (Value3 > 255?255:Value3 < 0?0:Value3) << 24;
+						Value3;
+						1;
+					}
+					$r = color;
+					return $r;
+				}($this));
+			}
+			$r = this1 & 16777215;
+			return $r;
+		}(this)));
+		this.set_alpha(alphaMultiplier);
+		flixel_util_FlxColorTransformUtil.setMultipliers(this.colorTransform,redMultiplier,greenMultiplier,blueMultiplier,alphaMultiplier);
+		flixel_util_FlxColorTransformUtil.setOffsets(this.colorTransform,redOffset,greenOffset,blueOffset,alphaOffset);
+		this.useColorTransform = this.alpha != 1 || this.color != 16777215 || flixel_util_FlxColorTransformUtil.hasRGBOffsets(this.colorTransform);
+		this.dirty = true;
+	}
+	,updateColorTransform: function() {
+		if(this.colorTransform == null) this.colorTransform = new openfl_geom_ColorTransform();
+		this.useColorTransform = this.alpha != 1 || this.color != 16777215;
+		if(this.useColorTransform) flixel_util_FlxColorTransformUtil.setMultipliers(this.colorTransform,(this.color >> 16 & 255) / 255,(this.color >> 8 & 255) / 255,(this.color & 255) / 255,this.alpha); else flixel_util_FlxColorTransformUtil.setMultipliers(this.colorTransform,1,1,1,1);
+		this.dirty = true;
+	}
+	,pixelsOverlapPoint: function(point,Mask,Camera) {
+		if(Mask == null) Mask = 255;
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		this.getScreenPosition(this._point,Camera);
+		this._point.subtractPoint(this.offset);
+		this._flashPoint.x = point.x - Camera.scroll.x - this._point.x;
+		this._flashPoint.y = point.y - Camera.scroll.y - this._point.y;
+		if(point._weak) point.put();
+		if(this._flashPoint.x < 0 || this._flashPoint.x > this.frameWidth || this._flashPoint.y < 0 || this._flashPoint.y > this.frameHeight) return false; else {
+			var frameData = this.updateFramePixels();
+			var pixelColor = frameData.getPixel32(this._flashPoint.x | 0,this._flashPoint.y | 0);
+			return (pixelColor >> 24 & 255) * this.alpha >= Mask;
+		}
+	}
+	,calcFrame: function(RunOnCpp) {
+		if(RunOnCpp == null) RunOnCpp = false;
+		this.checkEmptyFrame();
+		if(flixel_FlxG.renderTile && !RunOnCpp) return;
+		this.updateFramePixels();
+	}
+	,updateFramePixels: function() {
+		if(this._frame == null || !this.dirty) return this.framePixels;
+		if(flixel_FlxG.renderTile && this._frameGraphic != null) {
+			this.dirty = false;
+			return this.framePixels;
+		}
+		var doFlipX = this.checkFlipX();
+		var doFlipY = this.checkFlipY();
+		if(!doFlipX && !doFlipY && this._frame.type == 0) this.framePixels = this._frame.paint(this.framePixels,this._flashPointZero,false,true); else this.framePixels = this._frame.paintRotatedAndFlipped(this.framePixels,this._flashPointZero,0,doFlipX,doFlipY,false,true);
+		if(this.useColorTransform) this.framePixels.colorTransform(this._flashRect,this.colorTransform);
+		if(flixel_FlxG.renderTile && this.useFramePixels) {
+			this._frameGraphic = flixel_util_FlxDestroyUtil.destroy(this._frameGraphic);
+			this._frameGraphic = flixel_graphics_FlxGraphic.fromBitmapData(this.framePixels,false,null,false);
+			this._frame = this._frameGraphic.get_imageFrame().get_frame().copyTo(this._frame);
+		}
+		this.dirty = false;
+		return this.framePixels;
+	}
+	,getGraphicMidpoint: function(point) {
+		if(point == null) point = flixel_math_FlxPoint.get(null,null);
+		return point.set(this.x + this.frameWidth * 0.5,this.y + this.frameHeight * 0.5);
+	}
+	,isOnScreen: function(Camera) {
+		if(Camera == null) Camera = flixel_FlxG.camera;
+		var minX = this.x - this.offset.x - Camera.scroll.x * this.scrollFactor.x;
+		var minY = this.y - this.offset.y - Camera.scroll.y * this.scrollFactor.y;
+		if((this.angle == 0 || this.bakedRotationAngle > 0) && this.scale.x == 1 && this.scale.y == 1) {
+			if(minX > Camera.width || minX + this.frameWidth < 0) return false;
+			if(minY > Camera.height || minY + this.frameHeight < 0) return false;
+		} else {
+			var radiusX = this._halfSize.x;
+			var radiusY = this._halfSize.y;
+			var ox = this.origin.x;
+			if(ox != radiusX) {
+				var x1 = Math.abs(ox);
+				var x2 = Math.abs(this.frameWidth - ox);
+				radiusX = Math.max(x2,x1);
+			}
+			var oy = this.origin.y;
+			if(oy != radiusY) {
+				var y1 = Math.abs(oy);
+				var y2 = Math.abs(this.frameHeight - oy);
+				radiusY = Math.max(y2,y1);
+			}
+			radiusX *= Math.abs(this.scale.x);
+			radiusY *= Math.abs(this.scale.y);
+			var radius = Math.max(radiusX,radiusY);
+			radius *= 1.41421356237;
+			minX += ox;
+			var maxX = minX + radius;
+			minX -= radius;
+			if(maxX < 0 || minX > Camera.width) return false;
+			minY += oy;
+			var maxY = minY + radius;
+			minY -= radius;
+			if(maxY < 0 || minY > Camera.height) return false;
+		}
+		return true;
+	}
+	,isSimpleRender: function(camera) {
+		if(flixel_FlxG.renderTile) return false;
+		return this.isSimpleRenderBlit(camera);
+	}
+	,isSimpleRenderBlit: function(camera) {
+		var result = (this.angle == 0 || this.bakedRotationAngle > 0) && this.scale.x == 1 && this.scale.y == 1 && this.blend == null;
+		result = result && (camera != null?this.isPixelPerfectRender(camera):this.pixelPerfectRender);
+		return result;
+	}
+	,setFacingFlip: function(Direction,FlipX,FlipY) {
+		this._facingFlip.h[Direction] = { x : FlipX, y : FlipY};
+	}
+	,setFrames: function(Frames,saveAnimations) {
+		if(saveAnimations == null) saveAnimations = true;
+		if(saveAnimations) {
+			var animations = this.animation._animations;
+			var reverse = false;
+			var index = 0;
+			var frameIndex = this.animation.frameIndex;
+			var currName = null;
+			if(this.animation._curAnim != null) {
+				reverse = this.animation._curAnim.reversed;
+				index = this.animation._curAnim.curFrame;
+				currName = this.animation._curAnim.name;
+			}
+			this.animation._animations = null;
+			this.set_frames(Frames);
+			this.set_frame(this.frames.frames[frameIndex]);
+			this.animation._animations = animations;
+			if(currName != null) this.animation.play(currName,false,reverse,index);
+		} else this.set_frames(Frames);
+		return this;
+	}
+	,get_pixels: function() {
+		if(this.graphic == null) return null; else return this.graphic.bitmap;
+	}
+	,set_pixels: function(Pixels) {
+		var key = flixel_FlxG.bitmap.findKeyForBitmap(Pixels);
+		if(key == null) {
+			key = flixel_FlxG.bitmap.getUniqueKey();
+			this.set_graphic(flixel_FlxG.bitmap.add(Pixels,false,key));
+		} else this.set_graphic(flixel_FlxG.bitmap._cache.get(key));
+		this.set_frames(this.graphic.get_imageFrame());
+		return Pixels;
+	}
+	,set_frame: function(Value) {
+		this.frame = Value;
+		if(this.frame != null) {
+			if(this.frame != null) {
+				this.frameWidth = this.frame.sourceSize.x | 0;
+				this.frameHeight = this.frame.sourceSize.y | 0;
+			}
+			this._halfSize.set(0.5 * this.frameWidth,0.5 * this.frameHeight);
+			this._flashRect.x = 0;
+			this._flashRect.y = 0;
+			this._flashRect.width = this.frameWidth;
+			this._flashRect.height = this.frameHeight;
+			this.dirty = true;
+		} else if(this.frames != null && this.frames.frames != null && this.numFrames > 0) {
+			this.frame = this.frames.frames[0];
+			this.dirty = true;
+		} else return null;
+		if(flixel_FlxG.renderTile) this._frameGraphic = flixel_util_FlxDestroyUtil.destroy(this._frameGraphic);
+		if(this.clipRect != null) this._frame = this.frame.clipTo(this.clipRect,this._frame); else this._frame = this.frame.copyTo(this._frame);
+		return this.frame;
+	}
+	,set_facing: function(Direction) {
+		var flip = this._facingFlip.h[Direction];
+		if(flip != null) {
+			this.set_flipX(flip.x);
+			this.set_flipY(flip.y);
+		}
+		return this.facing = Direction;
+	}
+	,set_alpha: function(Alpha) {
+		if(this.alpha == Alpha) return Alpha;
+		this.alpha = flixel_math_FlxMath.bound(Alpha,0,1);
+		this.updateColorTransform();
+		return this.alpha;
+	}
+	,set_color: function(Color) {
+		if(this.color == Color) return Color;
+		this.color = Color;
+		this.updateColorTransform();
+		return this.color;
+	}
+	,set_angle: function(Value) {
+		var newAngle = this.angle != Value;
+		var ret = flixel_FlxObject.prototype.set_angle.call(this,Value);
+		if(newAngle) {
+			this._angleChanged = true;
+			this.animation.update(0);
+		}
+		return ret;
+	}
+	,updateTrig: function() {
+		if(this._angleChanged) {
+			var radians = this.angle * (Math.PI / 180);
+			this._sinAngle = Math.sin(radians);
+			this._cosAngle = Math.cos(radians);
+			this._angleChanged = false;
+		}
+	}
+	,set_blend: function(Value) {
+		return this.blend = Value;
+	}
+	,set_graphic: function(Value) {
+		var oldGraphic = this.graphic;
+		if(this.graphic != Value && Value != null) {
+			var _g = Value;
+			var _g1 = _g.get_useCount();
+			_g.set_useCount(_g1 + 1);
+			_g1;
+		}
+		if(oldGraphic != null && oldGraphic != Value) {
+			var _g2 = oldGraphic;
+			var _g11 = _g2.get_useCount();
+			_g2.set_useCount(_g11 - 1);
+			_g11;
+		}
+		return this.graphic = Value;
+	}
+	,set_clipRect: function(rect) {
+		if(rect != null) {
+			rect.x = Math.round(rect.x);
+			rect.y = Math.round(rect.y);
+			rect.width = Math.round(rect.width);
+			rect.height = Math.round(rect.height);
+			this.clipRect = rect;
+		} else this.clipRect = null;
+		if(this.frames != null) this.set_frame(this.frames.frames[this.animation.frameIndex]);
+		return rect;
+	}
+	,set_frames: function(Frames) {
+		if(this.animation != null) this.animation.destroyAnimations();
+		if(Frames != null) {
+			this.set_graphic(Frames.parent);
+			this.frames = Frames;
+			this.set_frame(this.frames.frames[0]);
+			this.numFrames = this.frames.frames.length;
+			this.resetHelpers();
+			this.bakedRotationAngle = 0;
+			this.animation.set_frameIndex(0);
+			this.graphicLoaded();
+		} else {
+			this.frames = null;
+			this.set_frame(null);
+			this.set_graphic(null);
+		}
+		this.set_clipRect(null);
+		return Frames;
+	}
+	,set_flipX: function(Value) {
+		if(flixel_FlxG.renderTile) if(Value) this._facingHorizontalMult = -1; else this._facingHorizontalMult = 1;
+		this.dirty = this.flipX != Value || this.dirty;
+		return this.flipX = Value;
+	}
+	,set_flipY: function(Value) {
+		if(flixel_FlxG.renderTile) if(Value) this._facingVerticalMult = -1; else this._facingVerticalMult = 1;
+		this.dirty = this.flipY != Value || this.dirty;
+		return this.flipY = Value;
+	}
+	,set_antialiasing: function(value) {
+		return this.antialiasing = value;
+	}
+	,set_useFramePixels: function(value) {
+		if(flixel_FlxG.renderTile) {
+			if(value != this.useFramePixels) {
+				this.useFramePixels = value;
+				this.set_frame(this.frame);
+				if(value) this.updateFramePixels();
+			}
+			return value;
+		} else {
+			this.useFramePixels = true;
+			return true;
+		}
+	}
+	,checkFlipX: function() {
+		var doFlipX = this.flipX != this._frame.flipX;
+		if(this.animation._curAnim != null) return doFlipX != this.animation._curAnim.flipX;
+		return doFlipX;
+	}
+	,checkFlipY: function() {
+		var doFlipY = this.flipY != this._frame.flipY;
+		if(this.animation._curAnim != null) return doFlipY != this.animation._curAnim.flipY;
+		return doFlipY;
+	}
+	,__class__: flixel_FlxSprite
+	,__properties__: $extend(flixel_FlxObject.prototype.__properties__,{set_clipRect:"set_clipRect",set_color:"set_color",set_blend:"set_blend",set_flipY:"set_flipY",set_flipX:"set_flipX",set_facing:"set_facing",set_alpha:"set_alpha",set_graphic:"set_graphic",set_frames:"set_frames",set_frame:"set_frame",set_pixels:"set_pixels",get_pixels:"get_pixels",set_antialiasing:"set_antialiasing",set_useFramePixels:"set_useFramePixels"})
+});
+var Tile = function(X,Y,T,BX,BY) {
+	flixel_FlxSprite.call(this,X,Y);
+	this.boardX = BX;
+	this.boardY = BY;
+	this.rotation = 0;
+	this.tileID = T;
+	this.loadGraphic(Settings.TILES_IMAGE_PATH,true,32,32);
+	this.animation.add("default",[this.tileID]);
+	this.animation.play("default");
+};
+$hxClasses["Tile"] = Tile;
+Tile.__name__ = ["Tile"];
+Tile.__super__ = flixel_FlxSprite;
+Tile.prototype = $extend(flixel_FlxSprite.prototype,{
+	tileID: null
+	,rotation: null
+	,boardX: null
+	,boardY: null
+	,rotate: function() {
+		this.rotation += 1;
+	}
+	,update: function(elapsed) {
+		flixel_FlxSprite.prototype.update.call(this,elapsed);
+		this.set_angle(this.rotation * 90);
+	}
+	,getBoardCoordinates: function() {
+		return Std.string(this.boardX) + "," + Std.string(this.boardY);
+	}
+	,__class__: Tile
+});
+var ValueType = $hxClasses["ValueType"] = { __ename__ : ["ValueType"], __constructs__ : ["TNull","TInt","TFloat","TBool","TObject","TFunction","TClass","TEnum","TUnknown"] };
+ValueType.TNull = ["TNull",0];
+ValueType.TNull.toString = $estr;
+ValueType.TNull.__enum__ = ValueType;
+ValueType.TInt = ["TInt",1];
+ValueType.TInt.toString = $estr;
+ValueType.TInt.__enum__ = ValueType;
+ValueType.TFloat = ["TFloat",2];
+ValueType.TFloat.toString = $estr;
+ValueType.TFloat.__enum__ = ValueType;
+ValueType.TBool = ["TBool",3];
+ValueType.TBool.toString = $estr;
+ValueType.TBool.__enum__ = ValueType;
+ValueType.TObject = ["TObject",4];
+ValueType.TObject.toString = $estr;
+ValueType.TObject.__enum__ = ValueType;
+ValueType.TFunction = ["TFunction",5];
+ValueType.TFunction.toString = $estr;
+ValueType.TFunction.__enum__ = ValueType;
+ValueType.TClass = function(c) { var $x = ["TClass",6,c]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TEnum = function(e) { var $x = ["TEnum",7,e]; $x.__enum__ = ValueType; $x.toString = $estr; return $x; };
+ValueType.TUnknown = ["TUnknown",8];
+ValueType.TUnknown.toString = $estr;
+ValueType.TUnknown.__enum__ = ValueType;
+var Type = function() { };
+$hxClasses["Type"] = Type;
+Type.__name__ = ["Type"];
+Type.getClass = function(o) {
+	if(o == null) return null; else return js_Boot.getClass(o);
+};
+Type.getSuperClass = function(c) {
+	return c.__super__;
+};
+Type.getClassName = function(c) {
+	var a = c.__name__;
+	if(a == null) return null;
+	return a.join(".");
+};
+Type.getEnumName = function(e) {
+	var a = e.__ename__;
+	return a.join(".");
+};
+Type.resolveClass = function(name) {
+	var cl = $hxClasses[name];
+	if(cl == null || !cl.__name__) return null;
+	return cl;
+};
+Type.resolveEnum = function(name) {
+	var e = $hxClasses[name];
+	if(e == null || !e.__ename__) return null;
+	return e;
+};
+Type.createInstance = function(cl,args) {
+	var _g = args.length;
+	switch(_g) {
+	case 0:
+		return new cl();
+	case 1:
+		return new cl(args[0]);
+	case 2:
+		return new cl(args[0],args[1]);
+	case 3:
+		return new cl(args[0],args[1],args[2]);
+	case 4:
+		return new cl(args[0],args[1],args[2],args[3]);
+	case 5:
+		return new cl(args[0],args[1],args[2],args[3],args[4]);
+	case 6:
+		return new cl(args[0],args[1],args[2],args[3],args[4],args[5]);
+	case 7:
+		return new cl(args[0],args[1],args[2],args[3],args[4],args[5],args[6]);
+	case 8:
+		return new cl(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
+	default:
+		throw new js__$Boot_HaxeError("Too many arguments");
+	}
+	return null;
+};
+Type.createEmptyInstance = function(cl) {
+	function empty() {}; empty.prototype = cl.prototype;
+	return new empty();
+};
+Type.createEnum = function(e,constr,params) {
+	var f = Reflect.field(e,constr);
+	if(f == null) throw new js__$Boot_HaxeError("No such constructor " + constr);
+	if(Reflect.isFunction(f)) {
+		if(params == null) throw new js__$Boot_HaxeError("Constructor " + constr + " need parameters");
+		return Reflect.callMethod(e,f,params);
+	}
+	if(params != null && params.length != 0) throw new js__$Boot_HaxeError("Constructor " + constr + " does not need parameters");
+	return f;
+};
+Type.getInstanceFields = function(c) {
+	var a = [];
+	for(var i in c.prototype) a.push(i);
+	HxOverrides.remove(a,"__class__");
+	HxOverrides.remove(a,"__properties__");
+	return a;
+};
+Type.getClassFields = function(c) {
+	var a = Reflect.fields(c);
+	HxOverrides.remove(a,"__name__");
+	HxOverrides.remove(a,"__interfaces__");
+	HxOverrides.remove(a,"__properties__");
+	HxOverrides.remove(a,"__super__");
+	HxOverrides.remove(a,"__meta__");
+	HxOverrides.remove(a,"prototype");
+	return a;
+};
+Type.getEnumConstructs = function(e) {
+	var a = e.__constructs__;
+	return a.slice();
+};
+Type["typeof"] = function(v) {
+	var _g = typeof(v);
+	switch(_g) {
+	case "boolean":
+		return ValueType.TBool;
+	case "string":
+		return ValueType.TClass(String);
+	case "number":
+		if(Math.ceil(v) == v % 2147483648.0) return ValueType.TInt;
+		return ValueType.TFloat;
+	case "object":
+		if(v == null) return ValueType.TNull;
+		var e = v.__enum__;
+		if(e != null) return ValueType.TEnum(e);
+		var c = js_Boot.getClass(v);
+		if(c != null) return ValueType.TClass(c);
+		return ValueType.TObject;
+	case "function":
+		if(v.__name__ || v.__ename__) return ValueType.TObject;
+		return ValueType.TFunction;
+	case "undefined":
+		return ValueType.TNull;
+	default:
+		return ValueType.TUnknown;
+	}
+};
+Type.enumEq = function(a,b) {
+	if(a == b) return true;
+	try {
+		if(a[0] != b[0]) return false;
+		var _g1 = 2;
+		var _g = a.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(!Type.enumEq(a[i],b[i])) return false;
+		}
+		var e = a.__enum__;
+		if(e != b.__enum__ || e == null) return false;
+	} catch( e1 ) {
+		haxe_CallStack.lastException = e1;
+		if (e1 instanceof js__$Boot_HaxeError) e1 = e1.val;
+		return false;
+	}
+	return true;
+};
+var _$UInt_UInt_$Impl_$ = {};
+$hxClasses["_UInt.UInt_Impl_"] = _$UInt_UInt_$Impl_$;
+_$UInt_UInt_$Impl_$.__name__ = ["_UInt","UInt_Impl_"];
+_$UInt_UInt_$Impl_$.gt = function(a,b) {
+	var aNeg = a < 0;
+	var bNeg = b < 0;
+	if(aNeg != bNeg) return aNeg; else return a > b;
+};
+_$UInt_UInt_$Impl_$.toFloat = function(this1) {
+	var $int = this1;
+	if($int < 0) return 4294967296.0 + $int; else return $int + 0.0;
+};
+var Xml = function(nodeType) {
+	this.nodeType = nodeType;
+	this.children = [];
+	this.attributeMap = new haxe_ds_StringMap();
+};
+$hxClasses["Xml"] = Xml;
+Xml.__name__ = ["Xml"];
+Xml.parse = function(str) {
+	return haxe_xml_Parser.parse(str);
+};
+Xml.createElement = function(name) {
+	var xml = new Xml(Xml.Element);
+	if(xml.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + xml.nodeType);
+	xml.nodeName = name;
+	return xml;
+};
+Xml.createPCData = function(data) {
+	var xml = new Xml(Xml.PCData);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createCData = function(data) {
+	var xml = new Xml(Xml.CData);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createComment = function(data) {
+	var xml = new Xml(Xml.Comment);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createDocType = function(data) {
+	var xml = new Xml(Xml.DocType);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createProcessingInstruction = function(data) {
+	var xml = new Xml(Xml.ProcessingInstruction);
+	if(xml.nodeType == Xml.Document || xml.nodeType == Xml.Element) throw new js__$Boot_HaxeError("Bad node type, unexpected " + xml.nodeType);
+	xml.nodeValue = data;
+	return xml;
+};
+Xml.createDocument = function() {
+	return new Xml(Xml.Document);
+};
+Xml.prototype = {
+	nodeType: null
+	,nodeName: null
+	,nodeValue: null
+	,parent: null
+	,children: null
+	,attributeMap: null
+	,get_nodeName: function() {
+		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		return this.nodeName;
+	}
+	,get: function(att) {
+		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		return this.attributeMap.get(att);
+	}
+	,set: function(att,value) {
+		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		this.attributeMap.set(att,value);
+	}
+	,exists: function(att) {
+		if(this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + this.nodeType);
+		return this.attributeMap.exists(att);
+	}
+	,elements: function() {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		var ret;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.children;
+		while(_g1 < _g2.length) {
+			var child = _g2[_g1];
+			++_g1;
+			if(child.nodeType == Xml.Element) _g.push(child);
+		}
+		ret = _g;
+		return HxOverrides.iter(ret);
+	}
+	,elementsNamed: function(name) {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		var ret;
+		var _g = [];
+		var _g1 = 0;
+		var _g2 = this.children;
+		while(_g1 < _g2.length) {
+			var child = _g2[_g1];
+			++_g1;
+			if(child.nodeType == Xml.Element && (function($this) {
+				var $r;
+				if(child.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element but found " + child.nodeType);
+				$r = child.nodeName;
+				return $r;
+			}(this)) == name) _g.push(child);
+		}
+		ret = _g;
+		return HxOverrides.iter(ret);
+	}
+	,firstElement: function() {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		var _g = 0;
+		var _g1 = this.children;
+		while(_g < _g1.length) {
+			var child = _g1[_g];
+			++_g;
+			if(child.nodeType == Xml.Element) return child;
+		}
+		return null;
+	}
+	,addChild: function(x) {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		if(x.parent != null) x.parent.removeChild(x);
+		this.children.push(x);
+		x.parent = this;
+	}
+	,removeChild: function(x) {
+		if(this.nodeType != Xml.Document && this.nodeType != Xml.Element) throw new js__$Boot_HaxeError("Bad node type, expected Element or Document but found " + this.nodeType);
+		if(HxOverrides.remove(this.children,x)) {
+			x.parent = null;
+			return true;
+		}
+		return false;
+	}
+	,__class__: Xml
+	,__properties__: {get_nodeName:"get_nodeName"}
+};
+var flixel_IFlxBasic = function() { };
+$hxClasses["flixel.IFlxBasic"] = flixel_IFlxBasic;
+flixel_IFlxBasic.__name__ = ["flixel","IFlxBasic"];
+flixel_IFlxBasic.prototype = {
+	set_active: null
+	,set_visible: null
+	,set_alive: null
+	,set_exists: null
+	,ID: null
+	,active: null
+	,visible: null
+	,alive: null
+	,exists: null
+	,draw: null
+	,update: null
+	,destroy: null
+	,kill: null
+	,revive: null
+	,toString: null
+	,__class__: flixel_IFlxBasic
+	,__properties__: {set_exists:"set_exists",set_alive:"set_alive",set_visible:"set_visible",set_active:"set_active"}
+};
+var openfl_VectorData = function() {
+	this.length = 0;
+};
+$hxClasses["openfl.VectorData"] = openfl_VectorData;
+openfl_VectorData.__name__ = ["openfl","VectorData"];
+openfl_VectorData.prototype = {
+	data: null
+	,fixed: null
+	,length: null
+	,__class__: openfl_VectorData
+};
+var flixel_util_FlxPool_$flixel_$math_$FlxPoint = function(classObj) {
+	this._count = 0;
+	this._pool = [];
+	this._class = classObj;
+};
+$hxClasses["flixel.util.FlxPool_flixel_math_FlxPoint"] = flixel_util_FlxPool_$flixel_$math_$FlxPoint;
+flixel_util_FlxPool_$flixel_$math_$FlxPoint.__name__ = ["flixel","util","FlxPool_flixel_math_FlxPoint"];
+flixel_util_FlxPool_$flixel_$math_$FlxPoint.__interfaces__ = [flixel_util_IFlxPool];
+flixel_util_FlxPool_$flixel_$math_$FlxPoint.prototype = {
+	_pool: null
+	,_class: null
+	,_count: null
+	,get: function() {
+		if(this._count == 0) return Type.createInstance(this._class,[]);
+		return this._pool[--this._count];
+	}
+	,put: function(obj) {
+		if(obj != null) {
+			var i = HxOverrides.indexOf(this._pool,obj,0);
+			if(i == -1 || i >= this._count) {
+				obj.destroy();
+				this._pool[this._count++] = obj;
+			}
+		}
+	}
+	,putUnsafe: function(obj) {
+		if(obj != null) {
+			obj.destroy();
+			this._pool[this._count++] = obj;
+		}
+	}
+	,preAllocate: function(numObjects) {
+		while(numObjects-- > 0) this._pool[this._count++] = Type.createInstance(this._class,[]);
+	}
+	,clear: function() {
+		this._count = 0;
+		var oldPool = this._pool;
+		this._pool = [];
+		return oldPool;
+	}
+	,get_length: function() {
+		return this._count;
+	}
+	,__class__: flixel_util_FlxPool_$flixel_$math_$FlxPoint
+	,__properties__: {get_length:"get_length"}
+};
+var flixel_math_FlxPoint = function(X,Y) {
+	if(Y == null) Y = 0;
+	if(X == null) X = 0;
+	this._inPool = false;
+	this._weak = false;
+	this.y = 0;
+	this.x = 0;
+	this.set(X,Y);
+};
+$hxClasses["flixel.math.FlxPoint"] = flixel_math_FlxPoint;
+flixel_math_FlxPoint.__name__ = ["flixel","math","FlxPoint"];
+flixel_math_FlxPoint.__interfaces__ = [flixel_util_IFlxPooled];
+flixel_math_FlxPoint.__properties__ = {get_pool:"get_pool"}
+flixel_math_FlxPoint.get = function(X,Y) {
+	if(Y == null) Y = 0;
+	if(X == null) X = 0;
+	var point = flixel_math_FlxPoint._pool.get().set(X,Y);
+	point._inPool = false;
+	return point;
+};
+flixel_math_FlxPoint.weak = function(X,Y) {
+	if(Y == null) Y = 0;
+	if(X == null) X = 0;
+	var point = flixel_math_FlxPoint.get(X,Y);
+	point._weak = true;
+	return point;
+};
+flixel_math_FlxPoint.get_pool = function() {
+	return flixel_math_FlxPoint._pool;
+};
+flixel_math_FlxPoint.prototype = {
+	x: null
+	,y: null
+	,_weak: null
+	,_inPool: null
+	,put: function() {
+		if(!this._inPool) {
+			this._inPool = true;
+			this._weak = false;
+			flixel_math_FlxPoint._pool.putUnsafe(this);
+		}
+	}
+	,putWeak: function() {
+		if(this._weak) this.put();
+	}
+	,set: function(X,Y) {
+		if(Y == null) Y = 0;
+		if(X == null) X = 0;
+		this.set_x(X);
+		this.set_y(Y);
+		return this;
+	}
+	,add: function(X,Y) {
+		if(Y == null) Y = 0;
+		if(X == null) X = 0;
+		var _g = this;
+		_g.set_x(_g.x + X);
+		var _g1 = this;
+		_g1.set_y(_g1.y + Y);
+		return this;
+	}
+	,addPoint: function(point) {
+		var _g = this;
+		_g.set_x(_g.x + point.x);
+		var _g1 = this;
+		_g1.set_y(_g1.y + point.y);
+		if(point._weak) point.put();
+		return this;
+	}
+	,subtract: function(X,Y) {
+		if(Y == null) Y = 0;
+		if(X == null) X = 0;
+		var _g = this;
+		_g.set_x(_g.x - X);
+		var _g1 = this;
+		_g1.set_y(_g1.y - Y);
+		return this;
+	}
+	,subtractPoint: function(point) {
+		var _g = this;
+		_g.set_x(_g.x - point.x);
+		var _g1 = this;
+		_g1.set_y(_g1.y - point.y);
+		if(point._weak) point.put();
+		return this;
+	}
+	,scale: function(k) {
+		var _g = this;
+		_g.set_x(_g.x * k);
+		var _g1 = this;
+		_g1.set_y(_g1.y * k);
+		return this;
+	}
+	,copyFrom: function(point) {
+		this.set_x(point.x);
+		this.set_y(point.y);
+		if(point._weak) point.put();
+		return this;
+	}
+	,copyTo: function(point) {
+		if(point == null) point = flixel_math_FlxPoint.get(null,null);
+		point.set_x(this.x);
+		point.set_y(this.y);
+		return point;
+	}
+	,copyFromFlash: function(FlashPoint) {
+		this.set_x(FlashPoint.x);
+		this.set_y(FlashPoint.y);
+		return this;
+	}
+	,copyToFlash: function(FlashPoint) {
+		if(FlashPoint == null) FlashPoint = new openfl_geom_Point();
+		FlashPoint.x = this.x;
+		FlashPoint.y = this.y;
+		return FlashPoint;
+	}
+	,addToFlash: function(FlashPoint) {
+		FlashPoint.x += this.x;
+		FlashPoint.y += this.y;
+		return FlashPoint;
+	}
+	,subtractFromFlash: function(FlashPoint) {
+		FlashPoint.x -= this.x;
+		FlashPoint.y -= this.y;
+		return FlashPoint;
+	}
+	,inCoords: function(RectX,RectY,RectWidth,RectHeight) {
+		return flixel_math_FlxMath.pointInCoordinates(this.x,this.y,RectX,RectY,RectWidth,RectHeight);
+	}
+	,inRect: function(Rect) {
+		return flixel_math_FlxMath.pointInFlxRect(this.x,this.y,Rect);
+	}
+	,distanceTo: function(point) {
+		var dx = this.x - point.x;
+		var dy = this.y - point.y;
+		if(point._weak) point.put();
+		return Math.sqrt(dx * dx + dy * dy);
+	}
+	,floor: function() {
+		this.set_x(Math.floor(this.x));
+		this.set_y(Math.floor(this.y));
+		return this;
+	}
+	,ceil: function() {
+		this.set_x(Math.ceil(this.x));
+		this.set_y(Math.ceil(this.y));
+		return this;
+	}
+	,round: function() {
+		this.set_x(Math.round(this.x));
+		this.set_y(Math.round(this.y));
+		return this;
+	}
+	,rotate: function(Pivot,Angle) {
+		var radians = Angle * (Math.PI / 180);
+		var sin = flixel_math_FlxMath.fastSin(radians);
+		var cos = flixel_math_FlxMath.fastSin(radians + 1.570796327);
+		var dx = this.x - Pivot.x;
+		var dy = this.y - Pivot.y;
+		this.set_x(cos * dx - sin * dy + Pivot.x);
+		this.set_y(sin * dx + cos * dy + Pivot.y);
+		if(Pivot._weak) Pivot.put();
+		return this;
+	}
+	,angleBetween: function(point) {
+		var x = point.x - this.x;
+		var y = point.y - this.y;
+		var angle = 0;
+		if(x != 0 || y != 0) {
+			var c1 = Math.PI * 0.25;
+			var c2 = 3 * c1;
+			var ay;
+			if(y < 0) ay = -y; else ay = y;
+			if(x >= 0) angle = c1 - c1 * ((x - ay) / (x + ay)); else angle = c2 - c1 * ((x + ay) / (ay - x));
+			angle = (y < 0?-angle:angle) * (180 / Math.PI);
+			if(angle > 90) angle = angle - 270; else angle += 90;
+		}
+		if(point._weak) point.put();
+		return angle;
+	}
+	,equals: function(point) {
+		var result = Math.abs(this.x - point.x) <= 0.0000001 && Math.abs(this.y - point.y) <= 0.0000001;
+		if(point._weak) point.put();
+		return result;
+	}
+	,destroy: function() {
+	}
+	,transform: function(matrix) {
+		var x1 = this.x * matrix.a + this.y * matrix.c + matrix.tx;
+		var y1 = this.x * matrix.b + this.y * matrix.d + matrix.ty;
+		return this.set(x1,y1);
+	}
+	,toString: function() {
+		return flixel_util_FlxStringUtil.getDebugString([flixel_util_LabelValuePair._pool.get().create("x",this.x),flixel_util_LabelValuePair._pool.get().create("y",this.y)]);
+	}
+	,set_x: function(Value) {
+		return this.x = Value;
+	}
+	,set_y: function(Value) {
+		return this.y = Value;
+	}
+	,__class__: flixel_math_FlxPoint
+	,__properties__: {set_y:"set_y",set_x:"set_x"}
 };
 var openfl_display_LoaderInfo = function() {
 	openfl_events_EventDispatcher.call(this);
@@ -6858,7 +8236,6 @@ var flixel_FlxGame = function(GameWidth,GameHeight,InitialState,Zoom,UpdateFrame
 	if(GameWidth == null) GameWidth = 0;
 	this._resetGame = false;
 	this._skipSplash = false;
-	this._customFocusLostScreen = flixel_system_ui_FlxFocusLostScreen;
 	this._customSoundTray = flixel_system_ui_FlxSoundTray;
 	this._lostFocus = false;
 	this._startTime = 0;
@@ -6900,10 +8277,8 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 	,_maxAccumulation: null
 	,_lostFocus: null
 	,_filters: null
-	,_focusLostScreen: null
 	,_inputContainer: null
 	,_customSoundTray: null
-	,_customFocusLostScreen: null
 	,_skipSplash: null
 	,_requestedState: null
 	,_resetGame: null
@@ -6923,8 +8298,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		this.addChild(this["debugger"]);
 		this.soundTray = Type.createInstance(this._customSoundTray,[]);
 		this.addChild(this.soundTray);
-		this._focusLostScreen = Type.createInstance(this._customFocusLostScreen,[]);
-		this.addChild(this._focusLostScreen);
 		this.stage.addEventListener("deactivate",$bind(this,this.onFocusLost));
 		this.stage.addEventListener("activate",$bind(this,this.onFocus));
 		flixel_FlxG.signals.preGameReset.dispatch();
@@ -6952,7 +8325,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		flixel_FlxG.signals.focusGained.dispatch();
 		this._state.onFocus();
 		if(!flixel_FlxG.autoPause) return;
-		if(this._focusLostScreen != null) this._focusLostScreen.set_visible(false);
 		this["debugger"].stats.onFocus();
 		this.stage.set_frameRate(flixel_FlxG.drawFramerate);
 		flixel_FlxG.sound.onFocus();
@@ -6963,7 +8335,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		flixel_FlxG.signals.focusLost.dispatch();
 		this._state.onFocusLost();
 		if(!flixel_FlxG.autoPause) return;
-		if(this._focusLostScreen != null) this._focusLostScreen.set_visible(true);
 		this["debugger"].stats.onFocusLost();
 		this.stage.set_frameRate(this.focusLostFramerate);
 		flixel_FlxG.sound.onFocusLost();
@@ -6981,7 +8352,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		flixel_FlxG.signals.gameResized.dispatch(width,height);
 		flixel_FlxG.cameras.resize();
 		this["debugger"].onResize(width,height);
-		if(this._focusLostScreen != null) this._focusLostScreen.draw();
 		if(this.soundTray != null) this.soundTray.screenCenter();
 	}
 	,onEnterFrame: function(_) {
@@ -7116,1261 +8486,6 @@ flixel_FlxGame.prototype = $extend(openfl_display_Sprite.prototype,{
 		return openfl_Lib.getTimer();
 	}
 	,__class__: flixel_FlxGame
-});
-var flixel_FlxObject = function(X,Y,Width,Height) {
-	if(Height == null) Height = 0;
-	if(Width == null) Width = 0;
-	if(Y == null) Y = 0;
-	if(X == null) X = 0;
-	this._rect = flixel_math_FlxRect.get(null,null,null,null);
-	this._point = flixel_math_FlxPoint.get(null,null);
-	this.path = null;
-	this.ignoreDrawDebug = false;
-	this.debugBoundingBoxColorPartial = -16744448;
-	this.debugBoundingBoxColorNotSolid = -16776961;
-	this.debugBoundingBoxColorSolid = -65536;
-	this.debugBoundingBoxColor = null;
-	this.collisonXDrag = true;
-	this.allowCollisions = 4369;
-	this.wasTouching = 0;
-	this.touching = 0;
-	this.health = 1;
-	this.maxAngular = 10000;
-	this.angularDrag = 0;
-	this.angularAcceleration = 0;
-	this.angularVelocity = 0;
-	this.elasticity = 0;
-	this.mass = 1;
-	this.immovable = false;
-	this.moves = true;
-	this.angle = 0;
-	this.pixelPerfectPosition = true;
-	this.y = 0;
-	this.x = 0;
-	flixel_FlxBasic.call(this);
-	this.set_x(X);
-	this.set_y(Y);
-	this.set_width(Width);
-	this.set_height(Height);
-	this.initVars();
-};
-$hxClasses["flixel.FlxObject"] = flixel_FlxObject;
-flixel_FlxObject.__name__ = ["flixel","FlxObject"];
-flixel_FlxObject.separate = function(Object1,Object2) {
-	var separatedX = flixel_FlxObject.separateX(Object1,Object2);
-	var separatedY = flixel_FlxObject.separateY(Object1,Object2);
-	return separatedX || separatedY;
-};
-flixel_FlxObject.updateTouchingFlags = function(Object1,Object2) {
-	var touchingX = flixel_FlxObject.updateTouchingFlagsX(Object1,Object2);
-	var touchingY = flixel_FlxObject.updateTouchingFlagsY(Object1,Object2);
-	return touchingX || touchingY;
-};
-flixel_FlxObject.computeOverlapX = function(Object1,Object2,checkMaxOverlap) {
-	if(checkMaxOverlap == null) checkMaxOverlap = true;
-	var overlap = 0;
-	var obj1delta = Object1.x - Object1.last.x;
-	var obj2delta = Object2.x - Object2.last.x;
-	if(obj1delta != obj2delta) {
-		var obj1deltaAbs;
-		if(obj1delta > 0) obj1deltaAbs = obj1delta; else obj1deltaAbs = -obj1delta;
-		var obj2deltaAbs;
-		if(obj2delta > 0) obj2deltaAbs = obj2delta; else obj2deltaAbs = -obj2delta;
-		var obj1rect = flixel_FlxObject._firstSeparateFlxRect.set(Object1.x - (obj1delta > 0?obj1delta:0),Object1.last.y,Object1.get_width() + obj1deltaAbs,Object1.get_height());
-		var obj2rect = flixel_FlxObject._secondSeparateFlxRect.set(Object2.x - (obj2delta > 0?obj2delta:0),Object2.last.y,Object2.get_width() + obj2deltaAbs,Object2.get_height());
-		if(obj1rect.x + obj1rect.width > obj2rect.x && obj1rect.x < obj2rect.x + obj2rect.width && obj1rect.y + obj1rect.height > obj2rect.y && obj1rect.y < obj2rect.y + obj2rect.height) {
-			var maxOverlap;
-			if(checkMaxOverlap) maxOverlap = obj1deltaAbs + obj2deltaAbs + flixel_FlxObject.SEPARATE_BIAS; else maxOverlap = 0;
-			if(obj1delta > obj2delta) {
-				overlap = Object1.x + Object1.get_width() - Object2.x;
-				if(checkMaxOverlap && overlap > maxOverlap || (Object1.allowCollisions & 16) == 0 || (Object2.allowCollisions & 1) == 0) overlap = 0; else {
-					Object1.touching |= 16;
-					Object2.touching |= 1;
-				}
-			} else if(obj1delta < obj2delta) {
-				overlap = Object1.x - Object2.get_width() - Object2.x;
-				if(checkMaxOverlap && -overlap > maxOverlap || (Object1.allowCollisions & 1) == 0 || (Object2.allowCollisions & 16) == 0) overlap = 0; else {
-					Object1.touching |= 1;
-					Object2.touching |= 16;
-				}
-			}
-		}
-	}
-	return overlap;
-};
-flixel_FlxObject.separateX = function(Object1,Object2) {
-	var obj1immovable = Object1.immovable;
-	var obj2immovable = Object2.immovable;
-	if(obj1immovable && obj2immovable) return false;
-	if(Object1.flixelType == 3) {
-		var tilemap = Object1;
-		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.separateX);
-	}
-	if(Object2.flixelType == 3) {
-		var tilemap1 = Object2;
-		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.separateX,true);
-	}
-	var overlap = flixel_FlxObject.computeOverlapX(Object1,Object2);
-	if(overlap != 0) {
-		var obj1v = Object1.velocity.x;
-		var obj2v = Object2.velocity.x;
-		if(!obj1immovable && !obj2immovable) {
-			overlap *= 0.5;
-			Object1.set_x(Object1.x - overlap);
-			var _g = Object2;
-			_g.set_x(_g.x + overlap);
-			var obj1velocity;
-			obj1velocity = Math.sqrt(obj2v * obj2v * Object2.mass / Object1.mass) * (obj2v > 0?1:-1);
-			var obj2velocity;
-			obj2velocity = Math.sqrt(obj1v * obj1v * Object1.mass / Object2.mass) * (obj1v > 0?1:-1);
-			var average = (obj1velocity + obj2velocity) * 0.5;
-			obj1velocity -= average;
-			obj2velocity -= average;
-			Object1.velocity.set_x(average + obj1velocity * Object1.elasticity);
-			Object2.velocity.set_x(average + obj2velocity * Object2.elasticity);
-		} else if(!obj1immovable) {
-			Object1.set_x(Object1.x - overlap);
-			Object1.velocity.set_x(obj2v - obj1v * Object1.elasticity);
-		} else if(!obj2immovable) {
-			var _g1 = Object2;
-			_g1.set_x(_g1.x + overlap);
-			Object2.velocity.set_x(obj1v - obj2v * Object2.elasticity);
-		}
-		return true;
-	}
-	return false;
-};
-flixel_FlxObject.updateTouchingFlagsX = function(Object1,Object2) {
-	if(Object1.flixelType == 3) {
-		var tilemap = Object1;
-		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.updateTouchingFlagsX);
-	}
-	if(Object2.flixelType == 3) {
-		var tilemap1 = Object2;
-		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.updateTouchingFlagsX,true);
-	}
-	return flixel_FlxObject.computeOverlapX(Object1,Object2,false) != 0;
-};
-flixel_FlxObject.computeOverlapY = function(Object1,Object2,checkMaxOverlap) {
-	if(checkMaxOverlap == null) checkMaxOverlap = true;
-	var overlap = 0;
-	var obj1delta = Object1.y - Object1.last.y;
-	var obj2delta = Object2.y - Object2.last.y;
-	if(obj1delta != obj2delta) {
-		var obj1deltaAbs;
-		if(obj1delta > 0) obj1deltaAbs = obj1delta; else obj1deltaAbs = -obj1delta;
-		var obj2deltaAbs;
-		if(obj2delta > 0) obj2deltaAbs = obj2delta; else obj2deltaAbs = -obj2delta;
-		var obj1rect = flixel_FlxObject._firstSeparateFlxRect.set(Object1.x,Object1.y - (obj1delta > 0?obj1delta:0),Object1.get_width(),Object1.get_height() + obj1deltaAbs);
-		var obj2rect = flixel_FlxObject._secondSeparateFlxRect.set(Object2.x,Object2.y - (obj2delta > 0?obj2delta:0),Object2.get_width(),Object2.get_height() + obj2deltaAbs);
-		if(obj1rect.x + obj1rect.width > obj2rect.x && obj1rect.x < obj2rect.x + obj2rect.width && obj1rect.y + obj1rect.height > obj2rect.y && obj1rect.y < obj2rect.y + obj2rect.height) {
-			var maxOverlap;
-			if(checkMaxOverlap) maxOverlap = obj1deltaAbs + obj2deltaAbs + flixel_FlxObject.SEPARATE_BIAS; else maxOverlap = 0;
-			if(obj1delta > obj2delta) {
-				overlap = Object1.y + Object1.get_height() - Object2.y;
-				if(checkMaxOverlap && overlap > maxOverlap || (Object1.allowCollisions & 4096) == 0 || (Object2.allowCollisions & 256) == 0) overlap = 0; else {
-					Object1.touching |= 4096;
-					Object2.touching |= 256;
-				}
-			} else if(obj1delta < obj2delta) {
-				overlap = Object1.y - Object2.get_height() - Object2.y;
-				if(checkMaxOverlap && -overlap > maxOverlap || (Object1.allowCollisions & 256) == 0 || (Object2.allowCollisions & 4096) == 0) overlap = 0; else {
-					Object1.touching |= 256;
-					Object2.touching |= 4096;
-				}
-			}
-		}
-	}
-	return overlap;
-};
-flixel_FlxObject.separateY = function(Object1,Object2) {
-	var obj1immovable = Object1.immovable;
-	var obj2immovable = Object2.immovable;
-	if(obj1immovable && obj2immovable) return false;
-	if(Object1.flixelType == 3) {
-		var tilemap = Object1;
-		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.separateY);
-	}
-	if(Object2.flixelType == 3) {
-		var tilemap1 = Object2;
-		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.separateY,true);
-	}
-	var overlap = flixel_FlxObject.computeOverlapY(Object1,Object2);
-	if(overlap != 0) {
-		var obj1delta = Object1.y - Object1.last.y;
-		var obj2delta = Object2.y - Object2.last.y;
-		var obj1v = Object1.velocity.y;
-		var obj2v = Object2.velocity.y;
-		if(!obj1immovable && !obj2immovable) {
-			overlap *= 0.5;
-			Object1.set_y(Object1.y - overlap);
-			var _g = Object2;
-			_g.set_y(_g.y + overlap);
-			var obj1velocity;
-			obj1velocity = Math.sqrt(obj2v * obj2v * Object2.mass / Object1.mass) * (obj2v > 0?1:-1);
-			var obj2velocity;
-			obj2velocity = Math.sqrt(obj1v * obj1v * Object1.mass / Object2.mass) * (obj1v > 0?1:-1);
-			var average = (obj1velocity + obj2velocity) * 0.5;
-			obj1velocity -= average;
-			obj2velocity -= average;
-			Object1.velocity.set_y(average + obj1velocity * Object1.elasticity);
-			Object2.velocity.set_y(average + obj2velocity * Object2.elasticity);
-		} else if(!obj1immovable) {
-			Object1.set_y(Object1.y - overlap);
-			Object1.velocity.set_y(obj2v - obj1v * Object1.elasticity);
-			if(Object1.collisonXDrag && Object2.active && Object2.moves && obj1delta > obj2delta) {
-				var _g1 = Object1;
-				_g1.set_x(_g1.x + (Object2.x - Object2.last.x));
-			}
-		} else if(!obj2immovable) {
-			var _g2 = Object2;
-			_g2.set_y(_g2.y + overlap);
-			Object2.velocity.set_y(obj1v - obj2v * Object2.elasticity);
-			if(Object2.collisonXDrag && Object1.active && Object1.moves && obj1delta < obj2delta) {
-				var _g3 = Object2;
-				_g3.set_x(_g3.x + (Object1.x - Object1.last.x));
-			}
-		}
-		return true;
-	}
-	return false;
-};
-flixel_FlxObject.updateTouchingFlagsY = function(Object1,Object2) {
-	if(Object1.flixelType == 3) {
-		var tilemap = Object1;
-		return tilemap.overlapsWithCallback(Object2,flixel_FlxObject.updateTouchingFlagsY);
-	}
-	if(Object2.flixelType == 3) {
-		var tilemap1 = Object2;
-		return tilemap1.overlapsWithCallback(Object1,flixel_FlxObject.updateTouchingFlagsY,true);
-	}
-	return flixel_FlxObject.computeOverlapY(Object1,Object2,false) != 0;
-};
-flixel_FlxObject.__super__ = flixel_FlxBasic;
-flixel_FlxObject.prototype = $extend(flixel_FlxBasic.prototype,{
-	x: null
-	,y: null
-	,width: null
-	,height: null
-	,pixelPerfectRender: null
-	,pixelPerfectPosition: null
-	,angle: null
-	,moves: null
-	,immovable: null
-	,scrollFactor: null
-	,velocity: null
-	,acceleration: null
-	,drag: null
-	,maxVelocity: null
-	,last: null
-	,mass: null
-	,elasticity: null
-	,angularVelocity: null
-	,angularAcceleration: null
-	,angularDrag: null
-	,maxAngular: null
-	,health: null
-	,touching: null
-	,wasTouching: null
-	,allowCollisions: null
-	,collisonXDrag: null
-	,debugBoundingBoxColor: null
-	,debugBoundingBoxColorSolid: null
-	,debugBoundingBoxColorNotSolid: null
-	,debugBoundingBoxColorPartial: null
-	,ignoreDrawDebug: null
-	,path: null
-	,_point: null
-	,_rect: null
-	,initVars: function() {
-		this.flixelType = 1;
-		this.last = flixel_math_FlxPoint.get(this.x,this.y);
-		this.scrollFactor = flixel_math_FlxPoint.get(1,1);
-		this.pixelPerfectPosition = flixel_FlxObject.defaultPixelPerfectPosition;
-		this.velocity = flixel_math_FlxPoint.get(null,null);
-		this.acceleration = flixel_math_FlxPoint.get(null,null);
-		this.drag = flixel_math_FlxPoint.get(null,null);
-		this.maxVelocity = flixel_math_FlxPoint.get(10000,10000);
-	}
-	,initMotionVars: function() {
-		this.velocity = flixel_math_FlxPoint.get(null,null);
-		this.acceleration = flixel_math_FlxPoint.get(null,null);
-		this.drag = flixel_math_FlxPoint.get(null,null);
-		this.maxVelocity = flixel_math_FlxPoint.get(10000,10000);
-	}
-	,destroy: function() {
-		flixel_FlxBasic.prototype.destroy.call(this);
-		this.velocity = flixel_util_FlxDestroyUtil.put(this.velocity);
-		this.acceleration = flixel_util_FlxDestroyUtil.put(this.acceleration);
-		this.drag = flixel_util_FlxDestroyUtil.put(this.drag);
-		this.maxVelocity = flixel_util_FlxDestroyUtil.put(this.maxVelocity);
-		this.scrollFactor = flixel_util_FlxDestroyUtil.put(this.scrollFactor);
-		this.last = flixel_util_FlxDestroyUtil.put(this.last);
-		this._point = flixel_util_FlxDestroyUtil.put(this._point);
-		this._rect = flixel_util_FlxDestroyUtil.put(this._rect);
-	}
-	,update: function(elapsed) {
-		flixel_FlxBasic.prototype.update.call(this,elapsed);
-		this.last.set(this.x,this.y);
-		if(this.path != null && this.path.active) this.path.update(elapsed);
-		if(this.moves) this.updateMotion(elapsed);
-		this.wasTouching = this.touching;
-		this.touching = 0;
-	}
-	,updateMotion: function(elapsed) {
-		var velocityDelta = 0.5 * (flixel_math_FlxVelocity.computeVelocity(this.angularVelocity,this.angularAcceleration,this.angularDrag,this.maxAngular,elapsed) - this.angularVelocity);
-		this.angularVelocity += velocityDelta;
-		var _g = this;
-		_g.set_angle(_g.angle + this.angularVelocity * elapsed);
-		this.angularVelocity += velocityDelta;
-		velocityDelta = 0.5 * (flixel_math_FlxVelocity.computeVelocity(this.velocity.x,this.acceleration.x,this.drag.x,this.maxVelocity.x,elapsed) - this.velocity.x);
-		var _g1 = this.velocity;
-		_g1.set_x(_g1.x + velocityDelta);
-		var delta = this.velocity.x * elapsed;
-		var _g2 = this.velocity;
-		_g2.set_x(_g2.x + velocityDelta);
-		var _g3 = this;
-		_g3.set_x(_g3.x + delta);
-		velocityDelta = 0.5 * (flixel_math_FlxVelocity.computeVelocity(this.velocity.y,this.acceleration.y,this.drag.y,this.maxVelocity.y,elapsed) - this.velocity.y);
-		var _g4 = this.velocity;
-		_g4.set_y(_g4.y + velocityDelta);
-		delta = this.velocity.y * elapsed;
-		var _g5 = this.velocity;
-		_g5.set_y(_g5.y + velocityDelta);
-		var _g6 = this;
-		_g6.set_y(_g6.y + delta);
-	}
-	,draw: function() {
-		flixel_FlxBasic.prototype.draw.call(this);
-		if(flixel_FlxG["debugger"].drawDebug) this.drawDebug();
-	}
-	,overlaps: function(ObjectOrGroup,InScreenSpace,Camera) {
-		if(InScreenSpace == null) InScreenSpace = false;
-		var group = flixel_group_FlxTypedGroup.resolveGroup(ObjectOrGroup);
-		if(group != null) return flixel_group_FlxTypedGroup.overlaps($bind(this,this.overlapsCallback),group,0,0,InScreenSpace,Camera);
-		if(ObjectOrGroup.flixelType == 3) {
-			var tilemap = ObjectOrGroup;
-			return tilemap.overlaps(this,InScreenSpace,Camera);
-		}
-		var object = ObjectOrGroup;
-		if(!InScreenSpace) return object.x + object.get_width() > this.x && object.x < this.x + this.get_width() && object.y + object.get_height() > this.y && object.y < this.y + this.get_height();
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		var objectScreenPos = object.getScreenPosition(null,Camera);
-		this.getScreenPosition(this._point,Camera);
-		return objectScreenPos.x + object.get_width() > this._point.x && objectScreenPos.x < this._point.x + this.get_width() && objectScreenPos.y + object.get_height() > this._point.y && objectScreenPos.y < this._point.y + this.get_height();
-	}
-	,overlapsCallback: function(ObjectOrGroup,X,Y,InScreenSpace,Camera) {
-		return this.overlaps(ObjectOrGroup,InScreenSpace,Camera);
-	}
-	,overlapsAt: function(X,Y,ObjectOrGroup,InScreenSpace,Camera) {
-		if(InScreenSpace == null) InScreenSpace = false;
-		var group = flixel_group_FlxTypedGroup.resolveGroup(ObjectOrGroup);
-		if(group != null) return flixel_group_FlxTypedGroup.overlaps($bind(this,this.overlapsAtCallback),group,X,Y,InScreenSpace,Camera);
-		if(ObjectOrGroup.flixelType == 3) {
-			var tilemap = ObjectOrGroup;
-			return tilemap.overlapsAt(tilemap.x - (X - this.x),tilemap.y - (Y - this.y),this,InScreenSpace,Camera);
-		}
-		var object = ObjectOrGroup;
-		if(!InScreenSpace) return object.x + object.get_width() > X && object.x < X + this.get_width() && object.y + object.get_height() > Y && object.y < Y + this.get_height();
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		var objectScreenPos = object.getScreenPosition(null,Camera);
-		this.getScreenPosition(this._point,Camera);
-		return objectScreenPos.x + object.get_width() > this._point.x && objectScreenPos.x < this._point.x + this.get_width() && objectScreenPos.y + object.get_height() > this._point.y && objectScreenPos.y < this._point.y + this.get_height();
-	}
-	,overlapsAtCallback: function(ObjectOrGroup,X,Y,InScreenSpace,Camera) {
-		return this.overlapsAt(X,Y,ObjectOrGroup,InScreenSpace,Camera);
-	}
-	,overlapsPoint: function(point,InScreenSpace,Camera) {
-		if(InScreenSpace == null) InScreenSpace = false;
-		if(!InScreenSpace) return point.x >= this.x && point.x < this.x + this.get_width() && point.y >= this.y && point.y < this.y + this.get_height();
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		var xPos = point.x - Camera.scroll.x;
-		var yPos = point.y - Camera.scroll.y;
-		this.getScreenPosition(this._point,Camera);
-		if(point._weak) point.put();
-		return xPos >= this._point.x && xPos < this._point.x + this.get_width() && yPos >= this._point.y && yPos < this._point.y + this.get_height();
-	}
-	,inWorldBounds: function() {
-		return this.x + this.get_width() > flixel_FlxG.worldBounds.x && this.x < flixel_FlxG.worldBounds.get_right() && this.y + this.get_height() > flixel_FlxG.worldBounds.y && this.y < flixel_FlxG.worldBounds.get_bottom();
-	}
-	,getScreenPosition: function(point,Camera) {
-		if(point == null) point = flixel_math_FlxPoint.get(null,null);
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		point.set(this.x,this.y);
-		if(this.pixelPerfectPosition) {
-			point.set_x(Math.floor(point.x));
-			point.set_y(Math.floor(point.y));
-			point;
-		}
-		return point.subtract(Camera.scroll.x * this.scrollFactor.x,Camera.scroll.y * this.scrollFactor.y);
-	}
-	,getPosition: function(point) {
-		if(point == null) point = flixel_math_FlxPoint.get(null,null);
-		return point.set(this.x,this.y);
-	}
-	,getMidpoint: function(point) {
-		if(point == null) point = flixel_math_FlxPoint.get(null,null);
-		return point.set(this.x + this.get_width() * 0.5,this.y + this.get_height() * 0.5);
-	}
-	,getHitbox: function(rect) {
-		if(rect == null) rect = flixel_math_FlxRect.get(null,null,null,null);
-		return rect.set(this.x,this.y,this.get_width(),this.get_height());
-	}
-	,reset: function(X,Y) {
-		this.touching = 0;
-		this.wasTouching = 0;
-		this.setPosition(X,Y);
-		this.last.set(this.x,this.y);
-		this.velocity.set();
-		this.revive();
-	}
-	,isOnScreen: function(Camera) {
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		this.getScreenPosition(this._point,Camera);
-		return this._point.x + this.get_width() > 0 && this._point.x < Camera.width && this._point.y + this.get_height() > 0 && this._point.y < Camera.height;
-	}
-	,isPixelPerfectRender: function(Camera) {
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		if(this.pixelPerfectRender == null) return Camera.pixelPerfectRender; else return this.pixelPerfectRender;
-	}
-	,isTouching: function(Direction) {
-		return (this.touching & Direction) > 0;
-	}
-	,justTouched: function(Direction) {
-		return (this.touching & Direction) > 0 && (this.wasTouching & Direction) <= 0;
-	}
-	,hurt: function(Damage) {
-		this.health = this.health - Damage;
-		if(this.health <= 0) this.kill();
-	}
-	,screenCenter: function(axes) {
-		if(axes == null) axes = flixel_util_FlxAxes.XY;
-		if(axes != flixel_util_FlxAxes.Y) this.set_x(flixel_FlxG.width / 2 - this.get_width() / 2);
-		if(axes != flixel_util_FlxAxes.X) this.set_y(flixel_FlxG.height / 2 - this.get_height() / 2);
-		return this;
-	}
-	,setPosition: function(X,Y) {
-		if(Y == null) Y = 0;
-		if(X == null) X = 0;
-		this.set_x(X);
-		this.set_y(Y);
-	}
-	,setSize: function(Width,Height) {
-		this.set_width(Width);
-		this.set_height(Height);
-	}
-	,drawDebug: function() {
-		if(this.ignoreDrawDebug) return;
-		var _g = 0;
-		var _g1 = this.get_cameras();
-		while(_g < _g1.length) {
-			var camera = _g1[_g];
-			++_g;
-			this.drawDebugOnCamera(camera);
-			if(this.path != null && !this.path.ignoreDrawDebug) this.path.drawDebug();
-		}
-	}
-	,drawDebugOnCamera: function(camera) {
-		if(!camera.visible || !camera.exists || !this.isOnScreen(camera)) return;
-		var rect = this.getBoundingBox(camera);
-		var gfx;
-		if(flixel_FlxG.renderBlit) {
-			flixel_util_FlxSpriteUtil.flashGfx.clear();
-			gfx = flixel_util_FlxSpriteUtil.flashGfx;
-		} else gfx = camera.debugLayer.get_graphics();
-		this.drawDebugBoundingBox(gfx,rect,this.allowCollisions,this.immovable);
-		if(flixel_FlxG.renderBlit) camera.buffer.draw(flixel_util_FlxSpriteUtil.flashGfxSprite);
-	}
-	,drawDebugBoundingBox: function(gfx,rect,allowCollisions,partial) {
-		var color = this.debugBoundingBoxColor;
-		if(color == null) {
-			if(allowCollisions != 0) if(partial) color = this.debugBoundingBoxColorPartial; else color = this.debugBoundingBoxColorSolid; else color = this.debugBoundingBoxColorNotSolid;
-		}
-		gfx.lineStyle(1,color,0.5);
-		gfx.drawRect(rect.x,rect.y,rect.width,rect.height);
-	}
-	,beginDrawDebug: function(camera) {
-		if(flixel_FlxG.renderBlit) {
-			flixel_util_FlxSpriteUtil.flashGfx.clear();
-			return flixel_util_FlxSpriteUtil.flashGfx;
-		} else return camera.debugLayer.get_graphics();
-	}
-	,endDrawDebug: function(camera) {
-		if(flixel_FlxG.renderBlit) camera.buffer.draw(flixel_util_FlxSpriteUtil.flashGfxSprite);
-	}
-	,getBoundingBox: function(camera) {
-		this.getScreenPosition(this._point,camera);
-		this._rect.set(this._point.x,this._point.y,this.get_width(),this.get_height());
-		if(this.isPixelPerfectRender(camera)) this._rect.floor();
-		return this._rect;
-	}
-	,toString: function() {
-		return flixel_util_FlxStringUtil.getDebugString([flixel_util_LabelValuePair._pool.get().create("x",this.x),flixel_util_LabelValuePair._pool.get().create("y",this.y),flixel_util_LabelValuePair.weak("w",this.get_width()),flixel_util_LabelValuePair.weak("h",this.get_height()),flixel_util_LabelValuePair._pool.get().create("visible",this.visible),flixel_util_LabelValuePair._pool.get().create("velocity",this.velocity)]);
-	}
-	,set_x: function(NewX) {
-		return this.x = NewX;
-	}
-	,set_y: function(NewY) {
-		return this.y = NewY;
-	}
-	,set_width: function(Width) {
-		if(Width < 0) {
-			flixel_FlxG.log.advanced("An object's width cannot be smaller than 0. Use offset for sprites to control the hitbox position!",flixel_system_debug_log_LogStyle.WARNING,true);
-			return Width;
-		}
-		return this.width = Width;
-	}
-	,set_height: function(Height) {
-		if(Height < 0) {
-			flixel_FlxG.log.advanced("An object's height cannot be smaller than 0. Use offset for sprites to control the hitbox position!",flixel_system_debug_log_LogStyle.WARNING,true);
-			return Height;
-		}
-		return this.height = Height;
-	}
-	,get_width: function() {
-		return this.width;
-	}
-	,get_height: function() {
-		return this.height;
-	}
-	,get_solid: function() {
-		return (this.allowCollisions & 4369) > 0;
-	}
-	,set_solid: function(Solid) {
-		this.set_allowCollisions(Solid?4369:0);
-		return Solid;
-	}
-	,set_angle: function(Value) {
-		return this.angle = Value;
-	}
-	,set_moves: function(Value) {
-		return this.moves = Value;
-	}
-	,set_immovable: function(Value) {
-		return this.immovable = Value;
-	}
-	,set_pixelPerfectRender: function(Value) {
-		return this.pixelPerfectRender = Value;
-	}
-	,set_allowCollisions: function(Value) {
-		return this.allowCollisions = Value;
-	}
-	,set_debugBoundingBoxColorSolid: function(color) {
-		return this.debugBoundingBoxColorSolid = color;
-	}
-	,set_debugBoundingBoxColorNotSolid: function(color) {
-		return this.debugBoundingBoxColorNotSolid = color;
-	}
-	,set_debugBoundingBoxColorPartial: function(color) {
-		return this.debugBoundingBoxColorPartial = color;
-	}
-	,set_path: function(path) {
-		if(this.path == path) return path;
-		if(this.path != null) this.path.object = null;
-		if(path != null) path.object = this;
-		return this.path = path;
-	}
-	,__class__: flixel_FlxObject
-	,__properties__: $extend(flixel_FlxBasic.prototype.__properties__,{set_path:"set_path",set_debugBoundingBoxColorPartial:"set_debugBoundingBoxColorPartial",set_debugBoundingBoxColorNotSolid:"set_debugBoundingBoxColorNotSolid",set_debugBoundingBoxColorSolid:"set_debugBoundingBoxColorSolid",set_allowCollisions:"set_allowCollisions",set_solid:"set_solid",get_solid:"get_solid",set_immovable:"set_immovable",set_moves:"set_moves",set_angle:"set_angle",set_pixelPerfectRender:"set_pixelPerfectRender",set_height:"set_height",get_height:"get_height",set_width:"set_width",get_width:"get_width",set_y:"set_y",set_x:"set_x"})
-});
-var flixel_FlxSprite = function(X,Y,SimpleGraphic) {
-	if(Y == null) Y = 0;
-	if(X == null) X = 0;
-	this._facingFlip = new haxe_ds_IntMap();
-	this._angleChanged = true;
-	this._cosAngle = 1;
-	this._sinAngle = 0;
-	this._facingVerticalMult = 1;
-	this._facingHorizontalMult = 1;
-	this.useColorTransform = false;
-	this.color = 16777215;
-	this.flipY = false;
-	this.flipX = false;
-	this.facing = 16;
-	this.alpha = 1.0;
-	this.bakedRotationAngle = 0;
-	this.numFrames = 0;
-	this.frameHeight = 0;
-	this.frameWidth = 0;
-	this.dirty = true;
-	this.antialiasing = false;
-	this.useFramePixels = true;
-	flixel_FlxObject.call(this,X,Y);
-	this.set_useFramePixels(flixel_FlxG.renderBlit);
-	if(SimpleGraphic != null) this.loadGraphic(SimpleGraphic);
-};
-$hxClasses["flixel.FlxSprite"] = flixel_FlxSprite;
-flixel_FlxSprite.__name__ = ["flixel","FlxSprite"];
-flixel_FlxSprite.__super__ = flixel_FlxObject;
-flixel_FlxSprite.prototype = $extend(flixel_FlxObject.prototype,{
-	animation: null
-	,framePixels: null
-	,useFramePixels: null
-	,antialiasing: null
-	,dirty: null
-	,frame: null
-	,frameWidth: null
-	,frameHeight: null
-	,numFrames: null
-	,frames: null
-	,graphic: null
-	,bakedRotationAngle: null
-	,alpha: null
-	,facing: null
-	,flipX: null
-	,flipY: null
-	,origin: null
-	,offset: null
-	,scale: null
-	,blend: null
-	,color: null
-	,colorTransform: null
-	,useColorTransform: null
-	,clipRect: null
-	,shader: null
-	,_frame: null
-	,_frameGraphic: null
-	,_facingHorizontalMult: null
-	,_facingVerticalMult: null
-	,_flashPoint: null
-	,_flashRect: null
-	,_flashRect2: null
-	,_flashPointZero: null
-	,_matrix: null
-	,_halfSize: null
-	,_sinAngle: null
-	,_cosAngle: null
-	,_angleChanged: null
-	,_facingFlip: null
-	,initVars: function() {
-		flixel_FlxObject.prototype.initVars.call(this);
-		this.animation = new flixel_animation_FlxAnimationController(this);
-		this._flashPoint = new openfl_geom_Point();
-		this._flashRect = new openfl_geom_Rectangle();
-		this._flashRect2 = new openfl_geom_Rectangle();
-		this._flashPointZero = new openfl_geom_Point();
-		this.offset = flixel_math_FlxPoint.get(null,null);
-		this.origin = flixel_math_FlxPoint.get(null,null);
-		this.scale = flixel_math_FlxPoint.get(1,1);
-		this._halfSize = flixel_math_FlxPoint.get(null,null);
-		this._matrix = new flixel_math_FlxMatrix();
-		this.colorTransform = new openfl_geom_ColorTransform();
-	}
-	,destroy: function() {
-		flixel_FlxObject.prototype.destroy.call(this);
-		this.animation = flixel_util_FlxDestroyUtil.destroy(this.animation);
-		this.offset = flixel_util_FlxDestroyUtil.put(this.offset);
-		this.origin = flixel_util_FlxDestroyUtil.put(this.origin);
-		this.scale = flixel_util_FlxDestroyUtil.put(this.scale);
-		this._halfSize = flixel_util_FlxDestroyUtil.put(this._halfSize);
-		this.framePixels = flixel_util_FlxDestroyUtil.dispose(this.framePixels);
-		this._flashPoint = null;
-		this._flashRect = null;
-		this._flashRect2 = null;
-		this._flashPointZero = null;
-		this._matrix = null;
-		this.colorTransform = null;
-		this.set_blend(null);
-		this.set_frames(null);
-		this.set_graphic(null);
-		this._frame = flixel_util_FlxDestroyUtil.destroy(this._frame);
-		this._frameGraphic = flixel_util_FlxDestroyUtil.destroy(this._frameGraphic);
-		this.shader = null;
-	}
-	,clone: function() {
-		return new flixel_FlxSprite().loadGraphicFromSprite(this);
-	}
-	,loadGraphicFromSprite: function(Sprite) {
-		this.set_frames(Sprite.frames);
-		this.bakedRotationAngle = Sprite.bakedRotationAngle;
-		if(this.bakedRotationAngle > 0) {
-			this.set_width(Sprite.get_width());
-			this.set_height(Sprite.get_height());
-			this.centerOffsets();
-		}
-		this.set_antialiasing(Sprite.antialiasing);
-		this.animation.copyFrom(Sprite.animation);
-		this.graphicLoaded();
-		this.set_clipRect(Sprite.clipRect);
-		return this;
-	}
-	,loadGraphic: function(Graphic,Animated,Width,Height,Unique,Key) {
-		if(Unique == null) Unique = false;
-		if(Height == null) Height = 0;
-		if(Width == null) Width = 0;
-		if(Animated == null) Animated = false;
-		var graph = flixel_FlxG.bitmap.add(Graphic,Unique,Key);
-		if(graph == null) return this;
-		if(Width == 0) {
-			if(Animated) Width = graph.height; else Width = graph.width;
-			if(Width > graph.width) Width = graph.width; else Width = Width;
-		}
-		if(Height == 0) {
-			if(Animated) Height = Width; else Height = graph.height;
-			if(Height > graph.height) Height = graph.height; else Height = Height;
-		}
-		if(Animated) this.set_frames(flixel_graphics_frames_FlxTileFrames.fromGraphic(graph,flixel_math_FlxPoint.get(Width,Height))); else this.set_frames(graph.get_imageFrame());
-		return this;
-	}
-	,loadRotatedGraphic: function(Graphic,Rotations,Frame,AntiAliasing,AutoBuffer,Key) {
-		if(AutoBuffer == null) AutoBuffer = false;
-		if(AntiAliasing == null) AntiAliasing = false;
-		if(Frame == null) Frame = -1;
-		if(Rotations == null) Rotations = 16;
-		var brushGraphic = flixel_FlxG.bitmap.add(Graphic,false,Key);
-		if(brushGraphic == null) return this;
-		var brush = brushGraphic.bitmap;
-		var key = brushGraphic.key;
-		if(Frame >= 0) {
-			var brushSize = brush.height;
-			var framesNum = brush.width / brushSize | 0;
-			if(framesNum > Frame) Frame = Frame; else Frame = Frame % framesNum;
-			key += ":" + Frame;
-			var full = brush;
-			brush = new openfl_display_BitmapData(brushSize,brushSize,true,0);
-			this._flashRect.setTo(Frame * brushSize,0,brushSize,brushSize);
-			brush.copyPixels(full,this._flashRect,this._flashPointZero);
-		}
-		key += ":" + Rotations + ":" + (AutoBuffer == null?"null":"" + AutoBuffer);
-		var tempGraph = flixel_FlxG.bitmap._cache.get(key);
-		if(tempGraph == null) {
-			var bitmap = flixel_util_FlxBitmapDataUtil.generateRotations(brush,Rotations,AntiAliasing,AutoBuffer);
-			tempGraph = flixel_graphics_FlxGraphic.fromBitmapData(bitmap,false,key);
-		}
-		var max;
-		if(brush.height > brush.width) max = brush.height; else max = brush.width;
-		if(AutoBuffer) max = max * 1.5 | 0; else max = max;
-		this.set_frames(flixel_graphics_frames_FlxTileFrames.fromGraphic(tempGraph,flixel_math_FlxPoint.get(max,max)));
-		if(AutoBuffer) {
-			this.set_width(brush.width);
-			this.set_height(brush.height);
-			this.centerOffsets();
-		}
-		this.bakedRotationAngle = 360 / Rotations;
-		this.animation.createPrerotated();
-		return this;
-	}
-	,loadRotatedFrame: function(Frame,Rotations,AntiAliasing,AutoBuffer) {
-		if(AutoBuffer == null) AutoBuffer = false;
-		if(AntiAliasing == null) AntiAliasing = false;
-		if(Rotations == null) Rotations = 16;
-		var key = Frame.parent.key;
-		if(Frame.name != null) key += ":" + Frame.name; else key += ":" + Frame.frame.toString();
-		var graphic = flixel_FlxG.bitmap._cache.get(key);
-		if(graphic == null) graphic = flixel_graphics_FlxGraphic.fromBitmapData(Frame.paint(),false,key);
-		return this.loadRotatedGraphic(graphic,Rotations,-1,AntiAliasing,AutoBuffer);
-	}
-	,makeGraphic: function(Width,Height,Color,Unique,Key) {
-		if(Unique == null) Unique = false;
-		if(Color == null) Color = -1;
-		var graph = flixel_FlxG.bitmap.create(Width,Height,Color,Unique,Key);
-		this.set_frames(graph.get_imageFrame());
-		return this;
-	}
-	,graphicLoaded: function() {
-	}
-	,resetSize: function() {
-		this._flashRect.x = 0;
-		this._flashRect.y = 0;
-		this._flashRect.width = this.frameWidth;
-		this._flashRect.height = this.frameHeight;
-	}
-	,resetFrameSize: function() {
-		if(this.frame != null) {
-			this.frameWidth = this.frame.sourceSize.x | 0;
-			this.frameHeight = this.frame.sourceSize.y | 0;
-		}
-		this._halfSize.set(0.5 * this.frameWidth,0.5 * this.frameHeight);
-		this._flashRect.x = 0;
-		this._flashRect.y = 0;
-		this._flashRect.width = this.frameWidth;
-		this._flashRect.height = this.frameHeight;
-	}
-	,resetSizeFromFrame: function() {
-		this.set_width(this.frameWidth);
-		this.set_height(this.frameHeight);
-	}
-	,resetFrame: function() {
-		this.set_frame(this.frame);
-	}
-	,setGraphicSize: function(Width,Height) {
-		if(Height == null) Height = 0;
-		if(Width == null) Width = 0;
-		if(Width <= 0 && Height <= 0) return;
-		var newScaleX = Width / this.frameWidth;
-		var newScaleY = Height / this.frameHeight;
-		this.scale.set(newScaleX,newScaleY);
-		if(Width <= 0) this.scale.set_x(newScaleY); else if(Height <= 0) this.scale.set_y(newScaleX);
-	}
-	,updateHitbox: function() {
-		this.set_width(Math.abs(this.scale.x) * this.frameWidth);
-		this.set_height(Math.abs(this.scale.y) * this.frameHeight);
-		this.offset.set(-0.5 * (this.get_width() - this.frameWidth),-0.5 * (this.get_height() - this.frameHeight));
-		this.origin.set(this.frameWidth * 0.5,this.frameHeight * 0.5);
-	}
-	,resetHelpers: function() {
-		if(this.frame != null) {
-			this.frameWidth = this.frame.sourceSize.x | 0;
-			this.frameHeight = this.frame.sourceSize.y | 0;
-		}
-		this._halfSize.set(0.5 * this.frameWidth,0.5 * this.frameHeight);
-		this._flashRect.x = 0;
-		this._flashRect.y = 0;
-		this._flashRect.width = this.frameWidth;
-		this._flashRect.height = this.frameHeight;
-		this.set_width(this.frameWidth);
-		this.set_height(this.frameHeight);
-		this._flashRect2.x = 0;
-		this._flashRect2.y = 0;
-		if(this.graphic != null) {
-			this._flashRect2.width = this.graphic.width;
-			this._flashRect2.height = this.graphic.height;
-		}
-		this.origin.set(this.frameWidth * 0.5,this.frameHeight * 0.5);
-		if(flixel_FlxG.renderBlit) {
-			this.dirty = true;
-			this.updateFramePixels();
-		}
-	}
-	,update: function(elapsed) {
-		flixel_FlxObject.prototype.update.call(this,elapsed);
-		this.updateAnimation(elapsed);
-	}
-	,updateAnimation: function(elapsed) {
-		this.animation.update(elapsed);
-	}
-	,checkEmptyFrame: function() {
-		if(this._frame == null) this.loadGraphic("flixel/images/logo/default.png");
-	}
-	,draw: function() {
-		this.checkEmptyFrame();
-		if(this.alpha == 0 || this._frame.type == 2) return;
-		if(this.dirty) this.calcFrame(this.useFramePixels);
-		var _g = 0;
-		var _g1 = this.get_cameras();
-		while(_g < _g1.length) {
-			var camera = _g1[_g];
-			++_g;
-			if(!camera.visible || !camera.exists || !this.isOnScreen(camera)) continue;
-			this.getScreenPosition(this._point,camera).subtractPoint(this.offset);
-			if(this.isSimpleRender(camera)) this.drawSimple(camera); else this.drawComplex(camera);
-			flixel_FlxBasic.visibleCount++;
-		}
-		if(flixel_FlxG["debugger"].drawDebug) this.drawDebug();
-	}
-	,drawSimple: function(camera) {
-		if(this.isPixelPerfectRender(camera)) this._point.floor();
-		this._point.copyToFlash(this._flashPoint);
-		camera.copyPixels(this._frame,this.framePixels,this._flashRect,this._flashPoint,this.colorTransform,this.blend,this.antialiasing);
-	}
-	,drawComplex: function(camera) {
-		this._frame.prepareMatrix(this._matrix,0,this.checkFlipX(),this.checkFlipY());
-		this._matrix.translate(-this.origin.x,-this.origin.y);
-		this._matrix.scale(this.scale.x,this.scale.y);
-		if(this.bakedRotationAngle <= 0) {
-			this.updateTrig();
-			if(this.angle != 0) this._matrix.rotateWithTrig(this._cosAngle,this._sinAngle);
-		}
-		this._point.add(this.origin.x,this.origin.y);
-		this._matrix.translate(this._point.x,this._point.y);
-		if(this.isPixelPerfectRender(camera)) {
-			this._matrix.tx = Math.floor(this._matrix.tx);
-			this._matrix.ty = Math.floor(this._matrix.ty);
-		}
-		camera.drawPixels(this._frame,this.framePixels,this._matrix,this.colorTransform,this.blend,this.antialiasing,this.shader);
-	}
-	,stamp: function(Brush,X,Y) {
-		if(Y == null) Y = 0;
-		if(X == null) X = 0;
-		Brush.drawFrame();
-		if(this.graphic == null || Brush.graphic == null) throw new js__$Boot_HaxeError("Cannot stamp to or from a FlxSprite with no graphics.");
-		var bitmapData = Brush.framePixels;
-		if(this.isSimpleRenderBlit()) {
-			this._flashPoint.x = X + this.frame.frame.x;
-			this._flashPoint.y = Y + this.frame.frame.y;
-			this._flashRect2.width = bitmapData.width;
-			this._flashRect2.height = bitmapData.height;
-			this.graphic.bitmap.copyPixels(bitmapData,this._flashRect2,this._flashPoint,null,null,true);
-			this._flashRect2.width = this.graphic.bitmap.width;
-			this._flashRect2.height = this.graphic.bitmap.height;
-		} else {
-			this._matrix.identity();
-			this._matrix.translate(-Brush.origin.x,-Brush.origin.y);
-			this._matrix.scale(Brush.scale.x,Brush.scale.y);
-			if(Brush.angle != 0) this._matrix.rotate(Brush.angle * (Math.PI / 180));
-			this._matrix.translate(X + this.frame.frame.x + Brush.origin.x,Y + this.frame.frame.y + Brush.origin.y);
-			var brushBlend = Brush.blend;
-			this.graphic.bitmap.draw(bitmapData,this._matrix,null,brushBlend,null,Brush.antialiasing);
-		}
-		if(flixel_FlxG.renderBlit) {
-			this.dirty = true;
-			this.calcFrame();
-		}
-	}
-	,drawFrame: function(Force) {
-		if(Force == null) Force = false;
-		if(flixel_FlxG.renderBlit) {
-			if(Force || this.dirty) {
-				this.dirty = true;
-				this.calcFrame();
-			}
-		} else {
-			this.dirty = true;
-			this.calcFrame(true);
-		}
-	}
-	,centerOffsets: function(AdjustPosition) {
-		if(AdjustPosition == null) AdjustPosition = false;
-		this.offset.set_x((this.frameWidth - this.get_width()) * 0.5);
-		this.offset.set_y((this.frameHeight - this.get_height()) * 0.5);
-		if(AdjustPosition) {
-			var _g = this;
-			_g.set_x(_g.x + this.offset.x);
-			var _g1 = this;
-			_g1.set_y(_g1.y + this.offset.y);
-		}
-	}
-	,centerOrigin: function() {
-		this.origin.set(this.frameWidth * 0.5,this.frameHeight * 0.5);
-	}
-	,replaceColor: function(Color,NewColor,FetchPositions) {
-		if(FetchPositions == null) FetchPositions = false;
-		var positions = flixel_util_FlxBitmapDataUtil.replaceColor(this.graphic.bitmap,Color,NewColor,FetchPositions);
-		if(positions != null) this.dirty = true;
-		return positions;
-	}
-	,setColorTransform: function(redMultiplier,greenMultiplier,blueMultiplier,alphaMultiplier,redOffset,greenOffset,blueOffset,alphaOffset) {
-		if(alphaOffset == null) alphaOffset = 0;
-		if(blueOffset == null) blueOffset = 0;
-		if(greenOffset == null) greenOffset = 0;
-		if(redOffset == null) redOffset = 0;
-		if(alphaMultiplier == null) alphaMultiplier = 1.0;
-		if(blueMultiplier == null) blueMultiplier = 1.0;
-		if(greenMultiplier == null) greenMultiplier = 1.0;
-		if(redMultiplier == null) redMultiplier = 1.0;
-		this.set_color((function($this) {
-			var $r;
-			var this1;
-			{
-				var color = flixel_util__$FlxColor_FlxColor_$Impl_$._new();
-				this1 = (function($this) {
-					var $r;
-					{
-						var Value = Math.round(redMultiplier * 255);
-						color &= -16711681;
-						color |= (Value > 255?255:Value < 0?0:Value) << 16;
-						Value;
-						redMultiplier;
-					}
-					{
-						var Value1 = Math.round(greenMultiplier * 255);
-						color &= -65281;
-						color |= (Value1 > 255?255:Value1 < 0?0:Value1) << 8;
-						Value1;
-						greenMultiplier;
-					}
-					{
-						var Value2 = Math.round(blueMultiplier * 255);
-						color &= -256;
-						if(Value2 > 255) color |= 255; else if(Value2 < 0) color |= 0; else color |= Value2;
-						Value2;
-						blueMultiplier;
-					}
-					{
-						var Value3 = Math.round(255);
-						color &= 16777215;
-						color |= (Value3 > 255?255:Value3 < 0?0:Value3) << 24;
-						Value3;
-						1;
-					}
-					$r = color;
-					return $r;
-				}($this));
-			}
-			$r = this1 & 16777215;
-			return $r;
-		}(this)));
-		this.set_alpha(alphaMultiplier);
-		flixel_util_FlxColorTransformUtil.setMultipliers(this.colorTransform,redMultiplier,greenMultiplier,blueMultiplier,alphaMultiplier);
-		flixel_util_FlxColorTransformUtil.setOffsets(this.colorTransform,redOffset,greenOffset,blueOffset,alphaOffset);
-		this.useColorTransform = this.alpha != 1 || this.color != 16777215 || flixel_util_FlxColorTransformUtil.hasRGBOffsets(this.colorTransform);
-		this.dirty = true;
-	}
-	,updateColorTransform: function() {
-		if(this.colorTransform == null) this.colorTransform = new openfl_geom_ColorTransform();
-		this.useColorTransform = this.alpha != 1 || this.color != 16777215;
-		if(this.useColorTransform) flixel_util_FlxColorTransformUtil.setMultipliers(this.colorTransform,(this.color >> 16 & 255) / 255,(this.color >> 8 & 255) / 255,(this.color & 255) / 255,this.alpha); else flixel_util_FlxColorTransformUtil.setMultipliers(this.colorTransform,1,1,1,1);
-		this.dirty = true;
-	}
-	,pixelsOverlapPoint: function(point,Mask,Camera) {
-		if(Mask == null) Mask = 255;
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		this.getScreenPosition(this._point,Camera);
-		this._point.subtractPoint(this.offset);
-		this._flashPoint.x = point.x - Camera.scroll.x - this._point.x;
-		this._flashPoint.y = point.y - Camera.scroll.y - this._point.y;
-		if(point._weak) point.put();
-		if(this._flashPoint.x < 0 || this._flashPoint.x > this.frameWidth || this._flashPoint.y < 0 || this._flashPoint.y > this.frameHeight) return false; else {
-			var frameData = this.updateFramePixels();
-			var pixelColor = frameData.getPixel32(this._flashPoint.x | 0,this._flashPoint.y | 0);
-			return (pixelColor >> 24 & 255) * this.alpha >= Mask;
-		}
-	}
-	,calcFrame: function(RunOnCpp) {
-		if(RunOnCpp == null) RunOnCpp = false;
-		this.checkEmptyFrame();
-		if(flixel_FlxG.renderTile && !RunOnCpp) return;
-		this.updateFramePixels();
-	}
-	,updateFramePixels: function() {
-		if(this._frame == null || !this.dirty) return this.framePixels;
-		if(flixel_FlxG.renderTile && this._frameGraphic != null) {
-			this.dirty = false;
-			return this.framePixels;
-		}
-		var doFlipX = this.checkFlipX();
-		var doFlipY = this.checkFlipY();
-		if(!doFlipX && !doFlipY && this._frame.type == 0) this.framePixels = this._frame.paint(this.framePixels,this._flashPointZero,false,true); else this.framePixels = this._frame.paintRotatedAndFlipped(this.framePixels,this._flashPointZero,0,doFlipX,doFlipY,false,true);
-		if(this.useColorTransform) this.framePixels.colorTransform(this._flashRect,this.colorTransform);
-		if(flixel_FlxG.renderTile && this.useFramePixels) {
-			this._frameGraphic = flixel_util_FlxDestroyUtil.destroy(this._frameGraphic);
-			this._frameGraphic = flixel_graphics_FlxGraphic.fromBitmapData(this.framePixels,false,null,false);
-			this._frame = this._frameGraphic.get_imageFrame().get_frame().copyTo(this._frame);
-		}
-		this.dirty = false;
-		return this.framePixels;
-	}
-	,getGraphicMidpoint: function(point) {
-		if(point == null) point = flixel_math_FlxPoint.get(null,null);
-		return point.set(this.x + this.frameWidth * 0.5,this.y + this.frameHeight * 0.5);
-	}
-	,isOnScreen: function(Camera) {
-		if(Camera == null) Camera = flixel_FlxG.camera;
-		var minX = this.x - this.offset.x - Camera.scroll.x * this.scrollFactor.x;
-		var minY = this.y - this.offset.y - Camera.scroll.y * this.scrollFactor.y;
-		if((this.angle == 0 || this.bakedRotationAngle > 0) && this.scale.x == 1 && this.scale.y == 1) {
-			if(minX > Camera.width || minX + this.frameWidth < 0) return false;
-			if(minY > Camera.height || minY + this.frameHeight < 0) return false;
-		} else {
-			var radiusX = this._halfSize.x;
-			var radiusY = this._halfSize.y;
-			var ox = this.origin.x;
-			if(ox != radiusX) {
-				var x1 = Math.abs(ox);
-				var x2 = Math.abs(this.frameWidth - ox);
-				radiusX = Math.max(x2,x1);
-			}
-			var oy = this.origin.y;
-			if(oy != radiusY) {
-				var y1 = Math.abs(oy);
-				var y2 = Math.abs(this.frameHeight - oy);
-				radiusY = Math.max(y2,y1);
-			}
-			radiusX *= Math.abs(this.scale.x);
-			radiusY *= Math.abs(this.scale.y);
-			var radius = Math.max(radiusX,radiusY);
-			radius *= 1.41421356237;
-			minX += ox;
-			var maxX = minX + radius;
-			minX -= radius;
-			if(maxX < 0 || minX > Camera.width) return false;
-			minY += oy;
-			var maxY = minY + radius;
-			minY -= radius;
-			if(maxY < 0 || minY > Camera.height) return false;
-		}
-		return true;
-	}
-	,isSimpleRender: function(camera) {
-		if(flixel_FlxG.renderTile) return false;
-		return this.isSimpleRenderBlit(camera);
-	}
-	,isSimpleRenderBlit: function(camera) {
-		var result = (this.angle == 0 || this.bakedRotationAngle > 0) && this.scale.x == 1 && this.scale.y == 1 && this.blend == null;
-		result = result && (camera != null?this.isPixelPerfectRender(camera):this.pixelPerfectRender);
-		return result;
-	}
-	,setFacingFlip: function(Direction,FlipX,FlipY) {
-		this._facingFlip.h[Direction] = { x : FlipX, y : FlipY};
-	}
-	,setFrames: function(Frames,saveAnimations) {
-		if(saveAnimations == null) saveAnimations = true;
-		if(saveAnimations) {
-			var animations = this.animation._animations;
-			var reverse = false;
-			var index = 0;
-			var frameIndex = this.animation.frameIndex;
-			var currName = null;
-			if(this.animation._curAnim != null) {
-				reverse = this.animation._curAnim.reversed;
-				index = this.animation._curAnim.curFrame;
-				currName = this.animation._curAnim.name;
-			}
-			this.animation._animations = null;
-			this.set_frames(Frames);
-			this.set_frame(this.frames.frames[frameIndex]);
-			this.animation._animations = animations;
-			if(currName != null) this.animation.play(currName,false,reverse,index);
-		} else this.set_frames(Frames);
-		return this;
-	}
-	,get_pixels: function() {
-		if(this.graphic == null) return null; else return this.graphic.bitmap;
-	}
-	,set_pixels: function(Pixels) {
-		var key = flixel_FlxG.bitmap.findKeyForBitmap(Pixels);
-		if(key == null) {
-			key = flixel_FlxG.bitmap.getUniqueKey();
-			this.set_graphic(flixel_FlxG.bitmap.add(Pixels,false,key));
-		} else this.set_graphic(flixel_FlxG.bitmap._cache.get(key));
-		this.set_frames(this.graphic.get_imageFrame());
-		return Pixels;
-	}
-	,set_frame: function(Value) {
-		this.frame = Value;
-		if(this.frame != null) {
-			if(this.frame != null) {
-				this.frameWidth = this.frame.sourceSize.x | 0;
-				this.frameHeight = this.frame.sourceSize.y | 0;
-			}
-			this._halfSize.set(0.5 * this.frameWidth,0.5 * this.frameHeight);
-			this._flashRect.x = 0;
-			this._flashRect.y = 0;
-			this._flashRect.width = this.frameWidth;
-			this._flashRect.height = this.frameHeight;
-			this.dirty = true;
-		} else if(this.frames != null && this.frames.frames != null && this.numFrames > 0) {
-			this.frame = this.frames.frames[0];
-			this.dirty = true;
-		} else return null;
-		if(flixel_FlxG.renderTile) this._frameGraphic = flixel_util_FlxDestroyUtil.destroy(this._frameGraphic);
-		if(this.clipRect != null) this._frame = this.frame.clipTo(this.clipRect,this._frame); else this._frame = this.frame.copyTo(this._frame);
-		return this.frame;
-	}
-	,set_facing: function(Direction) {
-		var flip = this._facingFlip.h[Direction];
-		if(flip != null) {
-			this.set_flipX(flip.x);
-			this.set_flipY(flip.y);
-		}
-		return this.facing = Direction;
-	}
-	,set_alpha: function(Alpha) {
-		if(this.alpha == Alpha) return Alpha;
-		this.alpha = flixel_math_FlxMath.bound(Alpha,0,1);
-		this.updateColorTransform();
-		return this.alpha;
-	}
-	,set_color: function(Color) {
-		if(this.color == Color) return Color;
-		this.color = Color;
-		this.updateColorTransform();
-		return this.color;
-	}
-	,set_angle: function(Value) {
-		var newAngle = this.angle != Value;
-		var ret = flixel_FlxObject.prototype.set_angle.call(this,Value);
-		if(newAngle) {
-			this._angleChanged = true;
-			this.animation.update(0);
-		}
-		return ret;
-	}
-	,updateTrig: function() {
-		if(this._angleChanged) {
-			var radians = this.angle * (Math.PI / 180);
-			this._sinAngle = Math.sin(radians);
-			this._cosAngle = Math.cos(radians);
-			this._angleChanged = false;
-		}
-	}
-	,set_blend: function(Value) {
-		return this.blend = Value;
-	}
-	,set_graphic: function(Value) {
-		var oldGraphic = this.graphic;
-		if(this.graphic != Value && Value != null) {
-			var _g = Value;
-			var _g1 = _g.get_useCount();
-			_g.set_useCount(_g1 + 1);
-			_g1;
-		}
-		if(oldGraphic != null && oldGraphic != Value) {
-			var _g2 = oldGraphic;
-			var _g11 = _g2.get_useCount();
-			_g2.set_useCount(_g11 - 1);
-			_g11;
-		}
-		return this.graphic = Value;
-	}
-	,set_clipRect: function(rect) {
-		if(rect != null) {
-			rect.x = Math.round(rect.x);
-			rect.y = Math.round(rect.y);
-			rect.width = Math.round(rect.width);
-			rect.height = Math.round(rect.height);
-			this.clipRect = rect;
-		} else this.clipRect = null;
-		if(this.frames != null) this.set_frame(this.frames.frames[this.animation.frameIndex]);
-		return rect;
-	}
-	,set_frames: function(Frames) {
-		if(this.animation != null) this.animation.destroyAnimations();
-		if(Frames != null) {
-			this.set_graphic(Frames.parent);
-			this.frames = Frames;
-			this.set_frame(this.frames.frames[0]);
-			this.numFrames = this.frames.frames.length;
-			this.resetHelpers();
-			this.bakedRotationAngle = 0;
-			this.animation.set_frameIndex(0);
-			this.graphicLoaded();
-		} else {
-			this.frames = null;
-			this.set_frame(null);
-			this.set_graphic(null);
-		}
-		this.set_clipRect(null);
-		return Frames;
-	}
-	,set_flipX: function(Value) {
-		if(flixel_FlxG.renderTile) if(Value) this._facingHorizontalMult = -1; else this._facingHorizontalMult = 1;
-		this.dirty = this.flipX != Value || this.dirty;
-		return this.flipX = Value;
-	}
-	,set_flipY: function(Value) {
-		if(flixel_FlxG.renderTile) if(Value) this._facingVerticalMult = -1; else this._facingVerticalMult = 1;
-		this.dirty = this.flipY != Value || this.dirty;
-		return this.flipY = Value;
-	}
-	,set_antialiasing: function(value) {
-		return this.antialiasing = value;
-	}
-	,set_useFramePixels: function(value) {
-		if(flixel_FlxG.renderTile) {
-			if(value != this.useFramePixels) {
-				this.useFramePixels = value;
-				this.set_frame(this.frame);
-				if(value) this.updateFramePixels();
-			}
-			return value;
-		} else {
-			this.useFramePixels = true;
-			return true;
-		}
-	}
-	,checkFlipX: function() {
-		var doFlipX = this.flipX != this._frame.flipX;
-		if(this.animation._curAnim != null) return doFlipX != this.animation._curAnim.flipX;
-		return doFlipX;
-	}
-	,checkFlipY: function() {
-		var doFlipY = this.flipY != this._frame.flipY;
-		if(this.animation._curAnim != null) return doFlipY != this.animation._curAnim.flipY;
-		return doFlipY;
-	}
-	,__class__: flixel_FlxSprite
-	,__properties__: $extend(flixel_FlxObject.prototype.__properties__,{set_clipRect:"set_clipRect",set_color:"set_color",set_blend:"set_blend",set_flipY:"set_flipY",set_flipX:"set_flipX",set_facing:"set_facing",set_alpha:"set_alpha",set_graphic:"set_graphic",set_frames:"set_frames",set_frame:"set_frame",set_pixels:"set_pixels",get_pixels:"get_pixels",set_antialiasing:"set_antialiasing",set_useFramePixels:"set_useFramePixels"})
 });
 var flixel_IFlxSprite = function() { };
 $hxClasses["flixel.IFlxSprite"] = flixel_IFlxSprite;
@@ -24979,44 +25094,6 @@ flixel_system_replay_MouseRecord.prototype = {
 	,wheel: null
 	,__class__: flixel_system_replay_MouseRecord
 };
-var flixel_system_ui_FlxFocusLostScreen = function() {
-	openfl_display_Sprite.call(this);
-	this.draw();
-	var logo = new openfl_display_Sprite();
-	flixel_system_FlxAssets.drawLogo(logo.get_graphics());
-	logo.set_scaleX(logo.set_scaleY(0.2));
-	logo.set_x(logo.set_y(5));
-	logo.set_alpha(0.35);
-	this.addChild(logo);
-	this.set_visible(false);
-};
-$hxClasses["flixel.system.ui.FlxFocusLostScreen"] = flixel_system_ui_FlxFocusLostScreen;
-flixel_system_ui_FlxFocusLostScreen.__name__ = ["flixel","system","ui","FlxFocusLostScreen"];
-flixel_system_ui_FlxFocusLostScreen.__super__ = openfl_display_Sprite;
-flixel_system_ui_FlxFocusLostScreen.prototype = $extend(openfl_display_Sprite.prototype,{
-	draw: function() {
-		var gfx = this.get_graphics();
-		var screenWidth = openfl_Lib.current.stage.stageWidth | 0;
-		var screenHeight = openfl_Lib.current.stage.stageHeight | 0;
-		gfx.clear();
-		gfx.moveTo(0,0);
-		gfx.beginFill(0,0.5);
-		gfx.drawRect(0,0,screenWidth,screenHeight);
-		gfx.endFill();
-		var halfWidth = screenWidth / 2 | 0;
-		var halfHeight = screenHeight / 2 | 0;
-		var helper = Std["int"](Math.min(halfWidth,halfHeight) / 3);
-		gfx.moveTo(halfWidth - helper,halfHeight - helper);
-		gfx.beginFill(16777215,0.65);
-		gfx.lineTo(halfWidth + helper,halfHeight);
-		gfx.lineTo(halfWidth - helper,halfHeight + helper);
-		gfx.lineTo(halfWidth - helper,halfHeight - helper);
-		gfx.endFill();
-		this.set_x(-flixel_FlxG.scaleMode.offset.x);
-		this.set_y(-flixel_FlxG.scaleMode.offset.y);
-	}
-	,__class__: flixel_system_ui_FlxFocusLostScreen
-});
 var flixel_system_ui_FlxSoundTray = function() {
 	this._defaultScale = 2.0;
 	this._width = 80;
@@ -69717,9 +69794,32 @@ openfl_display_DisplayObject.__instanceCount = 0;
 openfl_display_DisplayObject.__worldRenderDirty = 0;
 openfl_display_DisplayObject.__worldTransformDirty = 0;
 openfl_display_DisplayObject.__cacheAsBitmapMode = false;
-openfl_text_Font.__registeredFonts = [];
 flixel_FlxBasic.activeCount = 0;
 flixel_FlxBasic.visibleCount = 0;
+openfl_text_Font.__registeredFonts = [];
+Settings.BOARD_TILE_WIDTH = 8;
+Settings.BOARD_TILE_HEIGHT = 8;
+Settings.TILE_WIDTH = 32;
+Settings.TILE_HEIGHT = 32;
+Settings.TILES_IMAGE_PATH = "assets/images/Tiles.png";
+Settings.level = 0;
+Settings.scores = [];
+Settings.score = 0;
+Settings.saves = [];
+flixel_math_FlxRect._pool = new flixel_util_FlxPool_$flixel_$math_$FlxRect(flixel_math_FlxRect);
+flixel_FlxObject.defaultPixelPerfectPosition = false;
+flixel_FlxObject.SEPARATE_BIAS = 4;
+flixel_FlxObject.LEFT = 1;
+flixel_FlxObject.RIGHT = 16;
+flixel_FlxObject.UP = 256;
+flixel_FlxObject.DOWN = 4096;
+flixel_FlxObject.NONE = 0;
+flixel_FlxObject.CEILING = 256;
+flixel_FlxObject.FLOOR = 4096;
+flixel_FlxObject.WALL = 17;
+flixel_FlxObject.ANY = 4369;
+flixel_FlxObject._firstSeparateFlxRect = flixel_math_FlxRect.get(null,null,null,null);
+flixel_FlxObject._secondSeparateFlxRect = flixel_math_FlxRect.get(null,null,null,null);
 Xml.Element = 0;
 Xml.PCData = 1;
 Xml.CData = 2;
@@ -69728,7 +69828,6 @@ Xml.DocType = 4;
 Xml.ProcessingInstruction = 5;
 Xml.Document = 6;
 flixel_math_FlxPoint._pool = new flixel_util_FlxPool_$flixel_$math_$FlxPoint(flixel_math_FlxPoint);
-flixel_math_FlxRect._pool = new flixel_util_FlxPool_$flixel_$math_$FlxRect(flixel_math_FlxRect);
 openfl_display_LoaderInfo.__rootURL = window.document.URL;
 openfl_system_ApplicationDomain.currentDomain = new openfl_system_ApplicationDomain(null);
 openfl_geom_Matrix.__identity = new openfl_geom_Matrix();
@@ -69786,19 +69885,6 @@ flixel_FlxG.initialWidth = 0;
 flixel_FlxG.initialHeight = 0;
 flixel_FlxG.initialZoom = 0;
 flixel_FlxG.signals = new flixel_system_frontEnds_SignalFrontEnd();
-flixel_FlxObject.defaultPixelPerfectPosition = false;
-flixel_FlxObject.SEPARATE_BIAS = 4;
-flixel_FlxObject.LEFT = 1;
-flixel_FlxObject.RIGHT = 16;
-flixel_FlxObject.UP = 256;
-flixel_FlxObject.DOWN = 4096;
-flixel_FlxObject.NONE = 0;
-flixel_FlxObject.CEILING = 256;
-flixel_FlxObject.FLOOR = 4096;
-flixel_FlxObject.WALL = 17;
-flixel_FlxObject.ANY = 4369;
-flixel_FlxObject._firstSeparateFlxRect = flixel_math_FlxRect.get(null,null,null,null);
-flixel_FlxObject._secondSeparateFlxRect = flixel_math_FlxRect.get(null,null,null,null);
 flixel_animation_FlxPrerotatedAnimation.PREROTATED = "prerotated_animation";
 flixel_effects_FlxFlicker._pool = new flixel_util_FlxPool_$flixel_$effects_$FlxFlicker(flixel_effects_FlxFlicker);
 flixel_effects_FlxFlicker._boundObjects = new haxe_ds_ObjectMap();

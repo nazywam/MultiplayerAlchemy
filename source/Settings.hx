@@ -12,6 +12,10 @@ class Settings {
 	public static var TILE_WIDTH		:Int = 32;
 	public static var TILE_HEIGHT		:Int = 32;
 	
+	
+	
+	public static var TILES_IMAGE_PATH	:String = "assets/images/Tiles.png";
+	
 	/**
 	 * Generic level variable that can be used for cross-state stuff.
 	 * Example usage: Storing the current level number.

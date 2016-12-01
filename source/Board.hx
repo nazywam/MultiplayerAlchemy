@@ -8,7 +8,7 @@ import flixel.group.FlxGroup;
  */
 class Board extends FlxGroup {
 
-	private var tab 	:Array<Array<Tile>>;
+	public var tab 	:Array<Array<Tile>>;
 
 	var width			:Int;
 	var height			:Int;
@@ -26,12 +26,16 @@ class Board extends FlxGroup {
 			var row = new Array<Tile>();
 			
 			for (j in 0...Settings.BOARD_TILE_WIDTH) {
-				var t = new Tile(j * Settings.TILE_WIDTH, i * Settings.TILE_HEIGHT);
+				var t = new Tile(j * Settings.TILE_WIDTH, i * Settings.TILE_HEIGHT, Std.random(4), j, i);
 				row.push(t);
 				add(t);
 			}
 			tab.push(row);
 		}
+	}
+	
+	public function rotate(BX:Int, BY:Int):Void {
+		tab[BY][BX].rotate();
 	}
 	
 }

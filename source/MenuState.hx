@@ -7,12 +7,15 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import openfl.utils.ByteArray;
-import sys.net.WebSocket;
+
 
 class MenuState extends FlxState {
 	
 	override public function create():Void {
 		super.create();
+		
+		FlxG.log.redirectTraces = true;
+		FlxG.autoPause = false;
 		
 		FlxG.switchState(new PlayState());
 		

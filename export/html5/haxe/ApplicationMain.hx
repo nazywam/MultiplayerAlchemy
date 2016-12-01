@@ -38,6 +38,10 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
+		urls.push ("assets/images/Tiles.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/music/music-goes-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
@@ -131,7 +135,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "3",
+			build: "95",
 			company: "Michael",
 			file: "MultiplayerAlchemy",
 			fps: 60,
@@ -149,13 +153,13 @@ class ApplicationMain {
 					display: 0,
 					fullscreen: false,
 					hardware: false,
-					height: 480,
+					height: 512,
 					parameters: "{}",
 					resizable: false,
 					stencilBuffer: true,
 					title: "MultiplayerAlchemy",
 					vsync: true,
-					width: 640,
+					width: 512,
 					x: null,
 					y: null
 				},
@@ -173,7 +177,7 @@ class ApplicationMain {
 		
 		#if (js && html5)
 		#if (munit || utest)
-		openfl.Lib.embed (null, 640, 480, "000000");
+		openfl.Lib.embed (null, 512, 512, "000000");
 		#end
 		#else
 		create ();
