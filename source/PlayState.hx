@@ -22,7 +22,7 @@ class PlayState extends FlxState {
 		board = new Board(Settings.BOARD_TILE_WIDTH, Settings.BOARD_TILE_HEIGHT);
 		add(board);
 
-		socket = new WebSocket("ws://192.168.1.104:9000");
+		socket = new WebSocket("ws://92.222.72.215:9000");
 		socket.onopen = function() {
 			socket.send("Ssss give me the map");	
 		};

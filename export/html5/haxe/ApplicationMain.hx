@@ -135,7 +135,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "50",
+			build: "51",
 			company: "Michael",
 			file: "MultiplayerAlchemy",
 			fps: 60,

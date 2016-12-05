@@ -67,7 +67,7 @@ ApplicationMain.init = function() {
 	if(total == 0) ApplicationMain.start();
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "50", company : "Michael", file : "MultiplayerAlchemy", fps : 60, name : "MultiplayerAlchemy", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 512, parameters : "{}", resizable : false, stencilBuffer : true, title : "MultiplayerAlchemy", vsync : true, width : 512, x : null, y : null}]};
+	ApplicationMain.config = { build : "51", company : "Michael", file : "MultiplayerAlchemy", fps : 60, name : "MultiplayerAlchemy", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 512, parameters : "{}", resizable : false, stencilBuffer : true, title : "MultiplayerAlchemy", vsync : true, width : 512, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -2766,7 +2766,7 @@ PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		flixel_FlxState.prototype.create.call(this);
 		this.board = new Board(Settings.BOARD_TILE_WIDTH,Settings.BOARD_TILE_HEIGHT);
 		this.add(this.board);
-		this.socket = new WebSocket("ws://192.168.1.104:9000");
+		this.socket = new WebSocket("ws://92.222.72.215:9000");
 		this.socket.onopen = function() {
 			_g.socket.send("Ssss give me the map");
 		};
