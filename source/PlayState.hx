@@ -14,25 +14,31 @@ class PlayState extends FlxState {
 	var board : Board;
 	var socket : WebSocket;
 	override public function create():Void {
-		
-		socket = new WebSocket("ws://192.168.1.105:9000");
+		super.create();
+	
+		board = new Board(Settings.BOARD_TILE_WIDTH, Settings.BOARD_TILE_HEIGHT);
+		add(board);
+
+		socket = new WebSocket("ws://127.0.0.1:9000");
 		socket.onopen = function() {
-			socket.send("Hey, it's me, ur client");	
+			socket.send("Ssss give me the map");	
 		};
 		
 		socket.onmessage = function(message:MessageEvent) {
-			var BX = Std.int(message.data.split(',')[0]);
-			var BY = Std.int(message.data.split(',')[1]);
+			var payload:String = message.data.substring(1, message.data.length);
+
+			switch (message.data[0]) {
+				case 'S': // get the map
+					board.loadFromString(payload);
+
+				case 'M': // make a move
+					var BX = Std.parseInt(payload.split(',')[0]);
+					var BY = Std.parseInt(payload.split(',')[1]);
 			
-			board.rotate(BX, BY);
-		};
-		
-		
-		super.create();
-		
-		board = new Board(Settings.BOARD_TILE_WIDTH, Settings.BOARD_TILE_HEIGHT);
-		add(board);
-		
+					board.rotate(BX, BY);
+			}
+			
+		};		
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -43,7 +49,7 @@ class PlayState extends FlxState {
 				for(t in r){
 					if (FlxG.mouse.overlaps(t)) {
 						t.rotate();
-						socket.send(t.getBoardCoordinates());
+						socket.send("M"+t.getBoardCoordinates());
 					}
 				}
 			}

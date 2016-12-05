@@ -4,7 +4,20 @@ import flixel.util.FlxSave;
 
 
 class Settings {
+
+	public static var CONNECTIONS = [
+		[-1, -1, 0, 0],
+		[-1, 0, -1, -1],
+		[0, 1, 0, 1],
+		[0, 0, 1, 1]
+	];
 	
+	public static var COLORS = [
+		0xFFFFFFFF,
+		0xFFFF0000,
+		0xFF00FF00,
+		0xFF0000FF
+	];
 	
 	public static var BOARD_TILE_WIDTH	:Int = 8;
 	public static var BOARD_TILE_HEIGHT	:Int = 8;

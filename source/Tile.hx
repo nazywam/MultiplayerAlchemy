@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.util.FlxColor;
 
 /**
  * ...
@@ -16,6 +17,8 @@ class Tile extends FlxSprite {
 	var boardX : Int;
 	var boardY : Int;
 	
+	public var fill : Int;
+
 	public function new(X:Float, Y:Float, T:Int, BX:Int, BY:Int) {
 		super(X, Y);
 		
@@ -23,13 +26,24 @@ class Tile extends FlxSprite {
 		boardY = BY;
 		
 		rotation = 0;
+		fill = 0;
+
 		tileID = T;
 		
 		loadGraphic(Settings.TILES_IMAGE_PATH, true, 32, 32);
-		animation.add("default", [tileID]);
-		animation.play("default");
+
+		for(i in 0...4){
+			animation.add(Std.string(i), [i]);
+		}
+		animation.play(Std.string(tileID));
 	}
 	
+	public function setTileID(I:Int, R:Int){
+		tileID = I;
+		rotation = R;
+		animation.play(Std.string(tileID));
+	}
+
 	public function rotate() {
 		rotation += 1;
 	}
@@ -37,7 +51,7 @@ class Tile extends FlxSprite {
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 		
-		//angle += (angle - rotation * 4) / 10;
+		color = Settings.COLORS[fill];		
 		angle = rotation * 90;
 	}
 	
