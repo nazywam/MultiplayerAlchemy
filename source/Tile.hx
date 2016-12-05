@@ -12,22 +12,28 @@ class Tile extends FlxSprite {
 
 	
 	var tileID : Int;
-	var rotation : Int;
+	public var rotation : Int;
 	
-	var boardX : Int;
-	var boardY : Int;
+	public var boardX : Int;
+	public var boardY : Int;
 	
 	public var fill : Int;
 
+	public var index : Int;
+	
+	public var starter : Bool;
+	
 	public function new(X:Float, Y:Float, T:Int, BX:Int, BY:Int) {
 		super(X, Y);
 		
 		boardX = BX;
 		boardY = BY;
+		index = BY * Settings.BOARD_TILE_WIDTH + BX;
 		
 		rotation = 0;
 		fill = 0;
-
+		starter = false;
+		
 		tileID = T;
 		
 		loadGraphic(Settings.TILES_IMAGE_PATH, true, 32, 32);
@@ -38,6 +44,10 @@ class Tile extends FlxSprite {
 		animation.play(Std.string(tileID));
 	}
 	
+	public function getTileID() {
+		return tileID;
+	}
+	
 	public function setTileID(I:Int, R:Int){
 		tileID = I;
 		rotation = R;
@@ -46,6 +56,7 @@ class Tile extends FlxSprite {
 
 	public function rotate() {
 		rotation += 1;
+		rotation %= 4;
 	}
 	
 	override public function update(elapsed:Float) {

@@ -6,7 +6,7 @@ def generateBoard(width, height):
     d = []
     for y in range(height):
         for x in range(width):
-            d.append((randint(0, 3), randint(0, 3)))
+            d.append((randint(0, 1), randint(0, 3)))
     return d
 
 

@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
@@ -13,13 +14,15 @@ class PlayState extends FlxState {
 	
 	var board : Board;
 	var socket : WebSocket;
+	
+	
 	override public function create():Void {
 		super.create();
 	
 		board = new Board(Settings.BOARD_TILE_WIDTH, Settings.BOARD_TILE_HEIGHT);
 		add(board);
 
-		socket = new WebSocket("ws://127.0.0.1:9000");
+		socket = new WebSocket("ws://192.168.1.104:9000");
 		socket.onopen = function() {
 			socket.send("Ssss give me the map");	
 		};
@@ -37,8 +40,8 @@ class PlayState extends FlxState {
 			
 					board.rotate(BX, BY);
 			}
-			
 		};		
+		
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -49,10 +52,11 @@ class PlayState extends FlxState {
 				for(t in r){
 					if (FlxG.mouse.overlaps(t)) {
 						t.rotate();
-						socket.send("M"+t.getBoardCoordinates());
+						socket.send("M" + t.getBoardCoordinates());
+						//board.flow();
 					}
 				}
 			}
-		}
+		}	
 	}
 }
