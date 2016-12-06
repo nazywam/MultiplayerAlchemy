@@ -41,9 +41,6 @@ class Board extends FlxTypedGroup<Tile> {
 		tab[1][1].fill = 1;
 		tab[6][6].fill = 2;
 		
-		tab[1][1].setTileID(2, 0);
-		tab[6][6].setTileID(2, 0);
-
 		tab[1][1].starter= true;
 		tab[6][6].starter= true;
 		
@@ -120,7 +117,17 @@ class Board extends FlxTypedGroup<Tile> {
 
 		for(t in fillStarters){
 			visited[t.index] = true;
-			dfs(t, 0, t.fill);	
+			
+			for (i in 0...4) {
+				
+				var flowNext = getTile(Settings.DIRECTIONS[i][0] + t.boardX, Settings.DIRECTIONS[i][1] + t.boardY);
+				
+				if (flowNext != null) {
+					
+					dfs(flowNext, (i+2)%4, t.fill);		
+				}
+				
+			}
 		}
 	}
 

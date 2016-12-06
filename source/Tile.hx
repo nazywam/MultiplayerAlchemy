@@ -23,6 +23,8 @@ class Tile extends FlxSprite {
 	
 	public var starter : Bool;
 	
+	
+	
 	public function new(X:Float, Y:Float, T:Int, BX:Int, BY:Int) {
 		super(X, Y);
 		

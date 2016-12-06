@@ -15,14 +15,13 @@ class PlayState extends FlxState {
 	var board : Board;
 	var socket : WebSocket;
 	
-	
 	override public function create():Void {
 		super.create();
 	
 		board = new Board(Settings.BOARD_TILE_WIDTH, Settings.BOARD_TILE_HEIGHT);
 		add(board);
 
-		socket = new WebSocket("ws://127.0.0.1:9000");
+		socket = new WebSocket("ws://192.168.1.102:9000");
 		socket.onopen = function() {
 			socket.send("Ssss give me the map");	
 		};
