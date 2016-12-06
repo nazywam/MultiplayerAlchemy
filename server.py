@@ -6,12 +6,14 @@ def generateBoard(width, height):
     d = []
     for y in range(height):
         for x in range(width):
-            d.append((randint(0, 1), randint(0, 3)))
+            d.append((randint(0, 3), randint(0, 3)))
     return d
 
 
 clients = []
 board = generateBoard(8, 8)
+board[1*8+1] = (2, 0)
+board[6*8+6] = (2, 0)
 a = 1
 
 

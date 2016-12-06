@@ -11,7 +11,7 @@ import flixel.util.FlxColor;
 class Tile extends FlxSprite {
 
 	
-	var tileID : Int;
+	public var tileID : Int;
 	public var rotation : Int;
 	
 	public var boardX : Int;
@@ -42,10 +42,6 @@ class Tile extends FlxSprite {
 			animation.add(Std.string(i), [i]);
 		}
 		animation.play(Std.string(tileID));
-	}
-	
-	public function getTileID() {
-		return tileID;
 	}
 	
 	public function setTileID(I:Int, R:Int){

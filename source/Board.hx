@@ -16,7 +16,7 @@ class Board extends FlxTypedGroup<Tile> {
 	
 	public var fillStarters 	:Array<Tile>;
 	
-	var queue : FlxTypedGroup<Tile>;
+	var visited : Array<Bool>;
 	
 	public function new(H:Int, W:Int) {
 		super();
@@ -41,11 +41,19 @@ class Board extends FlxTypedGroup<Tile> {
 		tab[1][1].fill = 1;
 		tab[6][6].fill = 2;
 		
+		tab[1][1].setTileID(2, 0);
+		tab[6][6].setTileID(2, 0);
+
 		tab[1][1].starter= true;
 		tab[6][6].starter= true;
 		
-		queue = new FlxTypedGroup<Tile>();
-		
+	
+		visited = new Array<Bool>();
+
+		for(i in 0...members.length){
+			visited.push(false);
+		}
+
 	}
 	
 	public function rotate(BX:Int, BY:Int):Void {
@@ -74,55 +82,99 @@ class Board extends FlxTypedGroup<Tile> {
 	}
 	
 	
-	
-	//Don't touch that!
-	public function flow() {
-		queue.clear();
-		
-		for (t in fillStarters) {
-			queue.add(t);
+	function dfs(tile:Tile, inputDirection:Int, fill:Int){
+		trace(tile.index);
+		tile.fill = fill;
+
+		for(i in 0...4){
+			if(Settings.CONN[tile.tileID][tile.rotation][inputDirection][i] == 1){
+				var next = getTile(tile.boardX + Settings.DIRECTIONS[i][0], tile.boardY  + Settings.DIRECTIONS[i][1]);
+				if(next != null && !visited[next.index]){
+
+					var hasGotInput = false;
+					for(q in 0...4){
+						if(Settings.CONN[next.tileID][next.rotation][(i+2)%4][q] != 0){
+							hasGotInput = true;
+						}
+					}
+
+					if(hasGotInput){
+						visited[next.index] = true;
+						dfs(next, (i+2)%4, fill);	
+					}
+				}
+
+			}
 		}
-		
-		var visited = new Array<Bool>();
-		for (t in members) {
-			visited.push(false);
-			
-			if (!t.starter) {
+	}
+
+	public function flow():Void {
+
+		for(t in members){
+			visited[t.index] = false;
+			if(!t.starter){
 				t.fill = 0;
 			}
 		}
-		
-		
-		
-		while(queue.members.length > 0) {
-			var top:Tile = queue.members.pop();
-			
-			for (i in 0...4) {
-				
-				var connection = Settings.CONNECTIONS[top.getTileID()][top.rotation][i];
-				
-				if (connection != -1) {
-					
-					var flowNext = getTile(Settings.DIRECTIONS[i][0] + top.boardX, Settings.DIRECTIONS[i][1] + top.boardY);
-					
-					if (flowNext != null && ! visited[flowNext.index]) {
-						
-						if (Settings.CONNECTIONS[flowNext.getTileID()][flowNext.rotation][(i + 2) % 4] != -1) {
-							flowNext.fill = top.fill;
-							queue.add(flowNext);
-							visited[flowNext.index] = true;	
-						}
-					}
-				}
-			}
-			
+
+
+		for(t in fillStarters){
+			visited[t.index] = true;
+			dfs(t, 0, t.fill);	
 		}
-		
 	}
+
+
+// 	//Don't touch that!
+
+
+// 	public function flow() {
+// 		queue.clear();
+		
+// 		for (t in fillStarters) {
+// 			queue.add(t);
+// 		}
+		
+// 		var visited = new Array<Bool>();
+// 		for (t in members) {
+// 			visited.push(false);
+			
+// 			if (!t.starter) {
+// 				t.fill = 0;
+// 			}
+// 		}
+		
+		
+		
+// 		while(queue.members.length > 0) {
+// 			var top:Tile = queue.members.pop();
+			
+// 			for (i in 0...4) {
+				
+// 				var connection = Settings.CONNECTIONS[top.getTileID()][top.rotation][i];
+				
+// 				if (connection != -1) {
+					
+// 					var flowNext = getTile(Settings.DIRECTIONS[i][0] + top.boardX, Settings.DIRECTIONS[i][1] + top.boardY);
+					
+// 					if (flowNext != null && ! visited[flowNext.index]) {
+						
+// 						if (Settings.CONNECTIONS[flowNext.getTileID()][flowNext.rotation][(i + 2) % 4] != -1) {
+// 							flowNext.fill = top.fill;
+// 							queue.add(flowNext);
+// 							visited[flowNext.index] = true;	
+// 						}
+// 					}
+// 				}
+// 			}
+			
+// 		}
+		
+// 	}
 	
 	
-	override public function update(elapsed:Float) {
-		super.update(elapsed);
+ 	override public function update(elapsed:Float) {
+ 		super.update(elapsed);
 		flow();
 	}
 }
