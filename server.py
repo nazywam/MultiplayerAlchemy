@@ -2,8 +2,11 @@ from random import randint
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
 #1k
+
+tiles   = [ 0,  1,  2,  3, 4]
+weights = [.5, .5, .1, .3,.05]
+
 guesserino = []
-weights = [.5, .5, .1, .3]
 for i in range(len(weights)):
     for q in range(int(weights[i]*259)):
         guesserino.append(i)
@@ -13,7 +16,7 @@ def generateBoard(width, height):
     d = []
     for y in range(height):
         for x in range(width):
-            d.append((guesserino[randint(0, len(guesserino)-1)], randint(0, 3)))
+            d.append((tiles[guesserino[randint(0, len(guesserino)-1)]], randint(0, 3)))
     return d
 
 

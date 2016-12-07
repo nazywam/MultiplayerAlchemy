@@ -94,6 +94,28 @@ class Settings {
 				[0, 0, 0, 1],
 				[0, 0, 1, 0]
 			]
+		], [
+			[
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
+			], [
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
+			], [
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
+			], [
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
+			]
 		]
 	];
 
@@ -111,35 +133,16 @@ class Settings {
 		0xFF0000FF
 	];
 	
+	public static var RED_STARTER_TILE   : Int = 4;
+
 	public static var BOARD_TILE_WIDTH	:Int = 16;
 	public static var BOARD_TILE_HEIGHT	:Int = 16;
 	
 	public static var TILE_WIDTH		:Int = 32;
 	public static var TILE_HEIGHT		:Int = 32;
 	
-	public static var SECONDS_PER_DEPTH :Float = .1;
-	
+	public static var SECONDS_PER_DEPTH :Float = 0;
 	
 	public static var TILES_IMAGE_PATH	:String = "assets/images/Tiles.png";
 	
-	/**
-	 * Generic level variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current level number.
-	 */
-	public static var level:Int = 0;
-	/**
-	 * Generic scores Array that can be used for cross-state stuff.
-	 * Example usage: Storing the scores for level.
-	 */
-	public static var scores:Array<Dynamic> = [];
-	/**
-	 * Generic score variable that can be used for cross-state stuff.
-	 * Example usage: Storing the current score.
-	 */
-	public static var score:Int = 0;
-	/**
-	 * Generic bucket for storing different FlxSaves.
-	 * Especially useful for setting up multiple save slots.
-	 */
-	public static var saves:Array<FlxSave> = [];
 }

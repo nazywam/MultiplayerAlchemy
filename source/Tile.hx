@@ -38,10 +38,10 @@ class Tile extends FlxSprite {
 		starter = false;
 		
 		tileID = T;
-		
+
 		loadGraphic(Settings.TILES_IMAGE_PATH, true, 32, 32);
 
-		for(i in 0...4){
+		for(i in 0...20){
 			animation.add(Std.string(i), [i]);
 		}
 		animation.play(Std.string(tileID));
@@ -53,6 +53,11 @@ class Tile extends FlxSprite {
 		tileID = I;
 		rotation = R;
 		animation.play(Std.string(tileID));
+
+		if(tileID == Settings.RED_STARTER_TILE){
+			starter = true;
+			fill = Std.random(3)+1;
+		}
 	}
 
 	public function rotate() {

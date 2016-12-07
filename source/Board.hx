@@ -23,6 +23,7 @@ class Board extends FlxTypedGroup<Tile> {
 		height = H;
 		
 		tab = new Array<Array<Tile>>();
+		fillStarters = new Array<Tile>();
 
 		for (i in 0...Settings.BOARD_TILE_HEIGHT) {
 			var row = new Array<Tile>();
@@ -35,12 +36,16 @@ class Board extends FlxTypedGroup<Tile> {
 			tab.push(row);
 		}
 
-		fillStarters = [tab[1][1], tab[6][6]];
-		tab[1][1].fill = 1;
-		tab[6][6].fill = 2;
-		
-		tab[1][1].starter= true;
-		tab[6][6].starter= true;
+		// fillStarters.push(tab[1][1]);
+		// fillStarters.push(tab[6][6]);
+
+
+		// tab[1][1].fill = 1;
+		// tab[6][6].fill = 2;
+
+		// tab[1][1].starter= true;
+		// tab[6][6].starter= true;
+
 		
 	
 		visited = new Array<Bool>();
@@ -63,6 +68,9 @@ class Board extends FlxTypedGroup<Tile> {
 				var i = Std.parseInt(t[0]);
 				var r = Std.parseInt(t[1]);
 				tab[y][x].setTileID(i, r);
+				if(i == Settings.RED_STARTER_TILE){
+					fillStarters.push(tab[y][x]);
+				}
 			}
 		}
 	}
@@ -78,13 +86,18 @@ class Board extends FlxTypedGroup<Tile> {
 	//rewrite to bfs
 	function dfs(tile:Tile, inputDirection:Int, fill:Int, depth:Int){
 
-		//tile.timer.start(Settings.SECONDS_PER_DEPTH*depth, function(_){
+		trace(tile.index);
+
+
+		tile.timer.start(Settings.SECONDS_PER_DEPTH*depth, function(_){
 			tile.fill = fill;
-		//});
+		});
 
 		for(i in 0...4){
 			if(Settings.CONNECTIONS[tile.tileID][tile.rotation][inputDirection][i] == 1){
 				var next = getTile(tile.boardX + Settings.DIRECTIONS[i][0], tile.boardY  + Settings.DIRECTIONS[i][1]);
+
+				//TODO doesn't work for tiles with 2 streams
 				if(next != null && !visited[next.index]){
 
 					var hasGotInput = false;
@@ -107,7 +120,7 @@ class Board extends FlxTypedGroup<Tile> {
 	public function flow():Void {
 
 		for(t in members){
-			visited[t.index] = false;
+			visited[t.index] = false;	
 			if(!t.starter){
 				t.fill = 0;
 			}
@@ -116,7 +129,7 @@ class Board extends FlxTypedGroup<Tile> {
 
 		for(t in fillStarters){
 			visited[t.index] = true;
-			
+
 			for (i in 0...4) {
 				
 				var flowNext = getTile(Settings.DIRECTIONS[i][0] + t.boardX, Settings.DIRECTIONS[i][1] + t.boardY);
