@@ -1,19 +1,26 @@
 from random import randint
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
+#1k
+guesserino = []
+weights = [.5, .5, .1, .3]
+for i in range(len(weights)):
+    for q in range(int(weights[i]*259)):
+        guesserino.append(i)
+
 
 def generateBoard(width, height):
     d = []
     for y in range(height):
         for x in range(width):
-            d.append((randint(0, 3), randint(0, 3)))
+            d.append((guesserino[randint(0, len(guesserino)-1)], randint(0, 3)))
     return d
 
 
 clients = []
-board = generateBoard(8, 8)
-board[1*8+1] = (2, 0)
-board[6*8+6] = (2, 0)
+board = generateBoard(16, 16)
+board[1*16+1] = (2, 0)
+board[6*16+6] = (2, 0)
 a = 1
 
 

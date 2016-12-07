@@ -2,11 +2,9 @@ package;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.FlxG;
+import flixel.math.FlxPoint;
 
-/**
- * ...
- * @author Michael
- */
+
 class Board extends FlxTypedGroup<Tile> {
 
 	public var tab 		:Array<Array<Tile>>;
@@ -50,10 +48,9 @@ class Board extends FlxTypedGroup<Tile> {
 		for(i in 0...members.length){
 			visited.push(false);
 		}
-
 	}
 	
-	public function rotate(BX:Int, BY:Int):Void {
+	public function rotateTile(BX:Int, BY:Int):Void {
 		tab[BY][BX].rotate();
 	}
 
@@ -78,26 +75,28 @@ class Board extends FlxTypedGroup<Tile> {
 		return tab[by][bx];
 	}
 	
-	
-	function dfs(tile:Tile, inputDirection:Int, fill:Int){
-		trace(tile.index);
-		tile.fill = fill;
+	//rewrite to bfs
+	function dfs(tile:Tile, inputDirection:Int, fill:Int, depth:Int){
+
+		//tile.timer.start(Settings.SECONDS_PER_DEPTH*depth, function(_){
+			tile.fill = fill;
+		//});
 
 		for(i in 0...4){
-			if(Settings.CONN[tile.tileID][tile.rotation][inputDirection][i] == 1){
+			if(Settings.CONNECTIONS[tile.tileID][tile.rotation][inputDirection][i] == 1){
 				var next = getTile(tile.boardX + Settings.DIRECTIONS[i][0], tile.boardY  + Settings.DIRECTIONS[i][1]);
 				if(next != null && !visited[next.index]){
 
 					var hasGotInput = false;
 					for(q in 0...4){
-						if(Settings.CONN[next.tileID][next.rotation][(i+2)%4][q] != 0){
+						if(Settings.CONNECTIONS[next.tileID][next.rotation][(i+2)%4][q] != 0){
 							hasGotInput = true;
 						}
 					}
 
 					if(hasGotInput){
 						visited[next.index] = true;
-						dfs(next, (i+2)%4, fill);	
+						dfs(next, (i+2)%4, fill, depth+1);	
 					}
 				}
 
@@ -124,64 +123,16 @@ class Board extends FlxTypedGroup<Tile> {
 				
 				if (flowNext != null) {
 					
-					dfs(flowNext, (i+2)%4, t.fill);		
+					dfs(flowNext, (i+2)%4, t.fill, 1);		
 				}
 				
 			}
 		}
 	}
 
-
-// 	//Don't touch that!
-
-
-// 	public function flow() {
-// 		queue.clear();
-		
-// 		for (t in fillStarters) {
-// 			queue.add(t);
-// 		}
-		
-// 		var visited = new Array<Bool>();
-// 		for (t in members) {
-// 			visited.push(false);
-			
-// 			if (!t.starter) {
-// 				t.fill = 0;
-// 			}
-// 		}
-		
-		
-		
-// 		while(queue.members.length > 0) {
-// 			var top:Tile = queue.members.pop();
-			
-// 			for (i in 0...4) {
-				
-// 				var connection = Settings.CONNECTIONS[top.getTileID()][top.rotation][i];
-				
-// 				if (connection != -1) {
-					
-// 					var flowNext = getTile(Settings.DIRECTIONS[i][0] + top.boardX, Settings.DIRECTIONS[i][1] + top.boardY);
-					
-// 					if (flowNext != null && ! visited[flowNext.index]) {
-						
-// 						if (Settings.CONNECTIONS[flowNext.getTileID()][flowNext.rotation][(i + 2) % 4] != -1) {
-// 							flowNext.fill = top.fill;
-// 							queue.add(flowNext);
-// 							visited[flowNext.index] = true;	
-// 						}
-// 					}
-// 				}
-// 			}
-			
-// 		}
-		
-// 	}
 	
-	
+
  	override public function update(elapsed:Float) {
  		super.update(elapsed);
-		flow();
 	}
 }

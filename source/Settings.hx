@@ -4,15 +4,8 @@ import flixel.util.FlxSave;
 
 
 class Settings {
-
-	public static var CONNECTIONS = [
-		[[-1, 0, 0,-1], [-1, -1, 0, 0], [0, -1, -1, 0], [0, 0, -1, -1]],
-		[[-1, 0,-1, 0], [0, -1, 0, -1], [-1, 0,-1, 0], [0, -1, 0, -1]],
-		[[ 0, 1, 0, 1], [1, 0, 1, 0], [0, 1, 0, 1], [1, 0, 1 ,0]],
-		[[ 0, 1, 1, 0], [1, 1, 0, 0], [0, 1, 1, 0], [1, 1, 0, 0]]
-	];
 	
-	public static var CONN = [
+	public static var CONNECTIONS = [
 		[
 			[
 				[0, 0, 0, 0],
@@ -118,12 +111,13 @@ class Settings {
 		0xFF0000FF
 	];
 	
-	public static var BOARD_TILE_WIDTH	:Int = 8;
-	public static var BOARD_TILE_HEIGHT	:Int = 8;
+	public static var BOARD_TILE_WIDTH	:Int = 16;
+	public static var BOARD_TILE_HEIGHT	:Int = 16;
 	
 	public static var TILE_WIDTH		:Int = 32;
 	public static var TILE_HEIGHT		:Int = 32;
 	
+	public static var SECONDS_PER_DEPTH :Float = .1;
 	
 	
 	public static var TILES_IMAGE_PATH	:String = "assets/images/Tiles.png";

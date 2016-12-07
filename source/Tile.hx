@@ -3,6 +3,7 @@ package;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 
 /**
  * ...
@@ -23,7 +24,7 @@ class Tile extends FlxSprite {
 	
 	public var starter : Bool;
 	
-	
+	public var timer:FlxTimer;
 	
 	public function new(X:Float, Y:Float, T:Int, BX:Int, BY:Int) {
 		super(X, Y);
@@ -44,6 +45,8 @@ class Tile extends FlxSprite {
 			animation.add(Std.string(i), [i]);
 		}
 		animation.play(Std.string(tileID));
+
+		timer = new FlxTimer();
 	}
 	
 	public function setTileID(I:Int, R:Int){
