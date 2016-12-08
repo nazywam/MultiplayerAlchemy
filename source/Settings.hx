@@ -6,7 +6,8 @@ import flixel.util.FlxSave;
 class Settings {
 	
 	public static var CONNECTIONS = [
-		[
+	
+		[//down to left
 			[
 				[0, 0, 0, 0],
 				[0, 0, 1, 0],
@@ -28,7 +29,7 @@ class Settings {
 				[0, 0, 0, 0],
 				[0, 0, 0, 0]
 			]
-		], [
+		], [//left to right
 			[
 				[0, 0, 0, 0],
 				[0, 0, 0, 1],
@@ -50,7 +51,7 @@ class Settings {
 				[1, 0, 0, 0],
 				[0, 0, 0, 0]
 			]
-		], [
+		], [//up-left-right-down
 			[
 				[0, 1, 1, 1],
 				[1, 0, 1, 1],
@@ -74,25 +75,25 @@ class Settings {
 			]
 		], [
 			[
-				[0, 0, 0, 1],
-				[0, 0, 1, 0],
-				[0, 1, 0, 0],
-				[1, 0, 0, 0]
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
 			], [
-				[0, 1, 0, 0],
-				[1, 0, 0, 0],
-				[0, 0, 0, 1],
-				[0, 0, 1, 0]
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
 			], [
-				[0, 0, 0, 1],
-				[0, 0, 1, 0],
-				[0, 1, 0, 0],
-				[1, 0, 0, 0]
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
 			], [
-				[0, 1, 0, 0],
-				[1, 0, 0, 0],
-				[0, 0, 0, 1],
-				[0, 0, 1, 0]
+				[0, 1, 1, 1],
+				[1, 0, 1, 1],
+				[1, 1, 0, 1],
+				[1, 1, 1, 0]
 			]
 		], [
 			[
@@ -135,14 +136,42 @@ class Settings {
 	
 	public static var RED_STARTER_TILE   : Int = 4;
 
-	public static var BOARD_TILE_WIDTH	:Int = 16;
-	public static var BOARD_TILE_HEIGHT	:Int = 16;
+	public static var BOARD_TILE_WIDTH	:Int = 8;
+	public static var BOARD_TILE_HEIGHT	:Int = 8;
 	
-	public static var TILE_WIDTH		:Int = 32;
-	public static var TILE_HEIGHT		:Int = 32;
+	public static var TILE_WIDTH		:Int = 64;
+	public static var TILE_HEIGHT		:Int = 64;
 	
 	public static var SECONDS_PER_DEPTH :Float = 0;
 	
-	public static var TILES_IMAGE_PATH	:String = "assets/images/Tiles.png";
+	public static var TILES_IMAGE_PATH	:String = "assets/images/TilesDownscaled.png";
 	
 }
+
+/*
+
+[//left-up down-right
+			[
+				[0, 0, 0, 1],
+				[0, 0, 1, 0],
+				[0, 1, 0, 0],
+				[1, 0, 0, 0]
+			], [
+				[0, 1, 0, 0],
+				[1, 0, 0, 0],
+				[0, 0, 0, 1],
+				[0, 0, 1, 0]
+			], [
+				[0, 0, 0, 1],
+				[0, 0, 1, 0],
+				[0, 1, 0, 0],
+				[1, 0, 0, 0]
+			], [
+				[0, 1, 0, 0],
+				[1, 0, 0, 0],
+				[0, 0, 0, 1],
+				[0, 0, 1, 0]
+			]
+		]
+		
+		*/

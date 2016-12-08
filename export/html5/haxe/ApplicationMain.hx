@@ -42,6 +42,10 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
+		urls.push ("assets/images/TilesDownscaled.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/music/music-goes-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
 		
@@ -135,7 +139,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "76",
+			build: "111",
 			company: "Michael",
 			file: "MultiplayerAlchemy",
 			fps: 60,

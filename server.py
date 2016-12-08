@@ -3,8 +3,8 @@ from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
 #1k
 
-tiles   = [ 0,  1,  2,  3, 4]
-weights = [.5, .5, .1, .3, 0]
+tiles   = [0, 1, 2, 3]
+weights = [1, 1, .1, .3, 0]
 
 guesserino = []
 for i in range(len(weights)):
@@ -21,8 +21,12 @@ def generateBoard(width, height):
 
 
 clients = []
-board = generateBoard(16, 16)
-board[8*16+8] = (4, 0)
+
+width = 8
+height = 8
+
+board = generateBoard(width, height)
+board[2*width+2] = (4, 0)
 a = 1
 
 
@@ -32,8 +36,7 @@ class SimpleChat(WebSocket):
 
 
     def rotateTile(self, x, y):
-        pass
-        #global board
+        global board
         #board[y*8+x][1] = (board[y*8+x][1] + 1)%4
 
     #client sent move

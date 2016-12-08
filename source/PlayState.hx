@@ -16,13 +16,14 @@ class PlayState extends FlxState {
 	var socket : WebSocket;
 	var selection : Selection;
 	
+	
 	override public function create():Void {
 		super.create();
 	
 		board = new Board(Settings.BOARD_TILE_WIDTH, Settings.BOARD_TILE_HEIGHT);
 		add(board);
 
-		socket = new WebSocket("ws://92.222.72.215:9000");
+		socket = new WebSocket("ws://nazywam.host:9000");
 		socket.onopen = function() {
 			socket.send("Ssss give me the map");	
 		};
@@ -33,7 +34,8 @@ class PlayState extends FlxState {
 			switch (message.data[0]) {
 				case 'S': // get the map
 					board.loadFromString(payload);
-
+					board.flow();
+				
 				case 'M': // make a move
 					var BX = Std.parseInt(payload.split(',')[0]);
 					var BY = Std.parseInt(payload.split(',')[1]);
@@ -47,7 +49,6 @@ class PlayState extends FlxState {
 		selection = new Selection(8*Settings.TILE_WIDTH, 8*Settings.TILE_HEIGHT, 8, 8);
 		add(selection);
 
-		board.flow();
 	}
 
 	function handleKeys(){
