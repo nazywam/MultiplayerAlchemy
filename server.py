@@ -4,7 +4,7 @@ from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 #1k
 
 tiles   = [ 0,  1,  2,  3, 4]
-weights = [.5, .5, .1, .3,.05]
+weights = [.5, .5, .1, .3, 0]
 
 guesserino = []
 for i in range(len(weights)):
@@ -22,8 +22,7 @@ def generateBoard(width, height):
 
 clients = []
 board = generateBoard(16, 16)
-board[1*16+1] = (2, 0)
-board[6*16+6] = (2, 0)
+board[8*16+8] = (4, 0)
 a = 1
 
 
