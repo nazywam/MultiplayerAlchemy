@@ -1,43 +1,64 @@
 package;
 
 import flixel.FlxSprite;
+import flixel.util.FlxColor;
 
-class Selection extends FlxSprite {
+class Selection {
 
-	public var boardX:Int;
-	public var boardY:Int;
+	public var boardX:	Int;
+	public var boardY:	Int;
 
-	public function new(X:Float, Y:Float, BX:Int, BY:Int){
-		super(X, Y);
+	var tiles:			Array<Array<Tile>>;
+	var currentTile:	Tile;
+
+	var color:			Int;
+
+	public function new(C:Int, BX:Int, BY:Int, B:Array<Array<Tile>>){
+		tiles = B;
 		boardX = BX;
 		boardY = BY;
+		color = C;
 
-		loadGraphic(Settings.TILES_IMAGE_PATH, true, 32, 32);
-		animation.add("default", [5]);
-		animation.play("default");
+
+		currentTile = tiles[boardY][boardX];
+		currentTile.color = color;
 	}
 
+	public function updateMove(){
+		if(boardY < 0){
+			boardY = 0;
+		}
+		if(boardX < 0){
+			boardY = 0;
+		}
+		if(boardY >= tiles.length){
+			boardY = tiles.length - 1;
+		}
+		if(boardX >= tiles[0].length){
+			boardX = tiles[0].length -1;
+		}
+
+		currentTile.color = FlxColor.WHITE;
+		currentTile = tiles[boardY][boardX];
+		currentTile.color = color;
+
+	}
 
 	public function moveUp(){
 		boardY -= 1;
+		updateMove();
 	}
 	public function moveLeft(){
 		boardX -= 1;	
+		updateMove();
 	}
 	public function moveRight(){
 		boardX += 1;
+		updateMove();
 	}
 	public function moveDown(){
 		boardY += 1;
-	}
-
-	override public function update(elapsed:Float){
-		super.update(elapsed);
-
-		x = boardX * Settings.TILE_WIDTH;
-		y = boardY * Settings.TILE_HEIGHT;
-
-
+		updateMove();
 	}
 
 }

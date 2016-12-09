@@ -18,13 +18,16 @@ class Tile extends FlxSprite {
 	public var boardX : Int;
 	public var boardY : Int;
 	
-	public var fill : Int;
-
 	public var index : Int;
+
+	public var fill : Int;
+	public var previousFill : Int;
+	public var depth : Int;
 	
 	public var starter : Bool;
 	
 	public var timer:FlxTimer;
+	public var fillingStarted:Bool;
 	public var visited : Array<Bool>;
 
 	public function new(X:Float, Y:Float, T:Int, BX:Int, BY:Int) {
@@ -34,8 +37,10 @@ class Tile extends FlxSprite {
 		boardY = BY;
 		index = BY * Settings.BOARD_TILE_WIDTH + BX;
 		
+		previousFill = 0;
 		rotation = 0;
 		fill = 0;
+		fillingStarted = false;
 		starter = false;
 		visited = [false, false, false, false];
 		
@@ -43,7 +48,7 @@ class Tile extends FlxSprite {
 
 		loadGraphic(Settings.TILES_IMAGE_PATH, true, Settings.TILE_WIDTH,Settings.TILE_HEIGHT);
 
-		for(i in 0...30){ //TODO
+		for(i in 0...50){ //TODO
 			animation.add(Std.string(i), [i+1]);
 		}
 		animation.play(Std.string(tileID));
@@ -65,17 +70,26 @@ class Tile extends FlxSprite {
 	public function rotate() {
 		rotation += 1;
 		rotation %= 4;
+
+
+		//buggy with fast turning
+		if(rotation == 0){
+			angle = -90;
+		}
 	}
 	
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 		
 		if (fill != 0) {
-			animation.play(Std.string(tileID  + 6));
+			animation.play(Std.string(tileID  + 11));
 		} else {
 			animation.play(Std.string(tileID));
 		}
-		angle = rotation * 90;
+
+
+		angle += (rotation*90 - angle)/10;	
+		//angle = rotation * 90;
 	}
 	
 	public function getBoardCoordinates():String { 

@@ -41,7 +41,6 @@ class Board extends FlxTypedGroup<Tile> {
 	}
 
 	public function loadFromString(payload:String){
-		//trace(payload);
 		var d = payload.split(",");
 		for(y in 0...height){
 			for(x in 0...width){
@@ -67,17 +66,24 @@ class Board extends FlxTypedGroup<Tile> {
 	//rewrite to bfs
 	function dfs(tile:Tile, inputDirection:Int, fill:Int, depth:Int){
 
-		trace(tile.index);
-		
-		tile.timer.start(Settings.SECONDS_PER_DEPTH*depth, function(_){
-			tile.fill = fill;
-		});
+		if(!tile.fillingStarted){
+
+			if(tile.previousFill == fill){
+				tile.fill = fill;
+			} else {
+				tile.timer.start(Settings.SECONDS_PER_DEPTH*depth, function(_){
+					tile.fill = fill;
+				});
+
+			}
+			tile.fillingStarted = true;
+			
+		}
 
 		for (i in 0...4) {
 			if(Settings.CONNECTIONS[tile.tileID][tile.rotation][inputDirection][i] == 1){
 				var next = getTile(tile.boardX + Settings.DIRECTIONS[i][0], tile.boardY  + Settings.DIRECTIONS[i][1]);
 
-				//TODO doesn't work for tiles with 2 streams
 				if(next != null && !next.visited[(i+2)%4]){
 
 					var hasGotInput = false;
@@ -107,8 +113,12 @@ class Board extends FlxTypedGroup<Tile> {
 			}
 			
 			if(!t.starter){
+				t.previousFill = t.fill;
 				t.fill = 0;
 			}
+
+			t.fillingStarted = false;
+			t.timer.cancel();
 		}
 
 		for(t in fillStarters){
@@ -120,7 +130,17 @@ class Board extends FlxTypedGroup<Tile> {
 				
 				if (flowNext != null) {
 					
-					dfs(flowNext, (i+2)%4, t.fill, 1);		
+					var inputAlligned = false;
+					for(q in 0...4){
+						if(Settings.CONNECTIONS[flowNext.tileID][flowNext.rotation][(i+2)%4][q] != 0){
+							inputAlligned = true;
+						}
+					}
+
+					if(inputAlligned){
+						dfs(flowNext, (i+2)%4, t.fill, 1);
+					}
+					
 				}
 				
 			}

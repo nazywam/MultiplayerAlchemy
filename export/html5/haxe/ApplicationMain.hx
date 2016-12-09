@@ -34,8 +34,44 @@ class ApplicationMain {
 		types.push (lime.Assets.AssetType.TEXT);
 		
 		
+		urls.push ("assets/images/BackgroundTiles.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/BackgroundTilesDownscaled.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
 		urls.push ("assets/images/images-go-here.txt");
 		types.push (lime.Assets.AssetType.TEXT);
+		
+		
+		urls.push ("assets/images/tileBlack_01.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tileBlue_01.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tileGreen_01.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tileGrey_01.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tileOrange_01.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tilePink_01.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tileRed_01.png");
+		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
 		urls.push ("assets/images/Tiles.png");
@@ -43,6 +79,14 @@ class ApplicationMain {
 		
 		
 		urls.push ("assets/images/TilesDownscaled.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tilesxd.png");
+		types.push (lime.Assets.AssetType.IMAGE);
+		
+		
+		urls.push ("assets/images/tileYellow_01.png");
 		types.push (lime.Assets.AssetType.IMAGE);
 		
 		
@@ -139,7 +183,7 @@ class ApplicationMain {
 		
 		config = {
 			
-			build: "111",
+			build: "182",
 			company: "Michael",
 			file: "MultiplayerAlchemy",
 			fps: 60,
@@ -157,13 +201,13 @@ class ApplicationMain {
 					display: 0,
 					fullscreen: false,
 					hardware: false,
-					height: 512,
+					height: 800,
 					parameters: "{}",
 					resizable: false,
 					stencilBuffer: true,
 					title: "MultiplayerAlchemy",
 					vsync: true,
-					width: 512,
+					width: 800,
 					x: null,
 					y: null
 				},
@@ -181,7 +225,7 @@ class ApplicationMain {
 		
 		#if (js && html5)
 		#if (munit || utest)
-		openfl.Lib.embed (null, 512, 512, "000000");
+		openfl.Lib.embed (null, 800, 800, "000000");
 		#end
 		#else
 		create ();

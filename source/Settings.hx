@@ -73,7 +73,29 @@ class Settings {
 				[1, 1, 0, 1],
 				[1, 1, 1, 0]
 			]
-		], [
+		], [//down-left-up
+			[
+				[0, 1, 1, 0],
+				[1, 0, 1, 0],
+				[1, 1, 0, 0],
+				[0, 0, 0, 0]
+			], [
+				[0, 0, 0, 0],
+				[0, 0, 1, 1],
+				[0, 1, 0, 1],
+				[0, 1, 1, 0]
+			], [
+				[0, 0, 1, 1],
+				[0, 0, 0, 0],
+				[1, 0, 0, 1],
+				[1, 0, 1, 0]
+			], [
+				[0, 1, 0, 1],
+				[1, 0, 0, 1],
+				[0, 0, 0, 0],
+				[1, 1, 0, 0]
+			]
+		], [//spawn
 			[
 				[0, 1, 1, 1],
 				[1, 0, 1, 1],
@@ -95,27 +117,27 @@ class Settings {
 				[1, 1, 0, 1],
 				[1, 1, 1, 0]
 			]
-		], [
+		], [//finish
 			[
-				[0, 1, 1, 1],
-				[1, 0, 1, 1],
-				[1, 1, 0, 1],
-				[1, 1, 1, 0]
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 1]
 			], [
-				[0, 1, 1, 1],
-				[1, 0, 1, 1],
-				[1, 1, 0, 1],
-				[1, 1, 1, 0]
+				[1, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0]
 			], [
-				[0, 1, 1, 1],
-				[1, 0, 1, 1],
-				[1, 1, 0, 1],
-				[1, 1, 1, 0]
+				[0, 0, 0, 0],
+				[0, 1, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0]
 			], [
-				[0, 1, 1, 1],
-				[1, 0, 1, 1],
-				[1, 1, 0, 1],
-				[1, 1, 1, 0]
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 1, 0],
+				[0, 0, 0, 0]
 			]
 		]
 	];
@@ -136,16 +158,23 @@ class Settings {
 	
 	public static var RED_STARTER_TILE   : Int = 4;
 
-	public static var BOARD_TILE_WIDTH	:Int = 8;
-	public static var BOARD_TILE_HEIGHT	:Int = 8;
+	public static var BOARD_TILE_WIDTH	:Int = 16;
+	public static var BOARD_TILE_HEIGHT	:Int = 16;
 	
 	public static var TILE_WIDTH		:Int = 64;
 	public static var TILE_HEIGHT		:Int = 64;
 	
-	public static var SECONDS_PER_DEPTH :Float = 0;
+	public static var SECONDS_PER_DEPTH :Float = .05;
 	
 	public static var TILES_IMAGE_PATH	:String = "assets/images/TilesDownscaled.png";
-	
+	//public static var BACKGROUND_TILES_IMAGE_PATH	:String = "assets/images/BackgroundTilesDownscaled.png";
+	public static var BACKGROUND_TILES_IMAGE_PATH	:String = "assets/images/tilesxd.png";
+
+	public static var MAX_PLAYERS		:Int = 8;
+	public static var PLAYER_COLOR 		:Int = 0xFF00FF00;
+	public static var OTHER_PLAYER_COLOR:Int = 0xFFFF0000;
+
+
 }
 
 /*

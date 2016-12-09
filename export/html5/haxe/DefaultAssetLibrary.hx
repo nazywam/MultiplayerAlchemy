@@ -59,6 +59,17 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_nokiafc22_ttf);
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_monsterrat_ttf);
 		
@@ -70,12 +81,34 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		className.set ("assets/data/data-goes-here.txt", __ASSET__assets_data_data_goes_here_txt);
 		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
+		className.set ("assets/images/BackgroundTiles.png", __ASSET__assets_images_backgroundtiles_png);
+		type.set ("assets/images/BackgroundTiles.png", AssetType.IMAGE);
+		className.set ("assets/images/BackgroundTilesDownscaled.png", __ASSET__assets_images_backgroundtilesdownscaled_png);
+		type.set ("assets/images/BackgroundTilesDownscaled.png", AssetType.IMAGE);
 		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
 		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
+		className.set ("assets/images/tileBlack_01.png", __ASSET__assets_images_tileblack_01_png);
+		type.set ("assets/images/tileBlack_01.png", AssetType.IMAGE);
+		className.set ("assets/images/tileBlue_01.png", __ASSET__assets_images_tileblue_01_png);
+		type.set ("assets/images/tileBlue_01.png", AssetType.IMAGE);
+		className.set ("assets/images/tileGreen_01.png", __ASSET__assets_images_tilegreen_01_png);
+		type.set ("assets/images/tileGreen_01.png", AssetType.IMAGE);
+		className.set ("assets/images/tileGrey_01.png", __ASSET__assets_images_tilegrey_01_png);
+		type.set ("assets/images/tileGrey_01.png", AssetType.IMAGE);
+		className.set ("assets/images/tileOrange_01.png", __ASSET__assets_images_tileorange_01_png);
+		type.set ("assets/images/tileOrange_01.png", AssetType.IMAGE);
+		className.set ("assets/images/tilePink_01.png", __ASSET__assets_images_tilepink_01_png);
+		type.set ("assets/images/tilePink_01.png", AssetType.IMAGE);
+		className.set ("assets/images/tileRed_01.png", __ASSET__assets_images_tilered_01_png);
+		type.set ("assets/images/tileRed_01.png", AssetType.IMAGE);
 		className.set ("assets/images/Tiles.png", __ASSET__assets_images_tiles_png);
 		type.set ("assets/images/Tiles.png", AssetType.IMAGE);
 		className.set ("assets/images/TilesDownscaled.png", __ASSET__assets_images_tilesdownscaled_png);
 		type.set ("assets/images/TilesDownscaled.png", AssetType.IMAGE);
+		className.set ("assets/images/tilesxd.png", __ASSET__assets_images_tilesxd_png);
+		type.set ("assets/images/tilesxd.png", AssetType.IMAGE);
+		className.set ("assets/images/tileYellow_01.png", __ASSET__assets_images_tileyellow_01_png);
+		type.set ("assets/images/tileYellow_01.png", AssetType.IMAGE);
 		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
 		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
 		className.set ("assets/sounds/sounds-go-here.txt", __ASSET__assets_sounds_sounds_go_here_txt);
@@ -101,15 +134,59 @@ class DefaultAssetLibrary extends AssetLibrary {
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
+		id = "assets/images/BackgroundTiles.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/BackgroundTilesDownscaled.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
 		id = "assets/images/images-go-here.txt";
 		path.set (id, id);
 		
 		type.set (id, AssetType.TEXT);
+		id = "assets/images/tileBlack_01.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tileBlue_01.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tileGreen_01.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tileGrey_01.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tileOrange_01.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tilePink_01.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tileRed_01.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
 		id = "assets/images/Tiles.png";
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
 		id = "assets/images/TilesDownscaled.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tilesxd.png";
+		path.set (id, id);
+		
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/tileYellow_01.png";
 		path.set (id, id);
 		
 		type.set (id, AssetType.IMAGE);
@@ -166,14 +243,47 @@ class DefaultAssetLibrary extends AssetLibrary {
 		className.set ("assets/data/data-goes-here.txt", __ASSET__assets_data_data_goes_here_txt);
 		type.set ("assets/data/data-goes-here.txt", AssetType.TEXT);
 		
+		className.set ("assets/images/BackgroundTiles.png", __ASSET__assets_images_backgroundtiles_png);
+		type.set ("assets/images/BackgroundTiles.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/BackgroundTilesDownscaled.png", __ASSET__assets_images_backgroundtilesdownscaled_png);
+		type.set ("assets/images/BackgroundTilesDownscaled.png", AssetType.IMAGE);
+		
 		className.set ("assets/images/images-go-here.txt", __ASSET__assets_images_images_go_here_txt);
 		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
+		
+		className.set ("assets/images/tileBlack_01.png", __ASSET__assets_images_tileblack_01_png);
+		type.set ("assets/images/tileBlack_01.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tileBlue_01.png", __ASSET__assets_images_tileblue_01_png);
+		type.set ("assets/images/tileBlue_01.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tileGreen_01.png", __ASSET__assets_images_tilegreen_01_png);
+		type.set ("assets/images/tileGreen_01.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tileGrey_01.png", __ASSET__assets_images_tilegrey_01_png);
+		type.set ("assets/images/tileGrey_01.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tileOrange_01.png", __ASSET__assets_images_tileorange_01_png);
+		type.set ("assets/images/tileOrange_01.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tilePink_01.png", __ASSET__assets_images_tilepink_01_png);
+		type.set ("assets/images/tilePink_01.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tileRed_01.png", __ASSET__assets_images_tilered_01_png);
+		type.set ("assets/images/tileRed_01.png", AssetType.IMAGE);
 		
 		className.set ("assets/images/Tiles.png", __ASSET__assets_images_tiles_png);
 		type.set ("assets/images/Tiles.png", AssetType.IMAGE);
 		
 		className.set ("assets/images/TilesDownscaled.png", __ASSET__assets_images_tilesdownscaled_png);
 		type.set ("assets/images/TilesDownscaled.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tilesxd.png", __ASSET__assets_images_tilesxd_png);
+		type.set ("assets/images/tilesxd.png", AssetType.IMAGE);
+		
+		className.set ("assets/images/tileYellow_01.png", __ASSET__assets_images_tileyellow_01_png);
+		type.set ("assets/images/tileYellow_01.png", AssetType.IMAGE);
 		
 		className.set ("assets/music/music-goes-here.txt", __ASSET__assets_music_music_goes_here_txt);
 		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
@@ -844,9 +954,20 @@ class DefaultAssetLibrary extends AssetLibrary {
 #if flash
 
 @:keep @:bind #if display private #end class __ASSET__assets_data_data_goes_here_txt extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_images_backgroundtiles_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_backgroundtilesdownscaled_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_images_go_here_txt extends null { }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tileblack_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tileblue_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tilegreen_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tilegrey_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tileorange_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tilepink_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tilered_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_tiles_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_images_tilesdownscaled_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tilesxd_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
+@:keep @:bind #if display private #end class __ASSET__assets_images_tileyellow_01_png extends flash.display.BitmapData { public function new () { super (0, 0, true, 0); } }
 @:keep @:bind #if display private #end class __ASSET__assets_music_music_goes_here_txt extends null { }
 @:keep @:bind #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends null { }
 @:keep @:bind #if display private #end class __ASSET__flixel_sounds_beep_ogg extends null { }
@@ -858,6 +979,17 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 #elseif html5
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -881,17 +1013,28 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 @:file("assets/data/data-goes-here.txt") #if display private #end class __ASSET__assets_data_data_goes_here_txt extends lime.utils.Bytes {}
+@:image("assets/images/BackgroundTiles.png") #if display private #end class __ASSET__assets_images_backgroundtiles_png extends lime.graphics.Image {}
+@:image("assets/images/BackgroundTilesDownscaled.png") #if display private #end class __ASSET__assets_images_backgroundtilesdownscaled_png extends lime.graphics.Image {}
 @:file("assets/images/images-go-here.txt") #if display private #end class __ASSET__assets_images_images_go_here_txt extends lime.utils.Bytes {}
+@:image("assets/images/tileBlack_01.png") #if display private #end class __ASSET__assets_images_tileblack_01_png extends lime.graphics.Image {}
+@:image("assets/images/tileBlue_01.png") #if display private #end class __ASSET__assets_images_tileblue_01_png extends lime.graphics.Image {}
+@:image("assets/images/tileGreen_01.png") #if display private #end class __ASSET__assets_images_tilegreen_01_png extends lime.graphics.Image {}
+@:image("assets/images/tileGrey_01.png") #if display private #end class __ASSET__assets_images_tilegrey_01_png extends lime.graphics.Image {}
+@:image("assets/images/tileOrange_01.png") #if display private #end class __ASSET__assets_images_tileorange_01_png extends lime.graphics.Image {}
+@:image("assets/images/tilePink_01.png") #if display private #end class __ASSET__assets_images_tilepink_01_png extends lime.graphics.Image {}
+@:image("assets/images/tileRed_01.png") #if display private #end class __ASSET__assets_images_tilered_01_png extends lime.graphics.Image {}
 @:image("assets/images/Tiles.png") #if display private #end class __ASSET__assets_images_tiles_png extends lime.graphics.Image {}
 @:image("assets/images/TilesDownscaled.png") #if display private #end class __ASSET__assets_images_tilesdownscaled_png extends lime.graphics.Image {}
+@:image("assets/images/tilesxd.png") #if display private #end class __ASSET__assets_images_tilesxd_png extends lime.graphics.Image {}
+@:image("assets/images/tileYellow_01.png") #if display private #end class __ASSET__assets_images_tileyellow_01_png extends lime.graphics.Image {}
 @:file("assets/music/music-goes-here.txt") #if display private #end class __ASSET__assets_music_music_goes_here_txt extends lime.utils.Bytes {}
 @:file("assets/sounds/sounds-go-here.txt") #if display private #end class __ASSET__assets_sounds_sounds_go_here_txt extends lime.utils.Bytes {}
-@:file("C:/Development/flixel/git/assets/sounds/beep.ogg") #if display private #end class __ASSET__flixel_sounds_beep_ogg extends lime.utils.Bytes {}
-@:file("C:/Development/flixel/git/assets/sounds/flixel.ogg") #if display private #end class __ASSET__flixel_sounds_flixel_ogg extends lime.utils.Bytes {}
-@:font("C:/Development/flixel/git/assets/fonts/nokiafc22.ttf") #if display private #end class __ASSET__flixel_fonts_nokiafc22_ttf extends lime.text.Font {}
-@:font("C:/Development/flixel/git/assets/fonts/monsterrat.ttf") #if display private #end class __ASSET__flixel_fonts_monsterrat_ttf extends lime.text.Font {}
-@:image("C:/Development/flixel/git/assets/images/ui/button.png") #if display private #end class __ASSET__flixel_images_ui_button_png extends lime.graphics.Image {}
-@:image("C:/Development/flixel/git/assets/images/logo/default.png") #if display private #end class __ASSET__flixel_images_logo_default_png extends lime.graphics.Image {}
+@:file("/Users/michal/.haxe/flixel/4,2,0/assets/sounds/beep.ogg") #if display private #end class __ASSET__flixel_sounds_beep_ogg extends lime.utils.Bytes {}
+@:file("/Users/michal/.haxe/flixel/4,2,0/assets/sounds/flixel.ogg") #if display private #end class __ASSET__flixel_sounds_flixel_ogg extends lime.utils.Bytes {}
+@:font("/Users/michal/.haxe/flixel/4,2,0/assets/fonts/nokiafc22.ttf") #if display private #end class __ASSET__flixel_fonts_nokiafc22_ttf extends lime.text.Font {}
+@:font("/Users/michal/.haxe/flixel/4,2,0/assets/fonts/monsterrat.ttf") #if display private #end class __ASSET__flixel_fonts_monsterrat_ttf extends lime.text.Font {}
+@:image("/Users/michal/.haxe/flixel/4,2,0/assets/images/ui/button.png") #if display private #end class __ASSET__flixel_images_ui_button_png extends lime.graphics.Image {}
+@:image("/Users/michal/.haxe/flixel/4,2,0/assets/images/logo/default.png") #if display private #end class __ASSET__flixel_images_logo_default_png extends lime.graphics.Image {}
 
 
 
