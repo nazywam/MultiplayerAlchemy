@@ -1,10 +1,8 @@
 from random import randint
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 
-#1k
-
 tiles   = [0, 1, 2, 3]
-weights = [1, 1, .1, .3, 0]
+weights = [1, 1, .1, .3]
 
 guesserino = []
 for i in range(len(weights)):
@@ -31,22 +29,25 @@ a = 1
 
 
 
-
 class Client(WebSocket):
-    clientId = -1
-    boardX = -1
-    boardY = -1
 
-    targetX = -1
-    targetY = -1
+   def __init__(self):
+        super(Client,self).__init__()
 
-    def rotateTile(self, x, y):
+        self.clientId = -1
+        self.boardX = -1
+        self.boardY = -1
+
+        self.targetX = -1
+        self.targetY = -1
+
+   def rotateTile(self, x, y):
         global board
         #board[y*8+x][1] = (board[y*8+x][1] + 1)%4
 
     #client sent move
-    def handleMessage(self):
-        print(self.data)
+   def handleMessage(self):
+        print("Message" + self.data)
           
 
         #send out moves
@@ -60,8 +61,10 @@ class Client(WebSocket):
                     client.sendMessage(unicode("M{},{}".format(self.clientId, self.data[1:])))
 
   #client connected
-    def handleConnected(self):
-        print self.address, 'connected'
+   def handleConnected(self):
+
+        print(":c")
+
         self.clientId = len(clients)
         self.boardX = 8
         self.boardY = 8
@@ -85,7 +88,7 @@ class Client(WebSocket):
         print("{} has target {},{}".format(str(self.clientId), str(self.targetX), str(self.targetY)));
      
 
-    def handleClose(self):
+   def handleClose(self):
         print self.address, 'closed'
         clients.remove(self)
 

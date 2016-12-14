@@ -1,9 +1,11 @@
 package;
 
+import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import flixel.tweens.FlxEase;
 
 /**
  * ...
@@ -65,17 +67,24 @@ class Tile extends FlxSprite {
 			starter = true;
 			fill = Std.random(3)+1;
 		}
+		updateRotation();
 	}
 
 	public function rotate() {
 		rotation += 1;
 		rotation %= 4;
 
-
 		//buggy with fast turning
 		if(rotation == 0){
 			angle = -90;
 		}
+	
+		updateRotation();
+	}
+	
+	public function updateRotation() {
+		FlxTween.angle(this, angle, rotation*90, .3, {ease:FlxEase.sineInOut});
+		
 	}
 	
 	override public function update(elapsed:Float) {
@@ -88,7 +97,7 @@ class Tile extends FlxSprite {
 		}
 
 
-		angle += (rotation*90 - angle)/10;	
+		//angle += (rotation*90 - angle)/10;	
 		//angle = rotation * 90;
 	}
 	

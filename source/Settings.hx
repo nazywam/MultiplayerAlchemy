@@ -142,7 +142,13 @@ class Settings {
 		]
 	];
 
-	public static var DIRECTIONS = [
+	public static var MOVE_UP		:Int=0;	
+	public static var MOVE_RIGHT	:Int=1;
+	public static var MOVE_DOWN		:Int=2;
+	public static var MOVE_LEFT		:Int=3; 
+	
+	
+	public static var MOVES = [
 		[0, -1],
 		[1,  0],
 		[0,  1],
@@ -167,8 +173,7 @@ class Settings {
 	public static var SECONDS_PER_DEPTH :Float = .05;
 	
 	public static var TILES_IMAGE_PATH	:String = "assets/images/TilesDownscaled.png";
-	//public static var BACKGROUND_TILES_IMAGE_PATH	:String = "assets/images/BackgroundTilesDownscaled.png";
-	public static var BACKGROUND_TILES_IMAGE_PATH	:String = "assets/images/tilesxd.png";
+	public static var BACKGROUND_TILES_IMAGE_PATH	:String = "assets/images/BackgroundTilesDownscaled.png";
 
 	public static var MAX_PLAYERS		:Int = 8;
 	public static var PLAYER_COLOR 		:Int = 0xFF00FF00;
@@ -176,31 +181,3 @@ class Settings {
 
 
 }
-
-/*
-
-[//left-up down-right
-			[
-				[0, 0, 0, 1],
-				[0, 0, 1, 0],
-				[0, 1, 0, 0],
-				[1, 0, 0, 0]
-			], [
-				[0, 1, 0, 0],
-				[1, 0, 0, 0],
-				[0, 0, 0, 1],
-				[0, 0, 1, 0]
-			], [
-				[0, 0, 0, 1],
-				[0, 0, 1, 0],
-				[0, 1, 0, 0],
-				[1, 0, 0, 0]
-			], [
-				[0, 1, 0, 0],
-				[1, 0, 0, 0],
-				[0, 0, 0, 1],
-				[0, 0, 1, 0]
-			]
-		]
-		
-		*/

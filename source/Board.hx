@@ -82,7 +82,7 @@ class Board extends FlxTypedGroup<Tile> {
 
 		for (i in 0...4) {
 			if(Settings.CONNECTIONS[tile.tileID][tile.rotation][inputDirection][i] == 1){
-				var next = getTile(tile.boardX + Settings.DIRECTIONS[i][0], tile.boardY  + Settings.DIRECTIONS[i][1]);
+				var next = getTile(tile.boardX + Settings.MOVES[i][0], tile.boardY  + Settings.MOVES[i][1]);
 
 				if(next != null && !next.visited[(i+2)%4]){
 
@@ -126,7 +126,7 @@ class Board extends FlxTypedGroup<Tile> {
 			for (i in 0...4) {
 				t.visited[i] = true;
 				
-				var flowNext = getTile(Settings.DIRECTIONS[i][0] + t.boardX, Settings.DIRECTIONS[i][1] + t.boardY);
+				var flowNext = getTile(Settings.MOVES[i][0] + t.boardX, Settings.MOVES[i][1] + t.boardY);
 				
 				if (flowNext != null) {
 					

@@ -34,7 +34,7 @@ class PlayState extends FlxState {
 		}
 
 
-		socket = new WebSocket("ws://localhost:9000");
+		socket = new WebSocket("ws://192.168.1.105:9000");
 		socket.onopen = function() {
 			socket.send("Hello World!");	
 		};
@@ -88,22 +88,33 @@ class PlayState extends FlxState {
 
 	}
 
-	function handleKeys(){
+	function sendMyMove(move:Int) {
+		socket.send("M" + Std.string(move));
+	}
+	
+	function handleKeys() {
+		
+		var move:Int = -1;
+		
 		if(FlxG.keys.justPressed.LEFT){
 			players[clientId].moveLeft();
+			move = Settings.MOVE_LEFT;
 		}
 		if(FlxG.keys.justPressed.UP){
 			players[clientId].moveUp();
+			move = Settings.MOVE_UP;
 		}
 		if(FlxG.keys.justPressed.RIGHT){
 			players[clientId].moveRight();
+			move = Settings.MOVE_RIGHT;
 		}
 		if(FlxG.keys.justPressed.DOWN){
 			players[clientId].moveDown();
+			move = Settings.MOVE_DOWN;
 		}
 		if(FlxG.keys.justPressed.SPACE){
 			board.rotateTile(players[clientId].boardX, players[clientId].boardY);
-			socket.send("M" + board.tab[players[clientId].boardY][players[clientId].boardX].getBoardCoordinates());
+			sendMyMove(move);
 			board.flow();
 		}
 	}
@@ -123,6 +134,12 @@ class PlayState extends FlxState {
 					}
 				}
 			}
-		}	
+		}
+		
+		if (FlxG.keys.justPressed.Q) {
+			background.i = (background.i + 1) % 14;
+		}
+		
+		background.highlitPlayers(players);
 	}
 }

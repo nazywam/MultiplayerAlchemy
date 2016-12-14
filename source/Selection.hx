@@ -21,7 +21,7 @@ class Selection {
 
 
 		currentTile = tiles[boardY][boardX];
-		currentTile.color = color;
+		//currentTile.color = color;
 	}
 
 	public function updateMove(){
@@ -38,9 +38,9 @@ class Selection {
 			boardX = tiles[0].length -1;
 		}
 
-		currentTile.color = FlxColor.WHITE;
-		currentTile = tiles[boardY][boardX];
-		currentTile.color = color;
+		//currentTile.color = FlxColor.WHITE;
+		//currentTile = tiles[boardY][boardX];
+		//currentTile.color = color;
 
 	}
 
