@@ -69,6 +69,8 @@ class Board extends FlxTypedGroup<Tile> {
 	//rewrite to bfs
 	function dfs(tile:Tile, inputDirection:Int, fill:Int, depth:Int){
 
+		var d = depth;
+		
 		if(!tile.fillingStarted){
 
 			if(tile.previousFill == fill){
@@ -77,6 +79,7 @@ class Board extends FlxTypedGroup<Tile> {
 				tile.timer.start(Settings.SECONDS_PER_DEPTH*depth, function(_){
 					tile.fill = fill;
 				});
+				d += 1;
 
 			}
 			tile.fillingStarted = true;
@@ -98,8 +101,9 @@ class Board extends FlxTypedGroup<Tile> {
 
 					if (hasGotInput) {
 						tile.visited[i] = true;	
-						next.visited[(i+2)] = true;
-						dfs(next, (i+2)%4, fill, depth+1);	
+						next.visited[(i + 2)] = true;
+						
+						dfs(next, (i+2)%4, fill, d);	
 					}
 				}
 
@@ -145,7 +149,6 @@ class Board extends FlxTypedGroup<Tile> {
 					}
 					
 				}
-				
 			}
 		}
 	}
