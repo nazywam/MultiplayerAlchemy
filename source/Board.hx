@@ -42,12 +42,15 @@ class Board extends FlxTypedGroup<Tile> {
 
 	public function loadFromString(payload:String){
 		var d = payload.split(",");
+		
 		for(y in 0...height){
 			for(x in 0...width){
 				var t = d[(y*width+x)].split('.');
 				var i = Std.parseInt(t[0]);
 				var r = Std.parseInt(t[1]);
+				
 				tab[y][x].setTileID(i, r);
+				
 				if(i == Settings.RED_STARTER_TILE){
 					fillStarters.push(tab[y][x]);
 				}

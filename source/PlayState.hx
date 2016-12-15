@@ -35,8 +35,10 @@ class PlayState extends FlxState {
 
 
 		socket = new WebSocket("ws://192.168.1.105:9000");
+		
+		
 		socket.onopen = function() {
-			socket.send("Hello World!");	
+			//socket.send("Hello World!");	
 		};
 		
 		socket.onmessage = function(message:MessageEvent) {
@@ -44,10 +46,13 @@ class PlayState extends FlxState {
 			var payloadSplit = payload.split(',');
 
 			switch (message.data[0]) {
-				case 'I': //get client ID
-					clientId = Std.parseInt(payload);
-
-					players[clientId] = new Selection(Settings.PLAYER_COLOR, 8, 8, board.tab);
+				case 'I': //get my client ID
+					clientId = Std.parseInt(payloadSplit[0]);
+					var BX = Std.parseInt(payloadSplit[1]);
+					var BY = Std.parseInt(payloadSplit[2]);
+					
+					players[clientId] = new Selection(BX, BY, board.tab);
+					trace("Got id " + clientId);
 
 				case 'N': //new player
 					//id, posx, posy
@@ -57,7 +62,7 @@ class PlayState extends FlxState {
 
 					trace("Player connected with id " + id);
 
-					players[id] = new Selection(Settings.OTHER_PLAYER_COLOR, BX, BY, board.tab);
+					players[id] = new Selection(BX, BY, board.tab);
 
 				case 'S': // get the map
 					trace("Got map");
@@ -68,21 +73,29 @@ class PlayState extends FlxState {
 					//id, posx, posy
 
 					var id = Std.parseInt(payloadSplit[0]);
-					var BX = Std.parseInt(payloadSplit[1]);
-					var BY = Std.parseInt(payloadSplit[2]);
-			
-					players[id].boardX = BX;
-					players[id].boardY = BY;
-					players[id].updateMove();
-
-					board.rotateTile(BX, BY);
-					board.flow();
+					var move = Std.parseInt(payloadSplit[1]);
+					
+					if (move == 4) {
+						board.rotateTile(players[id].boardX, players[id].boardY);
+						board.flow();	
+					} else {
+						players[id].boardX += Settings.MOVES[move][0];
+						players[id].boardY += Settings.MOVES[move][1];
+						players[id].updateMove();
+					}
+					
+					
 				case 'T': //new target
 					trace("Got target");
 					var BX = Std.parseInt(payloadSplit[0]);
 					var BY = Std.parseInt(payloadSplit[1]);
 
 					board.tab[BY][BX].setTileID(5, Std.random(4));
+					
+				case 'D'://client disconnected
+					var clientId = Std.parseInt(payload);
+					players[clientId] = null;
+					
 			}
 		};		
 
@@ -92,38 +105,38 @@ class PlayState extends FlxState {
 		socket.send("M" + Std.string(move));
 	}
 	
-	function handleKeys() {
-		
-		var move:Int = -1;
+	function handleMoveKeys() {
 		
 		if(FlxG.keys.justPressed.LEFT){
 			players[clientId].moveLeft();
-			move = Settings.MOVE_LEFT;
+			sendMyMove(Settings.MOVE_LEFT);
 		}
 		if(FlxG.keys.justPressed.UP){
 			players[clientId].moveUp();
-			move = Settings.MOVE_UP;
+			sendMyMove(Settings.MOVE_UP);
 		}
 		if(FlxG.keys.justPressed.RIGHT){
 			players[clientId].moveRight();
-			move = Settings.MOVE_RIGHT;
+			sendMyMove(Settings.MOVE_RIGHT);
 		}
 		if(FlxG.keys.justPressed.DOWN){
 			players[clientId].moveDown();
-			move = Settings.MOVE_DOWN;
-		}
-		if(FlxG.keys.justPressed.SPACE){
-			board.rotateTile(players[clientId].boardX, players[clientId].boardY);
-			sendMyMove(move);
-			board.flow();
+			sendMyMove(Settings.MOVE_DOWN);
 		}
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		
-		handleKeys();
+		handleMoveKeys();
 
+		if(FlxG.keys.justPressed.SPACE){
+			board.rotateTile(players[clientId].boardX, players[clientId].boardY);
+			board.flow();
+			sendMyMove(Settings.MOVE_SPACE);
+		}
+		
+		/*
 		if (FlxG.mouse.justPressed) {
 			for (r in board.tab) {
 				for(t in r){
@@ -134,7 +147,7 @@ class PlayState extends FlxState {
 					}
 				}
 			}
-		}
+		}*/
 		
 		if (FlxG.keys.justPressed.Q) {
 			background.i = (background.i + 1) % 14;

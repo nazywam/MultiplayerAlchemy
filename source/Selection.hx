@@ -13,12 +13,10 @@ class Selection {
 
 	var color:			Int;
 
-	public function new(C:Int, BX:Int, BY:Int, B:Array<Array<Tile>>){
+	public function new(BX:Int, BY:Int, B:Array<Array<Tile>>){
 		tiles = B;
 		boardX = BX;
 		boardY = BY;
-		color = C;
-
 
 		currentTile = tiles[boardY][boardX];
 		//currentTile.color = color;
@@ -29,7 +27,7 @@ class Selection {
 			boardY = 0;
 		}
 		if(boardX < 0){
-			boardY = 0;
+			boardX = 0;
 		}
 		if(boardY >= tiles.length){
 			boardY = tiles.length - 1;

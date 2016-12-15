@@ -1,100 +1,104 @@
+from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
+
+from twisted.internet import reactor
 from random import randint
-from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
+from twisted.python import log
+import sys
 
-tiles   = [0, 1, 2, 3]
-weights = [1, 1, .1, .3]
+MOVES = [
+    [0, -1],
+    [1, 0],
+    [0, 1],
+    [-1, 0]
+]
 
-guesserino = []
-for i in range(len(weights)):
-    for q in range(int(weights[i]*259)):
-        guesserino.append(i)
+class Client(WebSocketServerProtocol):
 
+    def onOpen(self):
 
-def generateBoard(width, height):
-    d = []
-    for y in range(height):
-        for x in range(width):
-            d.append((tiles[guesserino[randint(0, len(guesserino)-1)]], randint(0, 3)))
-    return d
+        #generate random cooridnates as starters
+        self.boardX = randint(0, 16)
+        self.boardY = randint(0, 16)
 
+        self.clientId = self.factory.register(self)
 
-clients = []
-
-width = 16
-height = 16
-
-board = generateBoard(width, height)
-board[2*width+2] = (4, 0)
-a = 1
+        self.sendMessage("I{},{},{}".format(str(self.clientId), str(self.boardX), str(self.boardY)))
+        self.sendMessage("S" + ','.join(str(x[0]) + "." + str(x[1]) for x in self.factory.board))
 
 
+    def onMessage(self, payload, isBinary):
+        data = payload[1:]
 
-class Client(WebSocket):
-
-   def __init__(self):
-        super(Client,self).__init__()
-
-        self.clientId = -1
-        self.boardX = -1
-        self.boardY = -1
-
-        self.targetX = -1
-        self.targetY = -1
-
-   def rotateTile(self, x, y):
-        global board
-        #board[y*8+x][1] = (board[y*8+x][1] + 1)%4
-
-    #client sent move
-   def handleMessage(self):
-        print("Message" + self.data)
-          
-
-        #send out moves
-        if(self.data[0] == "M"):
-            payload = self.data[1:].split(",")
-
-            self.rotateTile(int(payload[0]), int(payload[1]))
-
-            for client in clients:
-                if client != self:
-                    client.sendMessage(unicode("M{},{}".format(self.clientId, self.data[1:])))
-
-  #client connected
-   def handleConnected(self):
-
-        print(":c")
-
-        self.clientId = len(clients)
-        self.boardX = 8
-        self.boardY = 8
-
-        self.targetX = randint(0, width-1)
-        self.targetY = randint(0, height-1)
-
-        self.sendMessage(unicode("I"+str(self.clientId)))
-
-        for f in clients:
-            if(f != self):
-                self.sendMessage(unicode("N{},{},{}".format(str(f.clientId), str(f.boardX), str(f.boardY))))
-                f.sendMessage(unicode("N{},{},{}".format(str(self.clientId), str(self.boardX), str(self.boardY))))
-
-        clients.append(self)
-
-        self.sendMessage(unicode(("S"+','.join(str(x[0])+"."+str(x[1]) for x in board))))
+        #move
+        if(payload[0] == "M"):
+            if(int(data) == 4):
+                self.factory.turnTile(self.boardY * 16 + self.boardX)
+            else:
+                self.boardX += MOVES[int(data)][0]
+                self.boardY += MOVES[int(data)][1]
+            self.factory.broadcastMove(self, data)
 
 
-        self.sendMessage(unicode("T{},{}".format(str(self.targetX), str(self.targetY))))
-        print("{} has target {},{}".format(str(self.clientId), str(self.targetX), str(self.targetY)));
-     
-
-   def handleClose(self):
-        print self.address, 'closed'
-        clients.remove(self)
+    def connectionLost(self, reason):
+        self.factory.unregister(self)
 
 
+class Server(WebSocketServerFactory):
+    def __init__(self, url):
+        WebSocketServerFactory.__init__(self, url)
 
-print(board)
+        self.clients = []
+        self.board = self.generateBoard()
 
-server = SimpleWebSocketServer('', 9000, Client)
-server.serveforever()
+        print("Server initiated")
+
+    def register(self, client):
+        self.clients.append(client)
+
+        for c in self.clients:
+            if c!= client:
+                c.sendMessage("N{},{},{}".format(str(len(self.clients)), str(client.boardX), str(client.boardY)))
+                client.sendMessage("N{},{},{}".format(str(c.clientId), str(c.boardX), str(c.boardY)))
+
+        return len(self.clients)
+
+    def unregister(self, client):
+        for c in self.clients:
+            if c != client:
+                c.sendMessage("D"+str(c.clientId))
+        self.clients.remove(client)
+
+    def turnTile(self, tile):
+        self.board[tile] = (self.board[tile][0], (self.board[tile][1] + 1) % 4)
+
+    def broadcastMove(self, client, move):
+        for c in self.clients:
+            if c != client:
+                c.sendMessage("M{},{}".format(str(client.clientId), str(move)))
+
+    def generateBoard(self):
+        tileIds =       [0,   1,   2,   3]
+        tileWeights =   [1.0, 1.0, 0.1, 0.3]
+        width = 16
+        height = 16
+
+        availableTiles = []
+        for i in range(len(tileWeights)):
+            for q in range(int(tileWeights[i] * 259)):
+                availableTiles.append(i)
+
+        d = []
+        for y in range(height):
+            for x in range(width):
+                d.append((tileIds[availableTiles[randint(0, len(availableTiles) - 1)]], randint(0, 3)))
+
+        #dirty
+        d[8 * 16 + 8] = (4, 0)
+        return d
+
+server = Server(u"ws://0.0.0.0:9000")
+server.protocol = Client
+
+log.startLogging(sys.stdout)
+reactor.listenTCP(9000, server)
+reactor.run()
