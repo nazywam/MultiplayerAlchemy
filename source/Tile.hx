@@ -92,6 +92,7 @@ class Tile extends FlxSprite {
 		
 		if (fill != 0) {
 			animation.play(Std.string(tileID  + 11));
+			color = Settings.COLORS[fill];
 		} else {
 			animation.play(Std.string(tileID));
 		}

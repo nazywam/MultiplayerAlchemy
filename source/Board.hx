@@ -115,6 +115,7 @@ class Board extends FlxTypedGroup<Tile> {
 
 		for (t in members) {
 		
+			//clear all connections
 			for (x in 0...4) {
 				t.visited[x] = false;
 			}

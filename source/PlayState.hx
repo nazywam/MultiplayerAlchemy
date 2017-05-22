@@ -34,7 +34,7 @@ class PlayState extends FlxState {
 		}
 
 
-		socket = new WebSocket("ws://192.168.1.105:9000");
+		socket = new WebSocket("ws://nazywam.host:9000");
 		
 		
 		socket.onopen = function() {

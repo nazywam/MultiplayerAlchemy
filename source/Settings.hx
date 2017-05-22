@@ -171,7 +171,7 @@ class Settings {
 	public static var TILE_WIDTH		:Int = 64;
 	public static var TILE_HEIGHT		:Int = 64;
 	
-	public static var SECONDS_PER_DEPTH :Float = .1;
+	public static var SECONDS_PER_DEPTH :Float = .06;
 	
 	public static var TILES_IMAGE_PATH	:String = "assets/images/TilesDownscaled.png";
 	public static var BACKGROUND_TILES_IMAGE_PATH	:String = "assets/images/BackgroundTilesDownscaled.png";
